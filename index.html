@@ -6,249 +6,214 @@
 <title>ChurchOS AI | Graceway and Truth Triumphant Church Inc.</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f4f7fb;
-  color:#172033;
-  line-height:1.5;
+font-family:Arial,Helvetica,sans-serif;
+background:#f4f7fb;
+color:#172033;
+line-height:1.5;
 }
 
 header{
-  background:linear-gradient(135deg,#14213d,#243b64);
-  color:white;
-  padding:28px 20px;
-  text-align:center;
+background:linear-gradient(135deg,#14213d,#243b64);
+color:white;
+padding:28px 20px;
+text-align:center;
 }
 
-header h1{
-  font-size:28px;
-  margin-bottom:6px;
-}
+header h1{font-size:28px;margin-bottom:6px}
+header p{margin:4px 0;opacity:.9}
+.brand{font-weight:bold;color:#ffd166}
 
-header p{
-  margin:4px 0;
-  opacity:.9;
-}
-
-.brand{
-  font-weight:bold;
-  color:#ffd166;
-}
-
-.container{
-  width:94%;
-  max-width:1200px;
-  margin:25px auto;
-}
+.container{width:94%;max-width:1200px;margin:25px auto}
 
 nav{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:25px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:25px;
 }
 
 nav button{
-  border:none;
-  background:#ffffff;
-  padding:11px 16px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
-  color:#243b64;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
+border:none;
+background:#fff;
+padding:11px 16px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+color:#243b64;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-nav button:hover{
-  background:#243b64;
-  color:white;
-}
+nav button:hover{background:#243b64;color:white}
 
 .stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
-  gap:15px;
-  margin-bottom:25px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:15px;
+margin-bottom:25px;
 }
 
 .stat{
-  background:white;
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
 .stat h3{
-  font-size:14px;
-  color:#687386;
-  margin-bottom:8px;
+font-size:14px;
+color:#687386;
+margin-bottom:8px;
 }
 
 .stat strong{
-  font-size:27px;
-  color:#243b64;
+font-size:27px;
+color:#243b64;
 }
 
 .grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:18px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:18px;
 }
 
 .card{
-  background:white;
-  padding:22px;
-  border-radius:14px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
+background:white;
+padding:22px;
+border-radius:14px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.card h2{
-  color:#243b64;
-  margin-bottom:8px;
-}
-
-.card p{
-  color:#687386;
-  margin-bottom:15px;
-}
+.card h2{color:#243b64;margin-bottom:8px}
+.card p{color:#687386;margin-bottom:15px}
 
 button.primary{
-  background:#243b64;
-  color:white;
-  border:none;
-  padding:11px 16px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
+background:#243b64;
+color:white;
+border:none;
+padding:11px 16px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
 }
 
-button.primary:hover{
-  background:#14213d;
-}
+button.primary:hover{background:#14213d}
 
 .section{
-  background:white;
-  padding:24px;
-  border-radius:14px;
-  margin-top:25px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
+background:white;
+padding:24px;
+border-radius:14px;
+margin-top:25px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
 .section h2{
-  color:#243b64;
-  margin-bottom:18px;
+color:#243b64;
+margin-bottom:18px;
 }
 
 .form-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:12px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:12px;
 }
 
 input,select,textarea{
-  width:100%;
-  padding:12px;
-  border:1px solid #d6dce5;
-  border-radius:8px;
-  font-size:15px;
-  margin-bottom:10px;
+width:100%;
+padding:12px;
+border:1px solid #d6dce5;
+border-radius:8px;
+font-size:15px;
+margin-bottom:10px;
 }
 
 textarea{
-  min-height:90px;
-  resize:vertical;
+min-height:90px;
+resize:vertical;
 }
 
-.list{
-  margin-top:20px;
-}
+.list{margin-top:20px}
 
 .item{
-  border:1px solid #e0e5ec;
-  border-radius:10px;
-  padding:15px;
-  margin-bottom:10px;
-  background:#fafbfd;
+border:1px solid #e0e5ec;
+border-radius:10px;
+padding:15px;
+margin-bottom:10px;
+background:#fafbfd;
 }
 
-.item strong{
-  color:#243b64;
-}
+.item strong{color:#243b64}
 
 .item small{
-  display:block;
-  color:#687386;
-  margin-top:4px;
+display:block;
+color:#687386;
+margin-top:4px;
 }
 
 .actions{
-  margin-top:10px;
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
+margin-top:10px;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
 }
 
 .delete{
-  background:#d62828;
-  color:white;
-  border:none;
-  padding:8px 12px;
-  border-radius:6px;
-  cursor:pointer;
+background:#d62828;
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:6px;
+cursor:pointer;
 }
 
 .status-btn{
-  background:#2a9d8f;
-  color:white;
-  border:none;
-  padding:8px 12px;
-  border-radius:6px;
-  cursor:pointer;
+background:#2a9d8f;
+color:white;
+border:none;
+padding:8px 12px;
+border-radius:6px;
+cursor:pointer;
 }
 
 .ai-box{
-  background:#f1f5ff;
-  border-left:5px solid #243b64;
-  padding:18px;
-  border-radius:8px;
-  margin-top:15px;
+background:#f1f5ff;
+border-left:5px solid #243b64;
+padding:18px;
+border-radius:8px;
+margin-top:15px;
 }
 
 .empty{
-  color:#7a8494;
-  padding:10px 0;
+color:#7a8494;
+padding:10px 0;
+}
+
+.total-box{
+background:#eef4ff;
+border-radius:10px;
+padding:18px;
+margin-top:15px;
+font-size:20px;
+font-weight:bold;
+color:#243b64;
 }
 
 footer{
-  margin-top:40px;
-  background:#14213d;
-  color:white;
-  text-align:center;
-  padding:25px 15px;
+margin-top:40px;
+background:#14213d;
+color:white;
+text-align:center;
+padding:25px 15px;
 }
 
-footer p{
-  margin:5px;
-}
+footer p{margin:5px}
 
 @media(max-width:600px){
-  header h1{
-    font-size:22px;
-  }
-
-  .container{
-    width:92%;
-  }
-
-  .card,.section{
-    padding:18px;
-  }
+header h1{font-size:22px}
+.container{width:92%}
+.card,.section{padding:18px}
 }
 </style>
 </head>
@@ -256,21 +221,23 @@ footer p{
 <body>
 
 <header>
-  <h1>Graceway and Truth Triumphant Church Inc.</h1>
-  <p class="brand">Transform • Build • Inherit</p>
-  <p>ChurchOS AI Ministry Operating System</p>
-  <p>Home of Triumphant</p>
+<h1>Graceway and Truth Triumphant Church Inc.</h1>
+<p class="brand">Transform • Build • Inherit</p>
+<p>ChurchOS AI Ministry Operating System</p>
+<p>Home of Triumphant</p>
 </header>
 
 <div class="container">
 
 <nav>
-  <button onclick="scrollToSection('dashboard')">Dashboard</button>
-  <button onclick="scrollToSection('members')">Members</button>
-  <button onclick="scrollToSection('converts')">New Converts</button>
-  <button onclick="scrollToSection('attendance')">Attendance</button>
-  <button onclick="scrollToSection('prayers')">Prayer Requests</button>
-  <button onclick="scrollToSection('ai')">AI Assistant</button>
+<button onclick="scrollToSection('dashboard')">Dashboard</button>
+<button onclick="scrollToSection('members')">Members</button>
+<button onclick="scrollToSection('converts')">New Converts</button>
+<button onclick="scrollToSection('attendance')">Attendance</button>
+<button onclick="scrollToSection('foundation')">Foundation School</button>
+<button onclick="scrollToSection('giving')">Giving</button>
+<button onclick="scrollToSection('prayers')">Prayer Requests</button>
+<button onclick="scrollToSection('ai')">AI Assistant</button>
 </nav>
 
 <section id="dashboard">
@@ -298,13 +265,13 @@ footer p{
 </div>
 
 <div class="stat">
-<h3>Foundation School</h3>
-<strong>42</strong>
+<h3>Foundation Students</h3>
+<strong id="foundationCount">0</strong>
 </div>
 
 <div class="stat">
-<h3>Giving</h3>
-<strong>₦850,000</strong>
+<h3>Total Giving</h3>
+<strong id="givingTotal">₦0</strong>
 </div>
 
 </div>
@@ -330,6 +297,18 @@ footer p{
 </div>
 
 <div class="card">
+<h2>📖 Foundation School</h2>
+<p>Track students, classes and discipleship progress.</p>
+<button class="primary" onclick="scrollToSection('foundation')">Open Foundation School</button>
+</div>
+
+<div class="card">
+<h2>💰 Giving</h2>
+<p>Record offerings, tithes and other church giving.</p>
+<button class="primary" onclick="scrollToSection('giving')">Open Giving</button>
+</div>
+
+<div class="card">
 <h2>🙏 Prayer Requests</h2>
 <p>Record and monitor prayer requests.</p>
 <button class="primary" onclick="scrollToSection('prayers')">Open Prayer Requests</button>
@@ -339,12 +318,6 @@ footer p{
 <h2>🤖 AI Ministry Assistant</h2>
 <p>Create simple ministry content and follow-up messages.</p>
 <button class="primary" onclick="scrollToSection('ai')">Open AI Assistant</button>
-</div>
-
-<div class="card">
-<h2>📖 Foundation School</h2>
-<p>Track discipleship and foundation school progress.</p>
-<button class="primary" onclick="showMessage('Foundation School module is coming next.')">Open Foundation School</button>
 </div>
 
 </div>
@@ -518,6 +491,106 @@ footer p{
 </section>
 
 
+<!-- FOUNDATION SCHOOL -->
+
+<section class="section" id="foundation">
+
+<h2>📖 Foundation School</h2>
+
+<p>Track discipleship students and their progress through foundation classes.</p>
+
+<div class="form-grid">
+
+<div>
+<label>Student Name</label>
+<input id="foundationName" placeholder="Enter student name">
+</div>
+
+<div>
+<label>Phone Number</label>
+<input id="foundationPhone" placeholder="Enter phone number">
+</div>
+
+<div>
+<label>Class / Course</label>
+<select id="foundationCourse">
+<option>New Believers Foundation</option>
+<option>Doctrine of Grace</option>
+<option>Discipleship Class</option>
+<option>Leadership Foundation</option>
+</select>
+</div>
+
+<div>
+<label>Progress</label>
+<select id="foundationProgress">
+<option>Not Started</option>
+<option>In Progress</option>
+<option>Almost Complete</option>
+<option>Completed</option>
+</select>
+</div>
+
+</div>
+
+<button class="primary" onclick="addFoundationStudent()">Add Student</button>
+
+<div class="list" id="foundationList"></div>
+
+</section>
+
+
+<!-- GIVING -->
+
+<section class="section" id="giving">
+
+<h2>💰 Giving Management</h2>
+
+<p>Record church giving and maintain a simple giving history.</p>
+
+<div class="form-grid">
+
+<div>
+<label>Name</label>
+<input id="givingName" placeholder="Enter name">
+</div>
+
+<div>
+<label>Giving Type</label>
+<select id="givingType">
+<option>Tithe</option>
+<option>Offering</option>
+<option>Thanksgiving</option>
+<option>First Fruit</option>
+<option>Mission</option>
+<option>Building Project</option>
+<option>Other</option>
+</select>
+</div>
+
+<div>
+<label>Amount (₦)</label>
+<input id="givingAmount" type="number" min="0" placeholder="Enter amount">
+</div>
+
+<div>
+<label>Date</label>
+<input id="givingDate" type="date">
+</div>
+
+</div>
+
+<button class="primary" onclick="addGiving()">Record Giving</button>
+
+<div class="total-box">
+Total Recorded Giving: <span id="givingTotalSection">₦0</span>
+</div>
+
+<div class="list" id="givingList"></div>
+
+</section>
+
+
 <!-- PRAYER REQUESTS -->
 
 <section class="section" id="prayers">
@@ -552,7 +625,7 @@ footer p{
 </section>
 
 
-<!-- AI ASSISTANT -->
+<!-- AI -->
 
 <section class="section" id="ai">
 
@@ -583,18 +656,16 @@ Your ministry assistant is ready.
 
 <script>
 
-let members = JSON.parse(localStorage.getItem("gracewayMembers")) || [];
-let prayers = JSON.parse(localStorage.getItem("gracewayPrayers")) || [];
-let converts = JSON.parse(localStorage.getItem("gracewayConverts")) || [];
-let attendance = JSON.parse(localStorage.getItem("gracewayAttendance")) || [];
+let members=JSON.parse(localStorage.getItem("gracewayMembers"))||[];
+let prayers=JSON.parse(localStorage.getItem("gracewayPrayers"))||[];
+let converts=JSON.parse(localStorage.getItem("gracewayConverts"))||[];
+let attendance=JSON.parse(localStorage.getItem("gracewayAttendance"))||[];
+let foundationStudents=JSON.parse(localStorage.getItem("gracewayFoundation"))||[];
+let giving=JSON.parse(localStorage.getItem("gracewayGiving"))||[];
 
-
-/* NAVIGATION */
 
 function scrollToSection(id){
-  document.getElementById(id).scrollIntoView({
-    behavior:"smooth"
-  });
+document.getElementById(id).scrollIntoView({behavior:"smooth"});
 }
 
 
@@ -602,209 +673,208 @@ function scrollToSection(id){
 
 function addMember(){
 
-  const name = document.getElementById("memberName").value.trim();
-  const phone = document.getElementById("memberPhone").value.trim();
-  const status = document.getElementById("memberStatus").value;
-  const department = document.getElementById("memberDepartment").value;
+const name=document.getElementById("memberName").value.trim();
+const phone=document.getElementById("memberPhone").value.trim();
+const status=document.getElementById("memberStatus").value;
+const department=document.getElementById("memberDepartment").value;
 
-  if(!name){
-    alert("Please enter the member's name.");
-    return;
-  }
+if(!name){
+alert("Please enter the member's name.");
+return;
+}
 
-  members.push({
-    id:Date.now(),
-    name:name,
-    phone:phone,
-    status:status,
-    department:department
-  });
+members.push({
+id:Date.now(),
+name,
+phone,
+status,
+department
+});
 
-  localStorage.setItem("gracewayMembers",JSON.stringify(members));
+localStorage.setItem("gracewayMembers",JSON.stringify(members));
 
-  document.getElementById("memberName").value="";
-  document.getElementById("memberPhone").value="";
+document.getElementById("memberName").value="";
+document.getElementById("memberPhone").value="";
 
-  renderMembers();
+renderMembers();
 }
 
 
 function deleteMember(id){
 
-  members = members.filter(member => member.id !== id);
+members=members.filter(member=>member.id!==id);
 
-  localStorage.setItem("gracewayMembers",JSON.stringify(members));
+localStorage.setItem("gracewayMembers",JSON.stringify(members));
 
-  renderMembers();
+renderMembers();
 }
 
 
 function renderMembers(){
 
-  const list = document.getElementById("memberList");
+const list=document.getElementById("memberList");
 
-  document.getElementById("memberCount").textContent = members.length;
+document.getElementById("memberCount").textContent=members.length;
 
-  if(members.length === 0){
-    list.innerHTML = '<div class="empty">No members added yet.</div>';
-    return;
-  }
+if(members.length===0){
+list.innerHTML='<div class="empty">No members added yet.</div>';
+return;
+}
 
-  list.innerHTML = members.map(member => `
+list.innerHTML=members.map(member=>`
 
-    <div class="item">
+<div class="item">
 
-      <strong>${escapeHTML(member.name)}</strong>
+<strong>${escapeHTML(member.name)}</strong>
 
-      <small>📞 ${escapeHTML(member.phone || "No phone number")}</small>
+<small>📞 ${escapeHTML(member.phone||"No phone number")}</small>
 
-      <small>👤 Status: ${escapeHTML(member.status)}</small>
+<small>👤 Status: ${escapeHTML(member.status)}</small>
 
-      <small>🏛️ Department: ${escapeHTML(member.department)}</small>
+<small>🏛️ Department: ${escapeHTML(member.department)}</small>
 
-      <div class="actions">
+<div class="actions">
 
-        <button class="delete"
-        onclick="deleteMember(${member.id})">
-        Delete
-        </button>
+<button class="delete" onclick="deleteMember(${member.id})">
+Delete
+</button>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  `).join("");
+`).join("");
 }
 
 
-/* NEW CONVERTS */
+/* CONVERTS */
 
 function addConvert(){
 
-  const name = document.getElementById("convertName").value.trim();
-  const phone = document.getElementById("convertPhone").value.trim();
-  const date = document.getElementById("convertDate").value;
-  const status = document.getElementById("convertStatus").value;
-  const worker = document.getElementById("convertWorker").value.trim();
-  const nextDate = document.getElementById("convertNextDate").value;
-  const notes = document.getElementById("convertNotes").value.trim();
+const name=document.getElementById("convertName").value.trim();
+const phone=document.getElementById("convertPhone").value.trim();
+const date=document.getElementById("convertDate").value;
+const status=document.getElementById("convertStatus").value;
+const worker=document.getElementById("convertWorker").value.trim();
+const nextDate=document.getElementById("convertNextDate").value;
+const notes=document.getElementById("convertNotes").value.trim();
 
-  if(!name){
-    alert("Please enter the convert's name.");
-    return;
-  }
+if(!name){
+alert("Please enter the convert's name.");
+return;
+}
 
-  converts.push({
-    id:Date.now(),
-    name:name,
-    phone:phone,
-    date:date,
-    status:status,
-    worker:worker,
-    nextDate:nextDate,
-    notes:notes
-  });
+converts.push({
+id:Date.now(),
+name,
+phone,
+date,
+status,
+worker,
+nextDate,
+notes
+});
 
-  localStorage.setItem("gracewayConverts",JSON.stringify(converts));
+localStorage.setItem("gracewayConverts",JSON.stringify(converts));
 
-  document.getElementById("convertName").value="";
-  document.getElementById("convertPhone").value="";
-  document.getElementById("convertDate").value="";
-  document.getElementById("convertWorker").value="";
-  document.getElementById("convertNextDate").value="";
-  document.getElementById("convertNotes").value="";
+document.getElementById("convertName").value="";
+document.getElementById("convertPhone").value="";
+document.getElementById("convertDate").value="";
+document.getElementById("convertWorker").value="";
+document.getElementById("convertNextDate").value="";
+document.getElementById("convertNotes").value="";
 
-  renderConverts();
+renderConverts();
 }
 
 
 function changeConvertStatus(id){
 
-  const statuses = [
-    "New",
-    "Contacted",
-    "In Discipleship",
-    "Joined",
-    "Needs Attention"
-  ];
+const statuses=[
+"New",
+"Contacted",
+"In Discipleship",
+"Joined",
+"Needs Attention"
+];
 
-  const convert = converts.find(item => item.id === id);
+const convert=converts.find(item=>item.id===id);
 
-  if(!convert) return;
+if(!convert)return;
 
-  let index = statuses.indexOf(convert.status);
+let index=statuses.indexOf(convert.status);
 
-  index = (index + 1) % statuses.length;
+index=(index+1)%statuses.length;
 
-  convert.status = statuses[index];
+convert.status=statuses[index];
 
-  localStorage.setItem("gracewayConverts",JSON.stringify(converts));
+localStorage.setItem("gracewayConverts",JSON.stringify(converts));
 
-  renderConverts();
+renderConverts();
 }
 
 
 function deleteConvert(id){
 
-  converts = converts.filter(item => item.id !== id);
+converts=converts.filter(item=>item.id!==id);
 
-  localStorage.setItem("gracewayConverts",JSON.stringify(converts));
+localStorage.setItem("gracewayConverts",JSON.stringify(converts));
 
-  renderConverts();
+renderConverts();
 }
 
 
 function renderConverts(){
 
-  const list = document.getElementById("convertList");
+const list=document.getElementById("convertList");
 
-  document.getElementById("convertCount").textContent = converts.length;
+document.getElementById("convertCount").textContent=converts.length;
 
-  if(converts.length === 0){
-    list.innerHTML = '<div class="empty">No new converts recorded yet.</div>';
-    return;
-  }
+if(converts.length===0){
+list.innerHTML='<div class="empty">No new converts recorded yet.</div>';
+return;
+}
 
-  list.innerHTML = converts.map(convert => `
+list.innerHTML=converts.map(convert=>`
 
-    <div class="item">
+<div class="item">
 
-      <strong>${escapeHTML(convert.name)}</strong>
+<strong>${escapeHTML(convert.name)}</strong>
 
-      <small>📞 ${escapeHTML(convert.phone || "No phone number")}</small>
+<small>📞 ${escapeHTML(convert.phone||"No phone number")}</small>
 
-      <small>📅 First Contact / Salvation:
-      ${escapeHTML(convert.date || "Not recorded")}</small>
+<small>📅 First Contact / Salvation:
+${escapeHTML(convert.date||"Not recorded")}</small>
 
-      <small>❤️ Status:
-      ${escapeHTML(convert.status)}</small>
+<small>❤️ Status:
+${escapeHTML(convert.status)}</small>
 
-      <small>👤 Assigned Worker:
-      ${escapeHTML(convert.worker || "Not assigned")}</small>
+<small>👤 Assigned Worker:
+${escapeHTML(convert.worker||"Not assigned")}</small>
 
-      <small>📆 Next Follow-up:
-      ${escapeHTML(convert.nextDate || "Not scheduled")}</small>
+<small>📆 Next Follow-up:
+${escapeHTML(convert.nextDate||"Not scheduled")}</small>
 
-      <small>📝 Notes:
-      ${escapeHTML(convert.notes || "No notes")}</small>
+<small>📝 Notes:
+${escapeHTML(convert.notes||"No notes")}</small>
 
-      <div class="actions">
+<div class="actions">
 
-        <button class="status-btn"
-        onclick="changeConvertStatus(${convert.id})">
-        Change Status
-        </button>
+<button class="status-btn"
+onclick="changeConvertStatus(${convert.id})">
+Change Status
+</button>
 
-        <button class="delete"
-        onclick="deleteConvert(${convert.id})">
-        Delete
-        </button>
+<button class="delete"
+onclick="deleteConvert(${convert.id})">
+Delete
+</button>
 
-      </div>
+</div>
 
-    </div>
+</div>
 
-  `).join("");
+`).join("");
 }
 
 
@@ -812,120 +882,339 @@ function renderConverts(){
 
 function addAttendance(){
 
-  const service = document.getElementById("attendanceService").value;
-  const date = document.getElementById("attendanceDate").value;
+const service=document.getElementById("attendanceService").value;
+const date=document.getElementById("attendanceDate").value;
 
-  const adults =
-    Number(document.getElementById("attendanceAdults").value) || 0;
+const adults=Number(document.getElementById("attendanceAdults").value)||0;
+const children=Number(document.getElementById("attendanceChildren").value)||0;
+const firstTimers=Number(document.getElementById("attendanceFirstTimers").value)||0;
+const newConverts=Number(document.getElementById("attendanceConverts").value)||0;
 
-  const children =
-    Number(document.getElementById("attendanceChildren").value) || 0;
+if(!date){
+alert("Please select a date.");
+return;
+}
 
-  const firstTimers =
-    Number(document.getElementById("attendanceFirstTimers").value) || 0;
+const total=adults+children;
 
-  const newConverts =
-    Number(document.getElementById("attendanceConverts").value) || 0;
+attendance.push({
+id:Date.now(),
+service,
+date,
+adults,
+children,
+firstTimers,
+newConverts,
+total
+});
 
-  if(!date){
-    alert("Please select a date.");
-    return;
-  }
+localStorage.setItem("gracewayAttendance",JSON.stringify(attendance));
 
-  const total = adults + children;
+document.getElementById("attendanceDate").value="";
+document.getElementById("attendanceAdults").value="";
+document.getElementById("attendanceChildren").value="";
+document.getElementById("attendanceFirstTimers").value="";
+document.getElementById("attendanceConverts").value="";
 
-  attendance.push({
-    id:Date.now(),
-    service:service,
-    date:date,
-    adults:adults,
-    children:children,
-    firstTimers:firstTimers,
-    newConverts:newConverts,
-    total:total
-  });
-
-  localStorage.setItem(
-    "gracewayAttendance",
-    JSON.stringify(attendance)
-  );
-
-  document.getElementById("attendanceDate").value="";
-  document.getElementById("attendanceAdults").value="";
-  document.getElementById("attendanceChildren").value="";
-  document.getElementById("attendanceFirstTimers").value="";
-  document.getElementById("attendanceConverts").value="";
-
-  renderAttendance();
+renderAttendance();
 }
 
 
 function deleteAttendance(id){
 
-  attendance = attendance.filter(item => item.id !== id);
+attendance=attendance.filter(item=>item.id!==id);
 
-  localStorage.setItem(
-    "gracewayAttendance",
-    JSON.stringify(attendance)
-  );
+localStorage.setItem("gracewayAttendance",JSON.stringify(attendance));
 
-  renderAttendance();
+renderAttendance();
 }
 
 
 function renderAttendance(){
 
-  const list = document.getElementById("attendanceList");
+const list=document.getElementById("attendanceList");
 
-  if(attendance.length === 0){
+if(attendance.length===0){
 
-    document.getElementById("attendanceCount").textContent = "0";
+document.getElementById("attendanceCount").textContent="0";
 
-    list.innerHTML =
-      '<div class="empty">No attendance recorded yet.</div>';
+list.innerHTML='<div class="empty">No attendance recorded yet.</div>';
 
-    return;
-  }
+return;
+}
 
-  const latest = attendance[attendance.length - 1];
+const latest=attendance[attendance.length-1];
 
-  document.getElementById("attendanceCount").textContent =
-    latest.total;
+document.getElementById("attendanceCount").textContent=latest.total;
 
-  list.innerHTML = [...attendance]
-    .reverse()
-    .map(item => `
+list.innerHTML=[...attendance].reverse().map(item=>`
 
-      <div class="item">
+<div class="item">
 
-        <strong>${escapeHTML(item.service)}</strong>
+<strong>${escapeHTML(item.service)}</strong>
 
-        <small>📅 Date: ${escapeHTML(item.date)}</small>
+<small>📅 Date: ${escapeHTML(item.date)}</small>
 
-        <small>👨 Adults: ${item.adults}</small>
+<small>👨 Adults: ${item.adults}</small>
 
-        <small>👧 Children: ${item.children}</small>
+<small>👧 Children: ${item.children}</small>
 
-        <small>⭐ First Timers: ${item.firstTimers}</small>
+<small>⭐ First Timers: ${item.firstTimers}</small>
 
-        <small>❤️ New Converts: ${item.newConverts}</small>
+<small>❤️ New Converts: ${item.newConverts}</small>
 
-        <small>
-        👥 Total Attendance: <strong>${item.total}</strong>
-        </small>
+<small>👥 Total Attendance:
+<strong>${item.total}</strong>
+</small>
 
-        <div class="actions">
+<div class="actions">
 
-          <button class="delete"
-          onclick="deleteAttendance(${item.id})">
-          Delete
-          </button>
+<button class="delete"
+onclick="deleteAttendance(${item.id})">
+Delete
+</button>
 
-        </div>
+</div>
 
-      </div>
+</div>
 
-    `).join("");
+`).join("");
+}
+
+
+/* FOUNDATION SCHOOL */
+
+function addFoundationStudent(){
+
+const name=document.getElementById("foundationName").value.trim();
+const phone=document.getElementById("foundationPhone").value.trim();
+const course=document.getElementById("foundationCourse").value;
+const progress=document.getElementById("foundationProgress").value;
+
+if(!name){
+alert("Please enter the student's name.");
+return;
+}
+
+foundationStudents.push({
+id:Date.now(),
+name,
+phone,
+course,
+progress
+});
+
+localStorage.setItem(
+"gracewayFoundation",
+JSON.stringify(foundationStudents)
+);
+
+document.getElementById("foundationName").value="";
+document.getElementById("foundationPhone").value="";
+
+renderFoundation();
+}
+
+
+function changeFoundationProgress(id){
+
+const progress=[
+"Not Started",
+"In Progress",
+"Almost Complete",
+"Completed"
+];
+
+const student=foundationStudents.find(item=>item.id===id);
+
+if(!student)return;
+
+let index=progress.indexOf(student.progress);
+
+index=(index+1)%progress.length;
+
+student.progress=progress[index];
+
+localStorage.setItem(
+"gracewayFoundation",
+JSON.stringify(foundationStudents)
+);
+
+renderFoundation();
+}
+
+
+function deleteFoundation(id){
+
+foundationStudents=
+foundationStudents.filter(item=>item.id!==id);
+
+localStorage.setItem(
+"gracewayFoundation",
+JSON.stringify(foundationStudents)
+);
+
+renderFoundation();
+}
+
+
+function renderFoundation(){
+
+const list=document.getElementById("foundationList");
+
+document.getElementById("foundationCount").textContent=
+foundationStudents.length;
+
+if(foundationStudents.length===0){
+
+list.innerHTML=
+'<div class="empty">No Foundation School students added yet.</div>';
+
+return;
+}
+
+list.innerHTML=foundationStudents.map(student=>`
+
+<div class="item">
+
+<strong>${escapeHTML(student.name)}</strong>
+
+<small>📞 ${escapeHTML(student.phone||"No phone number")}</small>
+
+<small>📖 Course:
+${escapeHTML(student.course)}</small>
+
+<small>📈 Progress:
+${escapeHTML(student.progress)}</small>
+
+<div class="actions">
+
+<button class="status-btn"
+onclick="changeFoundationProgress(${student.id})">
+Change Progress
+</button>
+
+<button class="delete"
+onclick="deleteFoundation(${student.id})">
+Delete
+</button>
+
+</div>
+
+</div>
+
+`).join("");
+}
+
+
+/* GIVING */
+
+function addGiving(){
+
+const name=document.getElementById("givingName").value.trim();
+const type=document.getElementById("givingType").value;
+const amount=Number(document.getElementById("givingAmount").value)||0;
+const date=document.getElementById("givingDate").value;
+
+if(!name){
+alert("Please enter the giver's name.");
+return;
+}
+
+if(amount<=0){
+alert("Please enter a valid amount.");
+return;
+}
+
+if(!date){
+alert("Please select a date.");
+return;
+}
+
+giving.push({
+id:Date.now(),
+name,
+type,
+amount,
+date
+});
+
+localStorage.setItem(
+"gracewayGiving",
+JSON.stringify(giving)
+);
+
+document.getElementById("givingName").value="";
+document.getElementById("givingAmount").value="";
+document.getElementById("givingDate").value="";
+
+renderGiving();
+}
+
+
+function deleteGiving(id){
+
+giving=giving.filter(item=>item.id!==id);
+
+localStorage.setItem(
+"gracewayGiving",
+JSON.stringify(giving)
+);
+
+renderGiving();
+}
+
+
+function renderGiving(){
+
+const list=document.getElementById("givingList");
+
+const total=giving.reduce(
+(sum,item)=>sum+Number(item.amount),
+0
+);
+
+document.getElementById("givingTotal").textContent=
+"₦"+total.toLocaleString();
+
+document.getElementById("givingTotalSection").textContent=
+"₦"+total.toLocaleString();
+
+if(giving.length===0){
+
+list.innerHTML=
+'<div class="empty">No giving records added yet.</div>';
+
+return;
+}
+
+list.innerHTML=[...giving].reverse().map(item=>`
+
+<div class="item">
+
+<strong>${escapeHTML(item.name)}</strong>
+
+<small>💰 Type:
+${escapeHTML(item.type)}</small>
+
+<small>💵 Amount:
+₦${Number(item.amount).toLocaleString()}</small>
+
+<small>📅 Date:
+${escapeHTML(item.date)}</small>
+
+<div class="actions">
+
+<button class="delete"
+onclick="deleteGiving(${item.id})">
+Delete
+</button>
+
+</div>
+
+</div>
+
+`).join("");
 }
 
 
@@ -933,208 +1222,205 @@ function renderAttendance(){
 
 function addPrayer(){
 
-  const name = document.getElementById("prayerName").value.trim();
-  const text = document.getElementById("prayerText").value.trim();
-  const status = document.getElementById("prayerStatus").value;
+const name=document.getElementById("prayerName").value.trim();
+const text=document.getElementById("prayerText").value.trim();
+const status=document.getElementById("prayerStatus").value;
 
-  if(!name || !text){
-    alert("Please enter the person's name and prayer request.");
-    return;
-  }
+if(!name||!text){
+alert("Please enter the person's name and prayer request.");
+return;
+}
 
-  prayers.push({
-    id:Date.now(),
-    name:name,
-    text:text,
-    status:status
-  });
+prayers.push({
+id:Date.now(),
+name,
+text,
+status
+});
 
-  localStorage.setItem("gracewayPrayers",JSON.stringify(prayers));
+localStorage.setItem("gracewayPrayers",JSON.stringify(prayers));
 
-  document.getElementById("prayerName").value="";
-  document.getElementById("prayerText").value="";
+document.getElementById("prayerName").value="";
+document.getElementById("prayerText").value="";
 
-  renderPrayers();
+renderPrayers();
 }
 
 
 function changePrayerStatus(id){
 
-  const prayer = prayers.find(item => item.id === id);
+const prayer=prayers.find(item=>item.id===id);
 
-  if(!prayer) return;
+if(!prayer)return;
 
-  if(prayer.status === "Pending"){
-    prayer.status = "Praying";
-  }
-  else if(prayer.status === "Praying"){
-    prayer.status = "Answered";
-  }
-  else{
-    prayer.status = "Pending";
-  }
+if(prayer.status==="Pending"){
+prayer.status="Praying";
+}
+else if(prayer.status==="Praying"){
+prayer.status="Answered";
+}
+else{
+prayer.status="Pending";
+}
 
-  localStorage.setItem("gracewayPrayers",JSON.stringify(prayers));
+localStorage.setItem("gracewayPrayers",JSON.stringify(prayers));
 
-  renderPrayers();
+renderPrayers();
 }
 
 
 function deletePrayer(id){
 
-  prayers = prayers.filter(item => item.id !== id);
+prayers=prayers.filter(item=>item.id!==id);
 
-  localStorage.setItem("gracewayPrayers",JSON.stringify(prayers));
+localStorage.setItem("gracewayPrayers",JSON.stringify(prayers));
 
-  renderPrayers();
+renderPrayers();
 }
 
 
 function renderPrayers(){
 
-  const list = document.getElementById("prayerList");
+const list=document.getElementById("prayerList");
 
-  document.getElementById("prayerCount").textContent =
-    prayers.length;
+document.getElementById("prayerCount").textContent=prayers.length;
 
-  if(prayers.length === 0){
-    list.innerHTML =
-      '<div class="empty">No prayer requests added yet.</div>';
-    return;
-  }
+if(prayers.length===0){
 
-  list.innerHTML = prayers.map(prayer => `
+list.innerHTML=
+'<div class="empty">No prayer requests added yet.</div>';
 
-    <div class="item">
+return;
+}
 
-      <strong>${escapeHTML(prayer.name)}</strong>
+list.innerHTML=prayers.map(prayer=>`
 
-      <small>🙏 ${escapeHTML(prayer.text)}</small>
+<div class="item">
 
-      <small>Status: ${escapeHTML(prayer.status)}</small>
+<strong>${escapeHTML(prayer.name)}</strong>
 
-      <div class="actions">
+<small>🙏 ${escapeHTML(prayer.text)}</small>
 
-        <button class="status-btn"
-        onclick="changePrayerStatus(${prayer.id})">
-        Change Status
-        </button>
+<small>Status:
+${escapeHTML(prayer.status)}</small>
 
-        <button class="delete"
-        onclick="deletePrayer(${prayer.id})">
-        Delete
-        </button>
+<div class="actions">
 
-      </div>
+<button class="status-btn"
+onclick="changePrayerStatus(${prayer.id})">
+Change Status
+</button>
 
-    </div>
+<button class="delete"
+onclick="deletePrayer(${prayer.id})">
+Delete
+</button>
 
-  `).join("");
+</div>
+
+</div>
+
+`).join("");
 }
 
 
-/* AI ASSISTANT */
+/* AI */
 
 function askAI(){
 
-  const input =
-    document.getElementById("aiInput").value
-    .trim()
-    .toLowerCase();
+const input=
+document.getElementById("aiInput").value.trim().toLowerCase();
 
-  const response =
-    document.getElementById("aiResponse");
+const response=document.getElementById("aiResponse");
 
-  if(!input){
-    response.innerHTML =
-      "Please enter a ministry request.";
-    return;
-  }
+if(!input){
 
-  let answer = "";
+response.innerHTML="Please enter a ministry request.";
 
-  if(
-    input.includes("devotional") ||
-    input.includes("devotion")
-  ){
+return;
+}
 
-    answer = `
-      <strong>Devotional Topic: Faith Beyond What You See</strong>
-      <br><br>
-      Scripture: Hebrews 11:1
-      <br><br>
-      Faith does not depend on what is visible.
-      Faith responds to God's Word and holds firmly
-      to what God has promised.
-    `;
+let answer="";
 
-  }
+if(input.includes("devotional")||input.includes("devotion")){
 
-  else if(
-    input.includes("sermon") ||
-    input.includes("message") ||
-    input.includes("preach")
-  ){
+answer=`
+<strong>Devotional Topic: Faith Beyond What You See</strong>
+<br><br>
+Scripture: Hebrews 11:1
+<br><br>
+Faith does not depend on what is visible.
+Faith responds to God's Word and holds firmly
+to what God has promised.
+`;
 
-    answer = `
-      <strong>Sermon Topic: Fight the Good Fight of Faith</strong>
-      <br><br>
-      Scripture: 1 Timothy 6:12
-      <br><br>
-      Faith is not passive. Stand upon God's Word,
-      refuse to surrender to circumstances and keep
-      moving forward in Christ.
-    `;
+}
 
-  }
+else if(
+input.includes("sermon")||
+input.includes("message")||
+input.includes("preach")
+){
 
-  else if(
-    input.includes("follow") ||
-    input.includes("convert")
-  ){
+answer=`
+<strong>Sermon Topic: Fight the Good Fight of Faith</strong>
+<br><br>
+Scripture: 1 Timothy 6:12
+<br><br>
+Faith is not passive. Stand upon God's Word,
+refuse to surrender to circumstances and keep
+moving forward in Christ.
+`;
 
-    answer = `
-      <strong>Follow-up Message</strong>
-      <br><br>
-      Hello! We are glad to have you with us at
-      Graceway and Truth Triumphant Church Inc.
-      We would love to know how you are doing and
-      help you grow in your walk with Christ.
-      You are welcome and loved.
-    `;
+}
 
-  }
+else if(
+input.includes("follow")||
+input.includes("convert")
+){
 
-  else if(
-    input.includes("announcement") ||
-    input.includes("whatsapp")
-  ){
+answer=`
+<strong>Follow-up Message</strong>
+<br><br>
+Hello! We are glad to have you with us at
+Graceway and Truth Triumphant Church Inc.
+We would love to know how you are doing and
+help you grow in your walk with Christ.
+You are welcome and loved.
+`;
 
-    answer = `
-      <strong>Church Announcement</strong>
-      <br><br>
-      Graceway and Truth Triumphant Church Inc.
-      invites you to join us as we gather to worship,
-      learn God's Word and grow together in Christ.
-      <br><br>
-      Transform • Build • Inherit
-    `;
+}
 
-  }
+else if(
+input.includes("announcement")||
+input.includes("whatsapp")
+){
 
-  else{
+answer=`
+<strong>Church Announcement</strong>
+<br><br>
+Graceway and Truth Triumphant Church Inc.
+invites you to join us as we gather to worship,
+learn God's Word and grow together in Christ.
+<br><br>
+Transform • Build • Inherit
+`;
 
-    answer = `
-      <strong>ChurchOS AI Ministry Assistant</strong>
-      <br><br>
-      I can currently help with devotional ideas,
-      sermon topics, follow-up messages and church
-      announcements.
-    `;
+}
 
-  }
+else{
 
-  response.innerHTML = answer;
+answer=`
+<strong>ChurchOS AI Ministry Assistant</strong>
+<br><br>
+I can currently help with devotional ideas,
+sermon topics, follow-up messages and church
+announcements.
+`;
+
+}
+
+response.innerHTML=answer;
 }
 
 
@@ -1142,12 +1428,12 @@ function askAI(){
 
 function escapeHTML(value){
 
-  return String(value)
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
@@ -1157,6 +1443,8 @@ function escapeHTML(value){
 renderMembers();
 renderConverts();
 renderAttendance();
+renderFoundation();
+renderGiving();
 renderPrayers();
 
 </script>
