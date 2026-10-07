@@ -2809,5 +2809,726 @@ updateChurchReports();
 showChurchOSUser();
 
   </script>
+   <!-- =========================================================
+     CHURCHOS AI — NEXT 4 FEATURES
+     20. Automated Reminders
+     21. Birthdays & Milestones
+     22. Visitors & First-Timers
+     23. Digital Forms
+     ========================================================= -->
+
+<style>
+.churchos-extra-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:18px;
+  margin-top:20px;
+}
+
+.churchos-extra-card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.churchos-extra-card h3{
+  margin-top:0;
+}
+
+.churchos-extra-card input,
+.churchos-extra-card select,
+.churchos-extra-card textarea{
+  width:100%;
+  padding:11px;
+  margin:7px 0;
+  border:1px solid #ddd;
+  border-radius:9px;
+  box-sizing:border-box;
+}
+
+.churchos-extra-card textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.churchos-extra-card button{
+  border:0;
+  border-radius:9px;
+  padding:10px 14px;
+  cursor:pointer;
+  margin-top:5px;
+}
+
+.extra-primary{
+  background:#111827;
+  color:#fff;
+}
+
+.extra-danger{
+  background:#dc2626;
+  color:#fff;
+}
+
+.extra-item{
+  background:#f8fafc;
+  border-left:4px solid #111827;
+  padding:12px;
+  border-radius:8px;
+  margin-top:10px;
+}
+
+.extra-empty{
+  color:#777;
+  padding:10px 0;
+}
+
+.extra-badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:20px;
+  background:#e5e7eb;
+  font-size:12px;
+  margin:3px;
+}
+</style>
+
+<script>
+
+/* =========================================================
+   HELPER
+   ========================================================= */
+
+function churchOSExtraData(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSSaveExtraData(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+/* =========================================================
+   20. AUTOMATED REMINDERS
+   ========================================================= */
+
+function createChurchOSReminders(){
+
+  if(document.getElementById("churchosReminders")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosReminders";
+
+  section.innerHTML=`
+    <div class="churchos-extra-card">
+      <h2>🔔 Automated Reminders</h2>
+      <p>Create reminders for follow-up, meetings, birthdays, events and ministry tasks.</p>
+
+      <input id="reminderTitle" placeholder="Reminder title">
+
+      <input id="reminderDate" type="date">
+
+      <select id="reminderType">
+        <option>Follow-up</option>
+        <option>Birthday</option>
+        <option>Event</option>
+        <option>Meeting</option>
+        <option>Prayer</option>
+        <option>Task</option>
+        <option>General</option>
+      </select>
+
+      <textarea id="reminderNote" placeholder="Reminder details"></textarea>
+
+      <button class="extra-primary" onclick="addChurchOSReminder()">
+        Add Reminder
+      </button>
+
+      <div id="churchosReminderList"></div>
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSReminders();
+}
+
+function addChurchOSReminder(){
+
+  const title=document.getElementById("reminderTitle").value.trim();
+  const date=document.getElementById("reminderDate").value;
+  const type=document.getElementById("reminderType").value;
+  const note=document.getElementById("reminderNote").value.trim();
+
+  if(!title || !date){
+    alert("Please enter a reminder title and date.");
+    return;
+  }
+
+  const data=churchOSExtraData("churchosReminders");
+
+  data.push({
+    id:Date.now(),
+    title,
+    date,
+    type,
+    note,
+    completed:false
+  });
+
+  churchOSSaveExtraData("churchosReminders",data);
+
+  document.getElementById("reminderTitle").value="";
+  document.getElementById("reminderDate").value="";
+  document.getElementById("reminderNote").value="";
+
+  renderChurchOSReminders();
+}
+
+function toggleChurchOSReminder(id){
+
+  const data=churchOSExtraData("churchosReminders");
+
+  const item=data.find(x=>x.id===id);
+
+  if(item){
+    item.completed=!item.completed;
+  }
+
+  churchOSSaveExtraData("churchosReminders",data);
+  renderChurchOSReminders();
+}
+
+function deleteChurchOSReminder(id){
+
+  const data=churchOSExtraData("churchosReminders")
+    .filter(x=>x.id!==id);
+
+  churchOSSaveExtraData("churchosReminders",data);
+  renderChurchOSReminders();
+}
+
+function renderChurchOSReminders(){
+
+  const box=document.getElementById("churchosReminderList");
+
+  if(!box) return;
+
+  const data=churchOSExtraData("churchosReminders")
+    .sort((a,b)=>a.date.localeCompare(b.date));
+
+  if(!data.length){
+    box.innerHTML='<div class="extra-empty">No reminders yet.</div>';
+    return;
+  }
+
+  box.innerHTML=data.map(item=>`
+
+    <div class="extra-item">
+
+      <strong>${escapeHTML(item.title)}</strong>
+
+      <div>
+        <span class="extra-badge">${escapeHTML(item.type)}</span>
+        <span class="extra-badge">${escapeHTML(item.date)}</span>
+      </div>
+
+      <p>${escapeHTML(item.note || "")}</p>
+
+      <button onclick="toggleChurchOSReminder(${item.id})">
+        ${item.completed ? "↩️ Reopen" : "✅ Complete"}
+      </button>
+
+      <button class="extra-danger"
+        onclick="deleteChurchOSReminder(${item.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================================================
+   21. BIRTHDAYS & MILESTONES
+   ========================================================= */
+
+function createChurchOSBirthdays(){
+
+  if(document.getElementById("churchosBirthdays")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosBirthdays";
+
+  section.innerHTML=`
+
+    <div class="churchos-extra-card">
+
+      <h2>🎂 Birthdays & Milestones</h2>
+
+      <p>Keep important member dates and ministry milestones in one place.</p>
+
+      <input id="birthdayName" placeholder="Member name">
+
+      <select id="birthdayType">
+        <option>Birthday</option>
+        <option>Wedding Anniversary</option>
+        <option>Salvation Anniversary</option>
+        <option>Church Membership Anniversary</option>
+        <option>Other Milestone</option>
+      </select>
+
+      <input id="birthdayDate" type="date">
+
+      <input id="birthdayPhone" placeholder="Phone number">
+
+      <button class="extra-primary" onclick="addChurchOSBirthday()">
+        Save Date
+      </button>
+
+      <div id="churchosBirthdayList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSBirthdays();
+}
+
+function addChurchOSBirthday(){
+
+  const name=document.getElementById("birthdayName").value.trim();
+  const type=document.getElementById("birthdayType").value;
+  const date=document.getElementById("birthdayDate").value;
+  const phone=document.getElementById("birthdayPhone").value.trim();
+
+  if(!name || !date){
+    alert("Please enter the member name and date.");
+    return;
+  }
+
+  const data=churchOSExtraData("churchosBirthdays");
+
+  data.push({
+    id:Date.now(),
+    name,
+    type,
+    date,
+    phone
+  });
+
+  churchOSSaveExtraData("churchosBirthdays",data);
+
+  document.getElementById("birthdayName").value="";
+  document.getElementById("birthdayDate").value="";
+  document.getElementById("birthdayPhone").value="";
+
+  renderChurchOSBirthdays();
+}
+
+function deleteChurchOSBirthday(id){
+
+  const data=churchOSExtraData("churchosBirthdays")
+    .filter(x=>x.id!==id);
+
+  churchOSSaveExtraData("churchosBirthdays",data);
+  renderChurchOSBirthdays();
+}
+
+function renderChurchOSBirthdays(){
+
+  const box=document.getElementById("churchosBirthdayList");
+
+  if(!box) return;
+
+  const data=churchOSExtraData("churchosBirthdays")
+    .sort((a,b)=>a.date.localeCompare(b.date));
+
+  if(!data.length){
+    box.innerHTML='<div class="extra-empty">No birthdays or milestones recorded.</div>';
+    return;
+  }
+
+  box.innerHTML=data.map(item=>`
+
+    <div class="extra-item">
+
+      <strong>${escapeHTML(item.name)}</strong>
+
+      <div>
+        <span class="extra-badge">${escapeHTML(item.type)}</span>
+        <span class="extra-badge">${escapeHTML(item.date)}</span>
+      </div>
+
+      ${item.phone ? `<p>📞 ${escapeHTML(item.phone)}</p>` : ""}
+
+      <button class="extra-danger"
+        onclick="deleteChurchOSBirthday(${item.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================================================
+   22. VISITORS & FIRST-TIMERS
+   ========================================================= */
+
+function createChurchOSVisitors(){
+
+  if(document.getElementById("churchosVisitors")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosVisitors";
+
+  section.innerHTML=`
+
+    <div class="churchos-extra-card">
+
+      <h2>📱 Visitors & First-Timers</h2>
+
+      <p>Capture visitors and make follow-up easier.</p>
+
+      <input id="visitorName" placeholder="Visitor name">
+
+      <input id="visitorPhone" placeholder="Phone number">
+
+      <input id="visitorDate" type="date">
+
+      <input id="visitorInvitedBy" placeholder="Invited by">
+
+      <select id="visitorStatus">
+        <option>New Visitor</option>
+        <option>Contacted</option>
+        <option>Follow-up Ongoing</option>
+        <option>Connected</option>
+        <option>Needs Attention</option>
+      </select>
+
+      <textarea id="visitorNotes"
+        placeholder="Notes"></textarea>
+
+      <button class="extra-primary"
+        onclick="addChurchOSVisitor()">
+        Add Visitor
+      </button>
+
+      <div id="churchosVisitorList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSVisitors();
+}
+
+function addChurchOSVisitor(){
+
+  const name=document.getElementById("visitorName").value.trim();
+  const phone=document.getElementById("visitorPhone").value.trim();
+  const date=document.getElementById("visitorDate").value;
+  const invitedBy=document.getElementById("visitorInvitedBy").value.trim();
+  const status=document.getElementById("visitorStatus").value;
+  const notes=document.getElementById("visitorNotes").value.trim();
+
+  if(!name || !phone){
+    alert("Please enter the visitor's name and phone number.");
+    return;
+  }
+
+  const data=churchOSExtraData("churchosVisitors");
+
+  data.push({
+    id:Date.now(),
+    name,
+    phone,
+    date,
+    invitedBy,
+    status,
+    notes
+  });
+
+  churchOSSaveExtraData("churchosVisitors",data);
+
+  document.getElementById("visitorName").value="";
+  document.getElementById("visitorPhone").value="";
+  document.getElementById("visitorDate").value="";
+  document.getElementById("visitorInvitedBy").value="";
+  document.getElementById("visitorNotes").value="";
+
+  renderChurchOSVisitors();
+}
+
+function changeChurchOSVisitorStatus(id){
+
+  const data=churchOSExtraData("churchosVisitors");
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const statuses=[
+    "New Visitor",
+    "Contacted",
+    "Follow-up Ongoing",
+    "Connected",
+    "Needs Attention"
+  ];
+
+  const current=statuses.indexOf(item.status);
+
+  item.status=statuses[(current+1)%statuses.length];
+
+  churchOSSaveExtraData("churchosVisitors",data);
+
+  renderChurchOSVisitors();
+}
+
+function deleteChurchOSVisitor(id){
+
+  const data=churchOSExtraData("churchosVisitors")
+    .filter(x=>x.id!==id);
+
+  churchOSSaveExtraData("churchosVisitors",data);
+  renderChurchOSVisitors();
+}
+
+function renderChurchOSVisitors(){
+
+  const box=document.getElementById("churchosVisitorList");
+
+  if(!box) return;
+
+  const data=churchOSExtraData("churchosVisitors")
+    .sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+
+  if(!data.length){
+    box.innerHTML='<div class="extra-empty">No visitors recorded.</div>';
+    return;
+  }
+
+  box.innerHTML=data.map(item=>`
+
+    <div class="extra-item">
+
+      <strong>${escapeHTML(item.name)}</strong>
+
+      <p>📞 ${escapeHTML(item.phone)}</p>
+
+      ${item.date ? `<p>📅 ${escapeHTML(item.date)}</p>` : ""}
+
+      ${item.invitedBy ?
+        `<p>Invited by: ${escapeHTML(item.invitedBy)}</p>` : ""}
+
+      <span class="extra-badge">
+        ${escapeHTML(item.status)}
+      </span>
+
+      ${item.notes ?
+        `<p>${escapeHTML(item.notes)}</p>` : ""}
+
+      <button onclick="changeChurchOSVisitorStatus(${item.id})">
+        🔄 Change Status
+      </button>
+
+      <button class="extra-danger"
+        onclick="deleteChurchOSVisitor(${item.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================================================
+   23. DIGITAL FORMS
+   ========================================================= */
+
+function createChurchOSForms(){
+
+  if(document.getElementById("churchosForms")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosForms";
+
+  section.innerHTML=`
+
+    <div class="churchos-extra-card">
+
+      <h2>📝 Digital Forms</h2>
+
+      <p>Create simple forms for ministry information and requests.</p>
+
+      <input id="formTitle"
+        placeholder="Form title e.g. Workers Registration">
+
+      <select id="formType">
+        <option>Membership Form</option>
+        <option>Workers Registration</option>
+        <option>Prayer Request</option>
+        <option>Event Registration</option>
+        <option>Volunteer Form</option>
+        <option>General Information</option>
+      </select>
+
+      <textarea id="formFields"
+        placeholder="Enter form fields, one per line.
+Example:
+Full Name
+Phone Number
+Department
+Address"></textarea>
+
+      <button class="extra-primary"
+        onclick="addChurchOSForm()">
+        Create Form
+      </button>
+
+      <div id="churchosFormList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSForms();
+}
+
+function addChurchOSForm(){
+
+  const title=document.getElementById("formTitle").value.trim();
+  const type=document.getElementById("formType").value;
+  const fields=document.getElementById("formFields").value.trim();
+
+  if(!title || !fields){
+    alert("Please enter a form title and at least one field.");
+    return;
+  }
+
+  const data=churchOSExtraData("churchosForms");
+
+  data.push({
+    id:Date.now(),
+    title,
+    type,
+    fields:fields.split("\n").map(x=>x.trim()).filter(Boolean),
+    date:new Date().toISOString()
+  });
+
+  churchOSSaveExtraData("churchosForms",data);
+
+  document.getElementById("formTitle").value="";
+  document.getElementById("formFields").value="";
+
+  renderChurchOSForms();
+}
+
+function deleteChurchOSForm(id){
+
+  const data=churchOSExtraData("churchosForms")
+    .filter(x=>x.id!==id);
+
+  churchOSSaveExtraData("churchosForms",data);
+  renderChurchOSForms();
+}
+
+function copyChurchOSForm(id){
+
+  const data=churchOSExtraData("churchosForms");
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const text=
+`GRACEWAY AND TRUTH TRIUMPHANT CHURCH INC
+
+${item.title}
+${item.type}
+
+${item.fields.map((field,i)=>
+`${i+1}. ${field}: __________________________`
+).join("\n")}`;
+
+  navigator.clipboard.writeText(text)
+    .then(()=>alert("Form copied successfully."))
+    .catch(()=>alert("Unable to copy automatically."));
+}
+
+function renderChurchOSForms(){
+
+  const box=document.getElementById("churchosFormList");
+
+  if(!box) return;
+
+  const data=churchOSExtraData("churchosForms");
+
+  if(!data.length){
+    box.innerHTML='<div class="extra-empty">No digital forms created.</div>';
+    return;
+  }
+
+  box.innerHTML=data.map(item=>`
+
+    <div class="extra-item">
+
+      <strong>${escapeHTML(item.title)}</strong>
+
+      <div>
+        <span class="extra-badge">
+          ${escapeHTML(item.type)}
+        </span>
+      </div>
+
+      <p>
+        ${item.fields.map(field=>
+          `• ${escapeHTML(field)}`
+        ).join("<br>")}
+      </p>
+
+      <button onclick="copyChurchOSForm(${item.id})">
+        📋 Copy Form
+      </button>
+
+      <button class="extra-danger"
+        onclick="deleteChurchOSForm(${item.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================================================
+   START THE 4 NEW FEATURES
+   ========================================================= */
+
+createChurchOSReminders();
+createChurchOSBirthdays();
+createChurchOSVisitors();
+createChurchOSForms();
+
+</script>
 </body>
 </html>
