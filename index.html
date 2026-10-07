@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ChurchOS AI</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  color: #1f2937;
+}
+
+header {
+  background: #111827;
+  color: white;
+  padding: 25px 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 28px;
+}
+
+header p {
+  margin: 8px 0 0;
+  color: #d1d5db;
+}
+
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 25px 18px;
+}
+
+.welcome {
+  margin-bottom: 25px;
+}
+
+.welcome h2 {
+  margin-bottom: 5px;
+}
+
+.welcome p {
+  color: #6b7280;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.stat h3 {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.stat strong {
+  display: block;
+  margin-top: 10px;
+  font-size: 27px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card p {
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+button {
+  border: none;
+  background: #111827;
+  color: white;
+  padding: 11px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.ai-box {
+  margin-top: 25px;
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  resize: vertical;
+}
+
+#aiResponse {
+  margin-top: 15px;
+  padding: 15px;
+  background: #f3f4f6;
+  border-radius: 8px;
+  line-height: 1.6;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #6b7280;
+  font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>ChurchOS AI</h1>
+  <p>Transform • Build • Inherit</p>
+</header>
+
+<div class="container">
+
+  <div class="welcome">
+    <h2>Church & Ministry Dashboard</h2>
+    <p>Manage your church, care for people and build the ministry from one place.</p>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <h3>Total Members</h3>
+      <strong>250</strong>
+    </div>
+
+    <div class="stat">
+      <h3>New Converts</h3>
+      <strong>18</strong>
+    </div>
+
+    <div class="stat">
+      <h3>Prayer Requests</h3>
+      <strong>12</strong>
+    </div>
+
+    <div class="stat">
+      <h3>Attendance</h3>
+      <strong>186</strong>
+    </div>
+
+    <div class="stat">
+      <h3>Foundation School</h3>
+      <strong>42</strong>
+    </div>
+
+    <div class="stat">
+      <h3>Giving</h3>
+      <strong>₦850,000</strong>
+    </div>
+
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>👥 Members</h3>
+      <p>Manage members, contact information and important member details.</p>
+      <button onclick="showMessage('Members management is coming next.')">
+        Open Members
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>🙏 Prayer Requests</h3>
+      <p>Record prayer requests and help leaders follow up with members.</p>
+      <button onclick="showMessage('Prayer request management is coming next.')">
+        View Requests
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>❤️ New Converts</h3>
+      <p>Track new converts and make sure nobody is forgotten after salvation.</p>
+      <button onclick="showMessage('New convert follow-up is coming next.')">
+        Follow Up
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>📊 Attendance</h3>
+      <p>Monitor attendance and understand participation trends.</p>
+      <button onclick="showMessage('Attendance analytics is coming next.')">
+        View Attendance
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>💰 Giving</h3>
+      <p>Monitor giving records and ministry financial information.</p>
+      <button onclick="showMessage('Giving analytics is coming next.')">
+        View Giving
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>📖 Foundation School</h3>
+      <p>Track discipleship, classes, attendance and spiritual growth.</p>
+      <button onclick="showMessage('Foundation School tracking is coming next.')">
+        Open School
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>📣 Communications</h3>
+      <p>Create church announcements and messages for WhatsApp and social media.</p>
+      <button onclick="showMessage('Church communication tools are coming next.')">
+        Create Message
+      </button>
+    </div>
+
+    <div class="card">
+      <h3>👨‍💼 Leadership</h3>
+      <p>Give pastors and leaders a clear view of important ministry activities.</p>
+      <button onclick="showMessage('Leadership dashboard is coming next.')">
+        Leadership View
+      </button>
+    </div>
+
+  </div>
+
+  <div class="ai-box">
+
+    <h2>🤖 AI Ministry Assistant</h2>
+
+    <p>
+      Ask the assistant to help create a sermon idea, devotional,
+      follow-up message or church announcement.
+    </p>
+
+    <textarea
+      id="aiQuestion"
+      placeholder="Example: Write a short devotional about faith...">
+    </textarea>
+
+    <button onclick="askAI()">
+      Ask Ministry Assistant
+    </button>
+
+    <div id="aiResponse">
+      Your AI response will appear here.
+    </div>
+
+  </div>
+
+</div>
+
+<footer>
+  ChurchOS AI — AI-powered ministry management
+</footer>
+
+<script>
+
+function showMessage(message) {
+  alert(message);
+}
+
+function askAI() {
+
+  const question =
+    document.getElementById("aiQuestion").value.toLowerCase();
+
+  const response =
+    document.getElementById("aiResponse");
+
+  if (!question.trim()) {
+    response.innerText =
+      "Please enter a ministry question first.";
+    return;
+  }
+
+  if (question.includes("devotional")) {
+
+    response.innerText =
+      "Devotional idea: Faith is trusting God even when you cannot see the full picture. " +
+      "Scripture: Hebrews 11:1. " +
+      "Encourage the church to keep trusting God's Word and walking by faith.";
+
+  } else if (question.includes("sermon")) {
+
+    response.innerText =
+      "Sermon idea: Fight the Good Fight of Faith. " +
+      "Main Scripture: 1 Timothy 6:12. " +
+      "Focus on standing firmly in God's Word, refusing discouragement and continuing faithfully.";
+
+  } else if (
+    question.includes("follow") ||
+    question.includes("convert")
+  ) {
+
+    response.innerText =
+      "Follow-up message: Hello! We are grateful that you worshipped with us. " +
+      "We would love to know how you are doing and how we can pray with you. " +
+      "You are welcome and valued in this family.";
+
+  } else if (
+    question.includes("announcement") ||
+    question.includes("whatsapp")
+  ) {
+
+    response.innerText =
+      "Church announcement: Dear family, we invite you to join us for our upcoming service. " +
+      "Come expectant, invite someone and let's encounter God's Word together.";
+
+  } else {
+
+    response.innerText =
+      "ChurchOS AI is ready to help with sermons, devotionals, " +
+      "new-convert follow-up, announcements and other ministry tasks. " +
+      "Tell me what you would like to create.";
+
+  }
+}
+
+</script>
+
+</body>
+</html>
