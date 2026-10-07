@@ -7067,5 +7067,710 @@ createChurchOSReceipts();
 createChurchOSAttendanceCertificates();
 
 </script>
+   <!-- =========================================================
+     CHURCHOS AI — FEATURES 40–43
+     QR ATTENDANCE • SMART FOLLOW-UP • MEMBER CARE • ADVANCED DASHBOARD
+========================================================= -->
+
+<style>
+.churchos-v8{
+  margin:25px 0;
+  padding:22px;
+  border-radius:18px;
+  background:#ffffff;
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
+  border:1px solid #e7e7e7;
+}
+
+.churchos-v8 h2{
+  margin-top:0;
+  color:#182848;
+}
+
+.churchos-v8-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+
+.churchos-v8 input,
+.churchos-v8 select,
+.churchos-v8 textarea{
+  width:100%;
+  padding:11px;
+  margin:6px 0 12px;
+  border:1px solid #ccc;
+  border-radius:9px;
+  box-sizing:border-box;
+}
+
+.churchos-v8 button{
+  border:0;
+  padding:10px 15px;
+  border-radius:9px;
+  cursor:pointer;
+  background:#182848;
+  color:white;
+  margin:4px;
+}
+
+.churchos-v8 button:hover{
+  opacity:.88;
+}
+
+.v8-card{
+  background:#f7f9fc;
+  border-radius:14px;
+  padding:15px;
+  margin:10px 0;
+  border-left:5px solid #182848;
+}
+
+.v8-stat{
+  text-align:center;
+  padding:20px;
+  border-radius:15px;
+  background:#f5f7fb;
+}
+
+.v8-stat strong{
+  display:block;
+  font-size:30px;
+  color:#182848;
+}
+
+.v8-alert{
+  border-left-color:#e67e22;
+}
+
+.v8-success{
+  border-left-color:#27ae60;
+}
+
+.v8-danger{
+  border-left-color:#c0392b;
+}
+
+#churchosQRDisplay{
+  text-align:center;
+  margin-top:20px;
+}
+
+#churchosQRCanvas{
+  max-width:100%;
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+/* =========================================================
+   CHURCHOS V8 STORAGE HELPERS
+========================================================= */
+
+function churchOSV8Data(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSV8Save(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+function churchOSV8Id(prefix){
+  return prefix + "-" + Date.now() + "-" +
+    Math.random().toString(36).substring(2,7);
+}
+
+function churchOSV8Escape(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   40. QR CODE ATTENDANCE
+========================================================= */
+
+function createChurchOSV8Sections(){
+
+  if(!document.getElementById("churchosQRAttendance")){
+
+    const section=document.createElement("section");
+    section.id="churchosQRAttendance";
+    section.className="churchos-v8";
+
+    section.innerHTML=`
+      <h2>📱 QR Code Attendance</h2>
+      <p>Create a QR code for a church service or programme.</p>
+
+      <div class="churchos-v8-grid">
+
+        <div>
+          <label>Programme / Service</label>
+          <input id="qrProgramme"
+            placeholder="e.g. Sunday Worship Service">
+
+          <label>Date</label>
+          <input id="qrDate" type="date">
+
+          <label>Venue</label>
+          <input id="qrVenue"
+            placeholder="e.g. Main Auditorium">
+
+          <button onclick="generateChurchOSQR()">
+            Generate QR Code
+          </button>
+        </div>
+
+        <div id="churchosQRDisplay">
+          <div id="churchosQRCanvas"></div>
+          <p id="qrInstruction"></p>
+        </div>
+
+      </div>
+
+      <div id="churchosQRHistory"></div>
+    `;
+
+    const container=document.querySelector(".container");
+
+    if(container){
+      container.appendChild(section);
+    }else{
+      document.body.appendChild(section);
+    }
+  }
+
+
+/* =========================================================
+   41. SMART FOLLOW-UP ALERTS
+========================================================= */
+
+  if(!document.getElementById("churchosSmartFollowup")){
+
+    const section=document.createElement("section");
+    section.id="churchosSmartFollowup";
+    section.className="churchos-v8";
+
+    section.innerHTML=`
+      <h2>🔔 Smart Follow-Up Alerts</h2>
+
+      <p>
+        ChurchOS checks your member and visitor records and highlights
+        people who may need follow-up.
+      </p>
+
+      <div id="churchosFollowupAlerts"></div>
+    `;
+
+    const container=document.querySelector(".container");
+
+    if(container){
+      container.appendChild(section);
+    }else{
+      document.body.appendChild(section);
+    }
+  }
+
+
+/* =========================================================
+   42. MEMBER CARE & VISITATION
+========================================================= */
+
+  if(!document.getElementById("churchosMemberCare")){
+
+    const section=document.createElement("section");
+    section.id="churchosMemberCare";
+    section.className="churchos-v8";
+
+    section.innerHTML=`
+      <h2>🧑‍🤝‍🧑 Member Care & Visitation</h2>
+
+      <div class="churchos-v8-grid">
+
+        <div>
+          <label>Member Name</label>
+          <input id="careMemberName"
+            placeholder="Full name">
+
+          <label>Care Type</label>
+          <select id="careType">
+            <option>Home Visitation</option>
+            <option>Hospital Visit</option>
+            <option>Prayer Visit</option>
+            <option>New Member Care</option>
+            <option>Bereavement Support</option>
+            <option>Marriage Support</option>
+            <option>General Welfare</option>
+          </select>
+
+          <label>Visit Date</label>
+          <input id="careVisitDate" type="date">
+
+          <label>Assigned Minister / Worker</label>
+          <input id="careWorker"
+            placeholder="Name of worker">
+
+          <label>Notes</label>
+          <textarea id="careNotes"
+            placeholder="Care notes"></textarea>
+
+          <button onclick="addChurchOSMemberCare()">
+            Save Care Record
+          </button>
+        </div>
+
+        <div>
+          <h3>Care Records</h3>
+          <div id="churchosCareList"></div>
+        </div>
+
+      </div>
+    `;
+
+    const container=document.querySelector(".container");
+
+    if(container){
+      container.appendChild(section);
+    }else{
+      document.body.appendChild(section);
+    }
+  }
+
+
+/* =========================================================
+   43. ADVANCED MINISTRY DASHBOARD
+========================================================= */
+
+  if(!document.getElementById("churchosAdvancedDashboard")){
+
+    const section=document.createElement("section");
+    section.id="churchosAdvancedDashboard";
+    section.className="churchos-v8";
+
+    section.innerHTML=`
+      <h2>📊 Advanced Ministry Dashboard</h2>
+
+      <div class="churchos-v8-grid">
+
+        <div class="v8-stat">
+          <strong id="v8TotalMembers">0</strong>
+          Members
+        </div>
+
+        <div class="v8-stat">
+          <strong id="v8TotalConverts">0</strong>
+          New Converts
+        </div>
+
+        <div class="v8-stat">
+          <strong id="v8TotalVisitors">0</strong>
+          Visitors
+        </div>
+
+        <div class="v8-stat">
+          <strong id="v8TotalAttendance">0</strong>
+          Attendance Records
+        </div>
+
+        <div class="v8-stat">
+          <strong id="v8TotalGiving">₦0</strong>
+          Total Giving
+        </div>
+
+        <div class="v8-stat">
+          <strong id="v8TotalCare">0</strong>
+          Care Records
+        </div>
+
+      </div>
+
+      <div id="v8MinistryInsights"
+        style="margin-top:20px;"></div>
+    `;
+
+    const container=document.querySelector(".container");
+
+    if(container){
+      container.appendChild(section);
+    }else{
+      document.body.appendChild(section);
+    }
+  }
+
+}
+
+
+/* =========================================================
+   QR CODE FUNCTIONS
+========================================================= */
+
+function generateChurchOSQR(){
+
+  const programme=
+    document.getElementById("qrProgramme").value.trim();
+
+  const date=
+    document.getElementById("qrDate").value;
+
+  const venue=
+    document.getElementById("qrVenue").value.trim();
+
+  if(!programme || !date){
+    alert("Please enter the programme and date.");
+    return;
+  }
+
+  const payload={
+    church:"Graceway and Truth Triumphant Church Inc.",
+    programme:programme,
+    date:date,
+    venue:venue,
+    attendanceCode:churchOSV8Id("ATT")
+  };
+
+  const box=document.getElementById("churchosQRCanvas");
+
+  box.innerHTML="";
+
+  new QRCode(box,{
+    text:JSON.stringify(payload),
+    width:220,
+    height:220
+  });
+
+  document.getElementById("qrInstruction").innerHTML=
+    "Scan this QR code for <strong>"+
+    churchOSV8Escape(programme)+
+    "</strong>.";
+
+  const history=churchOSV8Data("churchosQRCodes");
+
+  history.unshift({
+    id:churchOSV8Id("QR"),
+    programme:programme,
+    date:date,
+    venue:venue,
+    created:new Date().toLocaleString()
+  });
+
+  churchOSV8Save("churchosQRCodes",history);
+
+  renderChurchOSQRHistory();
+}
+
+
+function renderChurchOSQRHistory(){
+
+  const box=document.getElementById("churchosQRHistory");
+
+  if(!box)return;
+
+  const history=churchOSV8Data("churchosQRCodes");
+
+  if(!history.length){
+    box.innerHTML="<p>No QR codes created yet.</p>";
+    return;
+  }
+
+  box.innerHTML=`
+    <h3>Recent QR Codes</h3>
+    ${history.slice(0,10).map(item=>`
+      <div class="v8-card">
+        <strong>${churchOSV8Escape(item.programme)}</strong><br>
+        Date: ${churchOSV8Escape(item.date)}<br>
+        Venue: ${churchOSV8Escape(item.venue || "Not specified")}<br>
+        Created: ${churchOSV8Escape(item.created)}
+      </div>
+    `).join("")}
+  `;
+}
+
+
+/* =========================================================
+   SMART FOLLOW-UP
+========================================================= */
+
+function renderChurchOSSmartFollowups(){
+
+  const box=document.getElementById("churchosFollowupAlerts");
+
+  if(!box)return;
+
+  const members=churchOSV8Data("gracewayMembers");
+  const converts=churchOSV8Data("gracewayConverts");
+  const visitors=churchOSV8Data("churchosVisitors");
+
+  let alerts=[];
+
+  converts.forEach(item=>{
+    alerts.push({
+      type:"New Convert",
+      name:item.name || item.fullName || "Unnamed Convert",
+      message:"New convert requires intentional follow-up.",
+      className:"v8-success"
+    });
+  });
+
+  visitors.forEach(item=>{
+    alerts.push({
+      type:"Visitor",
+      name:item.name || item.fullName || "Unnamed Visitor",
+      message:"Visitor should receive a welcome and follow-up.",
+      className:"v8-alert"
+    });
+  });
+
+  members.forEach(item=>{
+
+    const lastContact=
+      item.lastContact ||
+      item.followUpDate ||
+      item.date;
+
+    if(lastContact){
+
+      const d=new Date(lastContact);
+      const days=Math.floor(
+        (Date.now()-d.getTime())/(1000*60*60*24)
+      );
+
+      if(days>=30){
+
+        alerts.push({
+          type:"Member Follow-Up",
+          name:item.name || item.fullName || "Unnamed Member",
+          message:"No recent contact detected.",
+          className:"v8-danger"
+        });
+
+      }
+    }
+  });
+
+  if(!alerts.length){
+    box.innerHTML=`
+      <div class="v8-card v8-success">
+        <strong>✅ All clear</strong><br>
+        No immediate follow-up alerts detected.
+      </div>
+    `;
+    return;
+  }
+
+  box.innerHTML=`
+    <p><strong>${alerts.length}</strong> follow-up item(s) detected.</p>
+
+    ${alerts.slice(0,30).map(a=>`
+      <div class="v8-card ${a.className}">
+        <strong>${churchOSV8Escape(a.name)}</strong><br>
+        ${churchOSV8Escape(a.type)}<br>
+        ${churchOSV8Escape(a.message)}
+      </div>
+    `).join("")}
+  `;
+}
+
+
+/* =========================================================
+   MEMBER CARE
+========================================================= */
+
+function addChurchOSMemberCare(){
+
+  const name=
+    document.getElementById("careMemberName").value.trim();
+
+  const type=
+    document.getElementById("careType").value;
+
+  const date=
+    document.getElementById("careVisitDate").value;
+
+  const worker=
+    document.getElementById("careWorker").value.trim();
+
+  const notes=
+    document.getElementById("careNotes").value.trim();
+
+  if(!name || !date){
+    alert("Please enter the member name and visit date.");
+    return;
+  }
+
+  const data=churchOSV8Data("churchosMemberCare");
+
+  data.unshift({
+    id:churchOSV8Id("CARE"),
+    name:name,
+    type:type,
+    date:date,
+    worker:worker,
+    notes:notes,
+    created:new Date().toISOString()
+  });
+
+  churchOSV8Save("churchosMemberCare",data);
+
+  document.getElementById("careMemberName").value="";
+  document.getElementById("careWorker").value="";
+  document.getElementById("careNotes").value="";
+
+  renderChurchOSMemberCare();
+  updateChurchOSAdvancedDashboard();
+
+  alert("Member care record saved successfully.");
+}
+
+
+function deleteChurchOSMemberCare(id){
+
+  const data=churchOSV8Data("churchosMemberCare")
+    .filter(item=>item.id!==id);
+
+  churchOSV8Save("churchosMemberCare",data);
+
+  renderChurchOSMemberCare();
+  updateChurchOSAdvancedDashboard();
+}
+
+
+function renderChurchOSMemberCare(){
+
+  const box=document.getElementById("churchosCareList");
+
+  if(!box)return;
+
+  const data=churchOSV8Data("churchosMemberCare");
+
+  if(!data.length){
+    box.innerHTML="<p>No care records yet.</p>";
+    return;
+  }
+
+  box.innerHTML=data.map(item=>`
+    <div class="v8-card">
+      <strong>${churchOSV8Escape(item.name)}</strong><br>
+      Care: ${churchOSV8Escape(item.type)}<br>
+      Date: ${churchOSV8Escape(item.date)}<br>
+      Worker: ${churchOSV8Escape(item.worker || "Not assigned")}<br>
+      ${item.notes ?
+        "Notes: "+churchOSV8Escape(item.notes)+"<br>" : ""}
+      <button onclick="deleteChurchOSMemberCare('${item.id}')">
+        Delete
+      </button>
+    </div>
+  `).join("");
+}
+
+
+/* =========================================================
+   ADVANCED DASHBOARD
+========================================================= */
+
+function updateChurchOSAdvancedDashboard(){
+
+  const members=churchOSV8Data("gracewayMembers");
+  const converts=churchOSV8Data("gracewayConverts");
+  const visitors=churchOSV8Data("churchosVisitors");
+  const attendance=churchOSV8Data("gracewayAttendance");
+  const giving=churchOSV8Data("gracewayGiving");
+  const care=churchOSV8Data("churchosMemberCare");
+
+  const givingTotal=giving.reduce((sum,item)=>{
+
+    const amount=
+      Number(
+        item.amount ||
+        item.value ||
+        item.total ||
+        0
+      );
+
+    return sum+amount;
+
+  },0);
+
+  const set=(id,value)=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=value;
+  };
+
+  set("v8TotalMembers",members.length);
+  set("v8TotalConverts",converts.length);
+  set("v8TotalVisitors",visitors.length);
+  set("v8TotalAttendance",attendance.length);
+  set(
+    "v8TotalGiving",
+    "₦"+givingTotal.toLocaleString()
+  );
+  set("v8TotalCare",care.length);
+
+  const insights=document.getElementById("v8MinistryInsights");
+
+  if(insights){
+
+    insights.innerHTML=`
+      <div class="v8-card">
+        <strong>📌 Ministry Insight</strong><br>
+        ChurchOS is currently tracking
+        <strong>${members.length}</strong> members,
+        <strong>${converts.length}</strong> converts,
+        and <strong>${visitors.length}</strong> visitors.
+      </div>
+
+      <div class="v8-card">
+        <strong>💡 Care Insight</strong><br>
+        There are currently
+        <strong>${care.length}</strong>
+        member care and visitation records.
+      </div>
+
+      <div class="v8-card">
+        <strong>💰 Giving Insight</strong><br>
+        Recorded giving currently totals
+        <strong>₦${givingTotal.toLocaleString()}</strong>.
+      </div>
+    `;
+  }
+}
+
+
+/* =========================================================
+   INITIALIZE FEATURES
+========================================================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+  createChurchOSV8Sections();
+
+  renderChurchOSQRHistory();
+  renderChurchOSSmartFollowups();
+  renderChurchOSMemberCare();
+  updateChurchOSAdvancedDashboard();
+
+});
+
+
+/* Refresh dashboard when ChurchOS returns to the page */
+window.addEventListener("focus",function(){
+
+  renderChurchOSSmartFollowups();
+  renderChurchOSMemberCare();
+  updateChurchOSAdvancedDashboard();
+
+});
+
+</script>
+
+<!-- END CHURCHOS AI FEATURES 40–43 -->
 </body>
 </html>
