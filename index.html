@@ -3,209 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Graceway and Truth Triumphant Church Inc. | ChurchOS AI</title>
+<title>ChurchOS AI | Graceway and Truth Triumphant Church Inc.</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f4f6f9;
-  color: #1f2937;
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f7fb;
+  color:#172033;
+  line-height:1.5;
 }
 
-header {
-  background: #111827;
-  color: white;
-  padding: 30px 20px;
-  text-align: center;
+header{
+  background:linear-gradient(135deg,#14213d,#243b64);
+  color:white;
+  padding:28px 20px;
+  text-align:center;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 27px;
-  line-height: 1.3;
+header h1{
+  font-size:28px;
+  margin-bottom:6px;
 }
 
-header p {
-  margin: 10px 0 0;
-  color: #d1d5db;
+header p{
+  margin:4px 0;
+  opacity:.9;
 }
 
-.brand {
-  margin-top: 8px;
-  font-size: 13px;
-  color: #9ca3af;
+.brand{
+  font-weight:bold;
+  color:#ffd166;
 }
 
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 25px 18px;
+.container{
+  width:94%;
+  max-width:1200px;
+  margin:25px auto;
 }
 
-.welcome {
-  margin-bottom: 25px;
+nav{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
 }
 
-.welcome h2 {
-  margin-bottom: 7px;
+nav button{
+  border:none;
+  background:#ffffff;
+  padding:11px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+  color:#243b64;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
 
-.welcome p {
-  color: #6b7280;
-  line-height: 1.6;
+nav button:hover{
+  background:#243b64;
+  color:white;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 15px;
-  margin-bottom: 25px;
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:15px;
+  margin-bottom:25px;
 }
 
-.stat {
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+.stat{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.stat h3 {
-  margin: 0;
-  font-size: 14px;
-  color: #6b7280;
+.stat h3{
+  font-size:14px;
+  color:#687386;
+  margin-bottom:8px;
 }
 
-.stat strong {
-  display: block;
-  margin-top: 10px;
-  font-size: 25px;
+.stat strong{
+  font-size:27px;
+  color:#243b64;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 18px;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:18px;
 }
 
-.card {
-  background: white;
-  padding: 22px;
-  border-radius: 14px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+.card{
+  background:white;
+  padding:22px;
+  border-radius:14px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.card h3 {
-  margin-top: 0;
+.card h2{
+  color:#243b64;
+  margin-bottom:8px;
 }
 
-.card p {
-  color: #6b7280;
-  line-height: 1.6;
+.card p{
+  color:#687386;
+  margin-bottom:15px;
 }
 
-button {
-  border: none;
-  background: #111827;
-  color: white;
-  padding: 11px 16px;
-  border-radius: 8px;
-  cursor: pointer;
+button.primary{
+  background:#243b64;
+  color:white;
+  border:none;
+  padding:11px 16px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
-button:hover {
-  opacity: 0.9;
+button.primary:hover{
+  background:#14213d;
 }
 
-.section {
-  margin-top: 25px;
+.section{
+  background:white;
+  padding:24px;
+  border-radius:14px;
+  margin-top:25px;
+  box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.form {
-  display: grid;
-  gap: 10px;
+.section h2{
+  color:#243b64;
+  margin-bottom:18px;
 }
 
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-family: Arial, sans-serif;
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
 }
 
-textarea {
-  min-height: 110px;
-  resize: vertical;
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #d6dce5;
+  border-radius:8px;
+  font-size:15px;
+  margin-bottom:10px;
 }
 
-.item-list {
-  margin-top: 20px;
+textarea{
+  min-height:90px;
+  resize:vertical;
 }
 
-.item {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 10px;
+.list{
+  margin-top:20px;
 }
 
-.item strong {
-  display: block;
-  margin-bottom: 6px;
+.item{
+  border:1px solid #e0e5ec;
+  border-radius:10px;
+  padding:15px;
+  margin-bottom:10px;
+  background:#fafbfd;
 }
 
-.item small {
-  color: #6b7280;
-  line-height: 1.6;
+.item strong{
+  color:#243b64;
 }
 
-.delete-btn {
-  margin-top: 10px;
-  background: #b91c1c;
+.item small{
+  display:block;
+  color:#687386;
+  margin-top:4px;
 }
 
-.status-btn {
-  margin-top: 10px;
-  background: #374151;
+.actions{
+  margin-top:10px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
 }
 
-.ai-box {
-  margin-top: 25px;
-  background: white;
-  padding: 22px;
-  border-radius: 14px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+.delete{
+  background:#d62828;
+  color:white;
+  border:none;
+  padding:8px 12px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-#aiResponse {
-  margin-top: 15px;
-  padding: 15px;
-  background: #f3f4f6;
-  border-radius: 8px;
-  line-height: 1.7;
-  white-space: pre-line;
+.status-btn{
+  background:#2a9d8f;
+  color:white;
+  border:none;
+  padding:8px 12px;
+  border-radius:6px;
+  cursor:pointer;
 }
 
-footer {
-  text-align: center;
-  padding: 30px 20px;
-  color: #6b7280;
-  font-size: 14px;
+.ai-box{
+  background:#f1f5ff;
+  border-left:5px solid #243b64;
+  padding:18px;
+  border-radius:8px;
+  margin-top:15px;
 }
 
-.tagline {
-  text-align: center;
-  margin: 25px 0;
-  font-weight: bold;
+.empty{
+  color:#7a8494;
+  padding:10px 0;
+}
+
+footer{
+  margin-top:40px;
+  background:#14213d;
+  color:white;
+  text-align:center;
+  padding:25px 15px;
+}
+
+footer p{
+  margin:5px;
+}
+
+@media(max-width:600px){
+  header h1{
+    font-size:22px;
+  }
+
+  .container{
+    width:92%;
+  }
+
+  .card,.section{
+    padding:18px;
+  }
 }
 </style>
 </head>
@@ -213,32 +256,24 @@ footer {
 <body>
 
 <header>
-
-<h1>Graceway and Truth Triumphant Church Inc.</h1>
-
-<p>Transform • Build • Inherit</p>
-
-<div class="brand">
-Powered by ChurchOS AI
-</div>
-
+  <h1>Graceway and Truth Triumphant Church Inc.</h1>
+  <p class="brand">Transform • Build • Inherit</p>
+  <p>ChurchOS AI Ministry Operating System</p>
+  <p>Home of Triumphant</p>
 </header>
 
 <div class="container">
 
-<div class="welcome">
+<nav>
+  <button onclick="scrollToSection('dashboard')">Dashboard</button>
+  <button onclick="scrollToSection('members')">Members</button>
+  <button onclick="scrollToSection('converts')">New Converts</button>
+  <button onclick="scrollToSection('attendance')">Attendance</button>
+  <button onclick="scrollToSection('prayers')">Prayer Requests</button>
+  <button onclick="scrollToSection('ai')">AI Assistant</button>
+</nav>
 
-<h2>Church & Ministry Dashboard</h2>
-
-<p>
-Welcome to the digital ministry operating system for
-Graceway and Truth Triumphant Church Inc.
-Manage people, follow-up, prayer, discipleship,
-attendance and ministry activities from one place.
-</p>
-
-</div>
-
+<section id="dashboard">
 
 <div class="stats">
 
@@ -249,7 +284,7 @@ attendance and ministry activities from one place.
 
 <div class="stat">
 <h3>New Converts</h3>
-<strong>18</strong>
+<strong id="convertCount">0</strong>
 </div>
 
 <div class="stat">
@@ -258,8 +293,8 @@ attendance and ministry activities from one place.
 </div>
 
 <div class="stat">
-<h3>Attendance</h3>
-<strong>186</strong>
+<h3>Latest Attendance</h3>
+<strong id="attendanceCount">0</strong>
 </div>
 
 <div class="stat">
@@ -274,737 +309,855 @@ attendance and ministry activities from one place.
 
 </div>
 
-
 <div class="grid">
 
 <div class="card">
-
-<h3>👥 Members</h3>
-
-<p>
-Add and manage church members and their basic information.
-</p>
-
-<button onclick="scrollToSection('members')">
-Manage Members
-</button>
-
+<h2>👥 Members</h2>
+<p>Manage church members and ministry departments.</p>
+<button class="primary" onclick="scrollToSection('members')">Open Members</button>
 </div>
-
 
 <div class="card">
-
-<h3>🙏 Prayer Requests</h3>
-
-<p>
-Record prayer requests and follow up with people in need of prayer.
-</p>
-
-<button onclick="scrollToSection('prayers')">
-Manage Prayer Requests
-</button>
-
+<h2>❤️ New Converts</h2>
+<p>Track new converts and their follow-up journey.</p>
+<button class="primary" onclick="scrollToSection('converts')">Open Follow-up</button>
 </div>
-
 
 <div class="card">
-
-<h3>❤️ New Converts</h3>
-
-<p>
-Track new converts and ensure that nobody is forgotten after salvation.
-</p>
-
-<button onclick="showMessage('New convert follow-up will be available in the next upgrade.')">
-Follow Up
-</button>
-
+<h2>📊 Attendance</h2>
+<p>Record attendance for church services.</p>
+<button class="primary" onclick="scrollToSection('attendance')">Record Attendance</button>
 </div>
-
 
 <div class="card">
-
-<h3>📊 Attendance</h3>
-
-<p>
-Monitor attendance and understand participation trends.
-</p>
-
-<button onclick="showMessage('Attendance analytics will be available in the next upgrade.')">
-View Attendance
-</button>
-
+<h2>🙏 Prayer Requests</h2>
+<p>Record and monitor prayer requests.</p>
+<button class="primary" onclick="scrollToSection('prayers')">Open Prayer Requests</button>
 </div>
-
 
 <div class="card">
-
-<h3>💰 Giving</h3>
-
-<p>
-Monitor giving records and ministry financial information.
-</p>
-
-<button onclick="showMessage('Giving analytics will be available in the next upgrade.')">
-View Giving
-</button>
-
+<h2>🤖 AI Ministry Assistant</h2>
+<p>Create simple ministry content and follow-up messages.</p>
+<button class="primary" onclick="scrollToSection('ai')">Open AI Assistant</button>
 </div>
-
 
 <div class="card">
-
-<h3>📖 Foundation School</h3>
-
-<p>
-Track discipleship, classes, attendance and spiritual growth.
-</p>
-
-<button onclick="showMessage('Foundation School tracking will be available in the next upgrade.')">
-Open School
-</button>
-
-</div>
-
-
-<div class="card">
-
-<h3>📣 Communications</h3>
-
-<p>
-Create church announcements, WhatsApp messages and social-media content.
-</p>
-
-<button onclick="showMessage('Church communication tools will be available in the next upgrade.')">
-Create Message
-</button>
-
-</div>
-
-
-<div class="card">
-
-<h3>👨‍💼 Leadership</h3>
-
-<p>
-Give pastors and leaders a clear view of important ministry activities.
-</p>
-
-<button onclick="showMessage('Leadership dashboard will be available in the next upgrade.')">
-Leadership View
-</button>
-
+<h2>📖 Foundation School</h2>
+<p>Track discipleship and foundation school progress.</p>
+<button class="primary" onclick="showMessage('Foundation School module is coming next.')">Open Foundation School</button>
 </div>
 
 </div>
+</section>
 
 
 <!-- MEMBERS -->
 
-<div class="card section" id="members">
+<section class="section" id="members">
 
 <h2>👥 Member Management</h2>
 
-<p>
-Add members to the Graceway ministry database.
-</p>
+<div class="form-grid">
 
-<div class="form">
+<div>
+<label>Full Name</label>
+<input id="memberName" placeholder="Enter full name">
+</div>
 
-<input
-id="memberName"
-placeholder="Member full name">
+<div>
+<label>Phone Number</label>
+<input id="memberPhone" placeholder="Enter phone number">
+</div>
 
-<input
-id="memberPhone"
-placeholder="Phone number">
-
+<div>
+<label>Status</label>
 <select id="memberStatus">
-
-<option value="Member">Member</option>
-<option value="New Convert">New Convert</option>
-<option value="Worker">Worker</option>
-<option value="Leader">Leader</option>
-
+<option>Member</option>
+<option>New Convert</option>
+<option>Worker</option>
+<option>Leader</option>
 </select>
+</div>
 
+<div>
+<label>Department</label>
 <select id="memberDepartment">
-
-<option value="Not Assigned">Department</option>
-<option value="Choir">Choir</option>
-<option value="Evangelism">Evangelism</option>
-<option value="Children">Children</option>
-<option value="Youth">Youth</option>
-<option value="Women">Women</option>
-<option value="Men">Men</option>
-<option value="Media">Media</option>
-<option value="Ushering">Ushering</option>
-
+<option>Not Assigned</option>
+<option>Choir</option>
+<option>Evangelism</option>
+<option>Children</option>
+<option>Youth</option>
+<option>Women</option>
+<option>Men</option>
+<option>Media</option>
+<option>Ushering</option>
 </select>
-
-<button onclick="addMember()">
-Add Member
-</button>
+</div>
 
 </div>
 
-<div class="item-list" id="memberList"></div>
+<button class="primary" onclick="addMember()">Add Member</button>
+
+<div class="list" id="memberList"></div>
+
+</section>
+
+
+<!-- NEW CONVERTS -->
+
+<section class="section" id="converts">
+
+<h2>❤️ New Converts & Follow-up</h2>
+
+<p>Record new converts and help the church follow them up intentionally.</p>
+
+<div class="form-grid">
+
+<div>
+<label>Name</label>
+<input id="convertName" placeholder="Enter convert's name">
+</div>
+
+<div>
+<label>Phone Number</label>
+<input id="convertPhone" placeholder="Enter phone number">
+</div>
+
+<div>
+<label>Date of First Contact / Salvation</label>
+<input id="convertDate" type="date">
+</div>
+
+<div>
+<label>Follow-up Status</label>
+<select id="convertStatus">
+<option>New</option>
+<option>Contacted</option>
+<option>In Discipleship</option>
+<option>Joined</option>
+<option>Needs Attention</option>
+</select>
+</div>
+
+<div>
+<label>Assigned Worker</label>
+<input id="convertWorker" placeholder="Worker's name">
+</div>
+
+<div>
+<label>Next Follow-up Date</label>
+<input id="convertNextDate" type="date">
+</div>
 
 </div>
+
+<label>Notes</label>
+<textarea id="convertNotes" placeholder="Add follow-up notes"></textarea>
+
+<button class="primary" onclick="addConvert()">Add New Convert</button>
+
+<div class="list" id="convertList"></div>
+
+</section>
+
+
+<!-- ATTENDANCE -->
+
+<section class="section" id="attendance">
+
+<h2>📊 Attendance Management</h2>
+
+<p>Record attendance for church services and keep a simple attendance history.</p>
+
+<div class="form-grid">
+
+<div>
+<label>Service</label>
+<select id="attendanceService">
+<option>Sunday Service</option>
+<option>Super Sunday School</option>
+<option>Mouldbreak Service</option>
+<option>Commanding the Day</option>
+<option>UNVEIL</option>
+<option>Evangelism</option>
+<option>Special Service</option>
+</select>
+</div>
+
+<div>
+<label>Date</label>
+<input id="attendanceDate" type="date">
+</div>
+
+<div>
+<label>Adults</label>
+<input id="attendanceAdults" type="number" min="0" placeholder="0">
+</div>
+
+<div>
+<label>Children</label>
+<input id="attendanceChildren" type="number" min="0" placeholder="0">
+</div>
+
+<div>
+<label>First Timers</label>
+<input id="attendanceFirstTimers" type="number" min="0" placeholder="0">
+</div>
+
+<div>
+<label>New Converts</label>
+<input id="attendanceConverts" type="number" min="0" placeholder="0">
+</div>
+
+</div>
+
+<button class="primary" onclick="addAttendance()">Save Attendance</button>
+
+<div class="list" id="attendanceList"></div>
+
+</section>
 
 
 <!-- PRAYER REQUESTS -->
 
-<div class="card section" id="prayers">
+<section class="section" id="prayers">
 
 <h2>🙏 Prayer Request Management</h2>
 
-<p>
-Record prayer requests and keep track of follow-up.
-</p>
+<div class="form-grid">
 
-<div class="form">
+<div>
+<label>Person's Name</label>
+<input id="prayerName" placeholder="Enter name">
+</div>
 
-<input
-id="prayerName"
-placeholder="Person's name">
-
-<textarea
-id="prayerRequest"
-placeholder="Enter the prayer request...">
-</textarea>
-
+<div>
+<label>Status</label>
 <select id="prayerStatus">
-
-<option value="Pending">Pending</option>
-<option value="Praying">Praying</option>
-<option value="Answered">Answered</option>
-
+<option>Pending</option>
+<option>Praying</option>
+<option>Answered</option>
 </select>
-
-<button onclick="addPrayer()">
-Add Prayer Request
-</button>
+</div>
 
 </div>
 
-<div class="item-list" id="prayerList"></div>
+<label>Prayer Request</label>
+<textarea id="prayerText" placeholder="Enter prayer request"></textarea>
 
-</div>
+<button class="primary" onclick="addPrayer()">Add Prayer Request</button>
+
+<div class="list" id="prayerList"></div>
+
+</section>
 
 
 <!-- AI ASSISTANT -->
 
-<div class="ai-box">
+<section class="section" id="ai">
 
 <h2>🤖 AI Ministry Assistant</h2>
 
-<p>
-Generate sermon ideas, devotionals, follow-up messages
-and church announcements.
-</p>
+<p>Ask ChurchOS AI for a simple ministry response.</p>
 
-<textarea
-id="aiQuestion"
-placeholder="Example: Write a devotional about faith...">
-</textarea>
+<input id="aiInput" placeholder="Example: Write a devotional about faith">
 
-<button onclick="askAI()">
-Ask Ministry Assistant
-</button>
+<button class="primary" onclick="askAI()">Ask ChurchOS AI</button>
 
-<div id="aiResponse">
-Your AI response will appear here.
+<div class="ai-box" id="aiResponse">
+Your ministry assistant is ready.
 </div>
 
-</div>
-
-
-<div class="tagline">
-Home of Triumphant
-</div>
+</section>
 
 </div>
 
 
 <footer>
-
-Graceway and Truth Triumphant Church Inc.<br>
-ChurchOS AI Ministry Operating System
-
+<p><strong>Graceway and Truth Triumphant Church Inc.</strong></p>
+<p>Transform • Build • Inherit</p>
+<p>Powered by ChurchOS AI</p>
+<p>Home of Triumphant</p>
 </footer>
 
 
 <script>
 
+let members = JSON.parse(localStorage.getItem("gracewayMembers")) || [];
+let prayers = JSON.parse(localStorage.getItem("gracewayPrayers")) || [];
+let converts = JSON.parse(localStorage.getItem("gracewayConverts")) || [];
+let attendance = JSON.parse(localStorage.getItem("gracewayAttendance")) || [];
+
+
+/* NAVIGATION */
+
+function scrollToSection(id){
+  document.getElementById(id).scrollIntoView({
+    behavior:"smooth"
+  });
+}
+
+
 /* MEMBERS */
 
-let members =
-JSON.parse(localStorage.getItem("gracewayMembers")) || [];
+function addMember(){
 
+  const name = document.getElementById("memberName").value.trim();
+  const phone = document.getElementById("memberPhone").value.trim();
+  const status = document.getElementById("memberStatus").value;
+  const department = document.getElementById("memberDepartment").value;
 
-function saveMembers() {
+  if(!name){
+    alert("Please enter the member's name.");
+    return;
+  }
 
-localStorage.setItem(
-"gracewayMembers",
-JSON.stringify(members)
-);
+  members.push({
+    id:Date.now(),
+    name:name,
+    phone:phone,
+    status:status,
+    department:department
+  });
 
+  localStorage.setItem("gracewayMembers",JSON.stringify(members));
+
+  document.getElementById("memberName").value="";
+  document.getElementById("memberPhone").value="";
+
+  renderMembers();
 }
 
 
-function addMember() {
+function deleteMember(id){
 
-const name =
-document.getElementById("memberName").value.trim();
+  members = members.filter(member => member.id !== id);
 
-const phone =
-document.getElementById("memberPhone").value.trim();
+  localStorage.setItem("gracewayMembers",JSON.stringify(members));
 
-const status =
-document.getElementById("memberStatus").value;
-
-const department =
-document.getElementById("memberDepartment").value;
-
-
-if (!name) {
-
-alert("Please enter the member's name.");
-
-return;
-
+  renderMembers();
 }
 
 
-members.push({
+function renderMembers(){
 
-id: Date.now(),
+  const list = document.getElementById("memberList");
 
-name: name,
+  document.getElementById("memberCount").textContent = members.length;
 
-phone: phone,
+  if(members.length === 0){
+    list.innerHTML = '<div class="empty">No members added yet.</div>';
+    return;
+  }
 
-status: status,
+  list.innerHTML = members.map(member => `
 
-department: department
+    <div class="item">
 
-});
+      <strong>${escapeHTML(member.name)}</strong>
 
+      <small>📞 ${escapeHTML(member.phone || "No phone number")}</small>
 
-saveMembers();
+      <small>👤 Status: ${escapeHTML(member.status)}</small>
 
-document.getElementById("memberName").value = "";
+      <small>🏛️ Department: ${escapeHTML(member.department)}</small>
 
-document.getElementById("memberPhone").value = "";
+      <div class="actions">
 
-displayMembers();
+        <button class="delete"
+        onclick="deleteMember(${member.id})">
+        Delete
+        </button>
 
+      </div>
+
+    </div>
+
+  `).join("");
 }
 
 
-function deleteMember(id) {
+/* NEW CONVERTS */
 
-members =
-members.filter(member => member.id !== id);
+function addConvert(){
 
-saveMembers();
+  const name = document.getElementById("convertName").value.trim();
+  const phone = document.getElementById("convertPhone").value.trim();
+  const date = document.getElementById("convertDate").value;
+  const status = document.getElementById("convertStatus").value;
+  const worker = document.getElementById("convertWorker").value.trim();
+  const nextDate = document.getElementById("convertNextDate").value;
+  const notes = document.getElementById("convertNotes").value.trim();
 
-displayMembers();
+  if(!name){
+    alert("Please enter the convert's name.");
+    return;
+  }
 
+  converts.push({
+    id:Date.now(),
+    name:name,
+    phone:phone,
+    date:date,
+    status:status,
+    worker:worker,
+    nextDate:nextDate,
+    notes:notes
+  });
+
+  localStorage.setItem("gracewayConverts",JSON.stringify(converts));
+
+  document.getElementById("convertName").value="";
+  document.getElementById("convertPhone").value="";
+  document.getElementById("convertDate").value="";
+  document.getElementById("convertWorker").value="";
+  document.getElementById("convertNextDate").value="";
+  document.getElementById("convertNotes").value="";
+
+  renderConverts();
 }
 
 
-function displayMembers() {
+function changeConvertStatus(id){
 
-const list =
-document.getElementById("memberList");
+  const statuses = [
+    "New",
+    "Contacted",
+    "In Discipleship",
+    "Joined",
+    "Needs Attention"
+  ];
 
-const count =
-document.getElementById("memberCount");
+  const convert = converts.find(item => item.id === id);
 
-count.innerText = members.length;
+  if(!convert) return;
 
+  let index = statuses.indexOf(convert.status);
 
-if (members.length === 0) {
+  index = (index + 1) % statuses.length;
 
-list.innerHTML =
-"<p>No members added yet.</p>";
+  convert.status = statuses[index];
 
-return;
+  localStorage.setItem("gracewayConverts",JSON.stringify(converts));
 
+  renderConverts();
 }
 
 
-list.innerHTML = "";
+function deleteConvert(id){
+
+  converts = converts.filter(item => item.id !== id);
+
+  localStorage.setItem("gracewayConverts",JSON.stringify(converts));
+
+  renderConverts();
+}
 
 
-members.forEach(member => {
+function renderConverts(){
 
-const div =
-document.createElement("div");
+  const list = document.getElementById("convertList");
 
-div.className = "item";
+  document.getElementById("convertCount").textContent = converts.length;
+
+  if(converts.length === 0){
+    list.innerHTML = '<div class="empty">No new converts recorded yet.</div>';
+    return;
+  }
+
+  list.innerHTML = converts.map(convert => `
+
+    <div class="item">
+
+      <strong>${escapeHTML(convert.name)}</strong>
+
+      <small>📞 ${escapeHTML(convert.phone || "No phone number")}</small>
+
+      <small>📅 First Contact / Salvation:
+      ${escapeHTML(convert.date || "Not recorded")}</small>
+
+      <small>❤️ Status:
+      ${escapeHTML(convert.status)}</small>
+
+      <small>👤 Assigned Worker:
+      ${escapeHTML(convert.worker || "Not assigned")}</small>
+
+      <small>📆 Next Follow-up:
+      ${escapeHTML(convert.nextDate || "Not scheduled")}</small>
+
+      <small>📝 Notes:
+      ${escapeHTML(convert.notes || "No notes")}</small>
+
+      <div class="actions">
+
+        <button class="status-btn"
+        onclick="changeConvertStatus(${convert.id})">
+        Change Status
+        </button>
+
+        <button class="delete"
+        onclick="deleteConvert(${convert.id})">
+        Delete
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+}
 
 
-div.innerHTML = `
+/* ATTENDANCE */
 
-<strong>${member.name}</strong>
+function addAttendance(){
 
-<small>
-📞 ${member.phone || "No phone number"}<br>
-👤 ${member.status}<br>
-🏷️ ${member.department}
-</small>
+  const service = document.getElementById("attendanceService").value;
+  const date = document.getElementById("attendanceDate").value;
 
-<br>
+  const adults =
+    Number(document.getElementById("attendanceAdults").value) || 0;
 
-<button
-class="delete-btn"
-onclick="deleteMember(${member.id})">
-Delete
-</button>
+  const children =
+    Number(document.getElementById("attendanceChildren").value) || 0;
 
-`;
+  const firstTimers =
+    Number(document.getElementById("attendanceFirstTimers").value) || 0;
 
-list.appendChild(div);
+  const newConverts =
+    Number(document.getElementById("attendanceConverts").value) || 0;
 
-});
+  if(!date){
+    alert("Please select a date.");
+    return;
+  }
 
+  const total = adults + children;
+
+  attendance.push({
+    id:Date.now(),
+    service:service,
+    date:date,
+    adults:adults,
+    children:children,
+    firstTimers:firstTimers,
+    newConverts:newConverts,
+    total:total
+  });
+
+  localStorage.setItem(
+    "gracewayAttendance",
+    JSON.stringify(attendance)
+  );
+
+  document.getElementById("attendanceDate").value="";
+  document.getElementById("attendanceAdults").value="";
+  document.getElementById("attendanceChildren").value="";
+  document.getElementById("attendanceFirstTimers").value="";
+  document.getElementById("attendanceConverts").value="";
+
+  renderAttendance();
+}
+
+
+function deleteAttendance(id){
+
+  attendance = attendance.filter(item => item.id !== id);
+
+  localStorage.setItem(
+    "gracewayAttendance",
+    JSON.stringify(attendance)
+  );
+
+  renderAttendance();
+}
+
+
+function renderAttendance(){
+
+  const list = document.getElementById("attendanceList");
+
+  if(attendance.length === 0){
+
+    document.getElementById("attendanceCount").textContent = "0";
+
+    list.innerHTML =
+      '<div class="empty">No attendance recorded yet.</div>';
+
+    return;
+  }
+
+  const latest = attendance[attendance.length - 1];
+
+  document.getElementById("attendanceCount").textContent =
+    latest.total;
+
+  list.innerHTML = [...attendance]
+    .reverse()
+    .map(item => `
+
+      <div class="item">
+
+        <strong>${escapeHTML(item.service)}</strong>
+
+        <small>📅 Date: ${escapeHTML(item.date)}</small>
+
+        <small>👨 Adults: ${item.adults}</small>
+
+        <small>👧 Children: ${item.children}</small>
+
+        <small>⭐ First Timers: ${item.firstTimers}</small>
+
+        <small>❤️ New Converts: ${item.newConverts}</small>
+
+        <small>
+        👥 Total Attendance: <strong>${item.total}</strong>
+        </small>
+
+        <div class="actions">
+
+          <button class="delete"
+          onclick="deleteAttendance(${item.id})">
+          Delete
+          </button>
+
+        </div>
+
+      </div>
+
+    `).join("");
 }
 
 
 /* PRAYER REQUESTS */
 
-let prayers =
-JSON.parse(localStorage.getItem("gracewayPrayers")) || [];
+function addPrayer(){
+
+  const name = document.getElementById("prayerName").value.trim();
+  const text = document.getElementById("prayerText").value.trim();
+  const status = document.getElementById("prayerStatus").value;
+
+  if(!name || !text){
+    alert("Please enter the person's name and prayer request.");
+    return;
+  }
+
+  prayers.push({
+    id:Date.now(),
+    name:name,
+    text:text,
+    status:status
+  });
+
+  localStorage.setItem("gracewayPrayers",JSON.stringify(prayers));
+
+  document.getElementById("prayerName").value="";
+  document.getElementById("prayerText").value="";
+
+  renderPrayers();
+}
 
 
-function savePrayers() {
+function changePrayerStatus(id){
 
-localStorage.setItem(
-"gracewayPrayers",
-JSON.stringify(prayers)
-);
+  const prayer = prayers.find(item => item.id === id);
+
+  if(!prayer) return;
+
+  if(prayer.status === "Pending"){
+    prayer.status = "Praying";
+  }
+  else if(prayer.status === "Praying"){
+    prayer.status = "Answered";
+  }
+  else{
+    prayer.status = "Pending";
+  }
+
+  localStorage.setItem("gracewayPrayers",JSON.stringify(prayers));
+
+  renderPrayers();
+}
+
+
+function deletePrayer(id){
+
+  prayers = prayers.filter(item => item.id !== id);
+
+  localStorage.setItem("gracewayPrayers",JSON.stringify(prayers));
+
+  renderPrayers();
+}
+
+
+function renderPrayers(){
+
+  const list = document.getElementById("prayerList");
+
+  document.getElementById("prayerCount").textContent =
+    prayers.length;
+
+  if(prayers.length === 0){
+    list.innerHTML =
+      '<div class="empty">No prayer requests added yet.</div>';
+    return;
+  }
+
+  list.innerHTML = prayers.map(prayer => `
+
+    <div class="item">
+
+      <strong>${escapeHTML(prayer.name)}</strong>
+
+      <small>🙏 ${escapeHTML(prayer.text)}</small>
+
+      <small>Status: ${escapeHTML(prayer.status)}</small>
+
+      <div class="actions">
+
+        <button class="status-btn"
+        onclick="changePrayerStatus(${prayer.id})">
+        Change Status
+        </button>
+
+        <button class="delete"
+        onclick="deletePrayer(${prayer.id})">
+        Delete
+        </button>
+
+      </div>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* AI ASSISTANT */
+
+function askAI(){
+
+  const input =
+    document.getElementById("aiInput").value
+    .trim()
+    .toLowerCase();
+
+  const response =
+    document.getElementById("aiResponse");
+
+  if(!input){
+    response.innerHTML =
+      "Please enter a ministry request.";
+    return;
+  }
+
+  let answer = "";
+
+  if(
+    input.includes("devotional") ||
+    input.includes("devotion")
+  ){
+
+    answer = `
+      <strong>Devotional Topic: Faith Beyond What You See</strong>
+      <br><br>
+      Scripture: Hebrews 11:1
+      <br><br>
+      Faith does not depend on what is visible.
+      Faith responds to God's Word and holds firmly
+      to what God has promised.
+    `;
+
+  }
+
+  else if(
+    input.includes("sermon") ||
+    input.includes("message") ||
+    input.includes("preach")
+  ){
+
+    answer = `
+      <strong>Sermon Topic: Fight the Good Fight of Faith</strong>
+      <br><br>
+      Scripture: 1 Timothy 6:12
+      <br><br>
+      Faith is not passive. Stand upon God's Word,
+      refuse to surrender to circumstances and keep
+      moving forward in Christ.
+    `;
+
+  }
+
+  else if(
+    input.includes("follow") ||
+    input.includes("convert")
+  ){
+
+    answer = `
+      <strong>Follow-up Message</strong>
+      <br><br>
+      Hello! We are glad to have you with us at
+      Graceway and Truth Triumphant Church Inc.
+      We would love to know how you are doing and
+      help you grow in your walk with Christ.
+      You are welcome and loved.
+    `;
+
+  }
+
+  else if(
+    input.includes("announcement") ||
+    input.includes("whatsapp")
+  ){
+
+    answer = `
+      <strong>Church Announcement</strong>
+      <br><br>
+      Graceway and Truth Triumphant Church Inc.
+      invites you to join us as we gather to worship,
+      learn God's Word and grow together in Christ.
+      <br><br>
+      Transform • Build • Inherit
+    `;
+
+  }
+
+  else{
+
+    answer = `
+      <strong>ChurchOS AI Ministry Assistant</strong>
+      <br><br>
+      I can currently help with devotional ideas,
+      sermon topics, follow-up messages and church
+      announcements.
+    `;
+
+  }
+
+  response.innerHTML = answer;
+}
+
+
+/* SECURITY */
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-function addPrayer() {
-
-const name =
-document.getElementById("prayerName").value.trim();
-
-const request =
-document.getElementById("prayerRequest").value.trim();
-
-const status =
-document.getElementById("prayerStatus").value;
-
-
-if (!name || !request) {
-
-alert("Please enter the person's name and prayer request.");
-
-return;
-
-}
-
-
-prayers.push({
-
-id: Date.now(),
-
-name: name,
-
-request: request,
-
-status: status
-
-});
-
-
-savePrayers();
-
-document.getElementById("prayerName").value = "";
-
-document.getElementById("prayerRequest").value = "";
-
-displayPrayers();
-
-}
-
-
-function deletePrayer(id) {
-
-prayers =
-prayers.filter(prayer => prayer.id !== id);
-
-savePrayers();
-
-displayPrayers();
-
-}
-
-
-function updatePrayerStatus(id) {
-
-const prayer =
-prayers.find(item => item.id === id);
-
-if (!prayer) return;
-
-
-if (prayer.status === "Pending") {
-
-prayer.status = "Praying";
-
-}
-
-else if (prayer.status === "Praying") {
-
-prayer.status = "Answered";
-
-}
-
-else {
-
-prayer.status = "Pending";
-
-}
-
-
-savePrayers();
-
-displayPrayers();
-
-}
-
-
-function displayPrayers() {
-
-const list =
-document.getElementById("prayerList");
-
-const count =
-document.getElementById("prayerCount");
-
-count.innerText = prayers.length;
-
-
-if (prayers.length === 0) {
-
-list.innerHTML =
-"<p>No prayer requests added yet.</p>";
-
-return;
-
-}
-
-
-list.innerHTML = "";
-
-
-prayers.forEach(prayer => {
-
-const div =
-document.createElement("div");
-
-div.className = "item";
-
-
-div.innerHTML = `
-
-<strong>🙏 ${prayer.name}</strong>
-
-<small>
-${prayer.request}<br><br>
-Status: <b>${prayer.status}</b>
-</small>
-
-<br>
-
-<button
-class="status-btn"
-onclick="updatePrayerStatus(${prayer.id})">
-Change Status
-</button>
-
-<button
-class="delete-btn"
-onclick="deletePrayer(${prayer.id})">
-Delete
-</button>
-
-`;
-
-list.appendChild(div);
-
-});
-
-}
-
-
-/* NAVIGATION */
-
-function scrollToSection(id) {
-
-document
-.getElementById(id)
-.scrollIntoView({
-behavior: "smooth"
-});
-
-}
-
-
-function showMessage(message) {
-
-alert(message);
-
-}
-
-
-/* AI MINISTRY ASSISTANT */
-
-function askAI() {
-
-const question =
-document
-.getElementById("aiQuestion")
-.value
-.toLowerCase();
-
-const response =
-document.getElementById("aiResponse");
-
-
-if (!question.trim()) {
-
-response.innerText =
-"Please enter a ministry question first.";
-
-return;
-
-}
-
-
-if (
-question.includes("devotional") ||
-question.includes("devotion")
-) {
-
-response.innerText =
-`DEVOTIONAL IDEA
-
-Faith Beyond What You See
-
-Scripture: Hebrews 11:1
-
-Faith is trusting God and His Word even when
-the evidence around us has not yet changed.
-
-God's Word remains sufficient.
-
-Encourage the church to keep believing,
-keep walking and keep standing on what
-God has spoken.`;
-
-}
-
-
-else if (
-question.includes("sermon") ||
-question.includes("message")
-) {
-
-response.innerText =
-`SERMON IDEA
-
-Fight the Good Fight of Faith
-
-Main Scripture: 1 Timothy 6:12
-
-Key Points:
-
-1. Faith must be exercised.
-
-2. Faith stands on God's Word.
-
-3. Faith refuses to surrender to circumstances.
-
-4. Faith keeps moving toward God's purpose.`;
-
-}
-
-
-else if (
-question.includes("follow") ||
-question.includes("convert")
-) {
-
-response.innerText =
-`FOLLOW-UP MESSAGE
-
-Hello!
-
-We are grateful that you worshipped with
-Graceway and Truth Triumphant Church Inc.
-
-We would love to know how you are doing
-and how we can pray with you.
-
-You are welcome, loved and valued in
-this family.`;
-
-}
-
-
-else if (
-question.includes("announcement") ||
-question.includes("whatsapp")
-) {
-
-response.innerText =
-`CHURCH ANNOUNCEMENT
-
-Dear Graceway family,
-
-We invite you to join us for our upcoming service.
-
-Come expectant, invite someone and let's
-encounter Christ together through the
-ministry of God's Word.`;
-
-}
-
-
-else {
-
-response.innerText =
-`ChurchOS AI is ready to assist Graceway and
-Truth Triumphant Church Inc.
-
-I can help with:
-
-• Sermons
-• Devotionals
-• New-convert follow-up
-• Church announcements
-• Ministry communication
-
-Tell me what you would like to create.`;
-
-}
-
-}
-
-
-/* LOAD SAVED DATA */
-
-displayMembers();
-
-displayPrayers();
+/* START */
+
+renderMembers();
+renderConverts();
+renderAttendance();
+renderPrayers();
 
 </script>
 
