@@ -122,11 +122,11 @@ button:hover {
   opacity: 0.9;
 }
 
-.member-section {
+.section {
   margin-top: 25px;
 }
 
-.member-form {
+.form {
   display: grid;
   gap: 10px;
 }
@@ -146,11 +146,11 @@ textarea {
   resize: vertical;
 }
 
-.member-list {
+.item-list {
   margin-top: 20px;
 }
 
-.member {
+.item {
   background: #f9fafb;
   border: 1px solid #e5e7eb;
   padding: 15px;
@@ -158,18 +158,24 @@ textarea {
   margin-bottom: 10px;
 }
 
-.member strong {
+.item strong {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
-.member small {
+.item small {
   color: #6b7280;
+  line-height: 1.6;
 }
 
 .delete-btn {
   margin-top: 10px;
   background: #b91c1c;
+}
+
+.status-btn {
+  margin-top: 10px;
+  background: #374151;
 }
 
 .ai-box {
@@ -233,6 +239,7 @@ attendance and ministry activities from one place.
 
 </div>
 
+
 <div class="stats">
 
 <div class="stat">
@@ -247,7 +254,7 @@ attendance and ministry activities from one place.
 
 <div class="stat">
 <h3>Prayer Requests</h3>
-<strong>12</strong>
+<strong id="prayerCount">0</strong>
 </div>
 
 <div class="stat">
@@ -271,12 +278,14 @@ attendance and ministry activities from one place.
 <div class="grid">
 
 <div class="card">
+
 <h3>👥 Members</h3>
+
 <p>
 Add and manage church members and their basic information.
 </p>
 
-<button onclick="scrollToMembers()">
+<button onclick="scrollToSection('members')">
 Manage Members
 </button>
 
@@ -284,27 +293,29 @@ Manage Members
 
 
 <div class="card">
+
 <h3>🙏 Prayer Requests</h3>
 
 <p>
-Record prayer requests and help leaders follow up with members.
+Record prayer requests and follow up with people in need of prayer.
 </p>
 
-<button onclick="showMessage('Prayer request management is coming next.')">
-View Requests
+<button onclick="scrollToSection('prayers')">
+Manage Prayer Requests
 </button>
 
 </div>
 
 
 <div class="card">
+
 <h3>❤️ New Converts</h3>
 
 <p>
 Track new converts and ensure that nobody is forgotten after salvation.
 </p>
 
-<button onclick="showMessage('New convert follow-up is coming next.')">
+<button onclick="showMessage('New convert follow-up will be available in the next upgrade.')">
 Follow Up
 </button>
 
@@ -312,13 +323,14 @@ Follow Up
 
 
 <div class="card">
+
 <h3>📊 Attendance</h3>
 
 <p>
 Monitor attendance and understand participation trends.
 </p>
 
-<button onclick="showMessage('Attendance analytics is coming next.')">
+<button onclick="showMessage('Attendance analytics will be available in the next upgrade.')">
 View Attendance
 </button>
 
@@ -326,13 +338,14 @@ View Attendance
 
 
 <div class="card">
+
 <h3>💰 Giving</h3>
 
 <p>
 Monitor giving records and ministry financial information.
 </p>
 
-<button onclick="showMessage('Giving analytics is coming next.')">
+<button onclick="showMessage('Giving analytics will be available in the next upgrade.')">
 View Giving
 </button>
 
@@ -340,13 +353,14 @@ View Giving
 
 
 <div class="card">
+
 <h3>📖 Foundation School</h3>
 
 <p>
 Track discipleship, classes, attendance and spiritual growth.
 </p>
 
-<button onclick="showMessage('Foundation School tracking is coming next.')">
+<button onclick="showMessage('Foundation School tracking will be available in the next upgrade.')">
 Open School
 </button>
 
@@ -354,13 +368,14 @@ Open School
 
 
 <div class="card">
+
 <h3>📣 Communications</h3>
 
 <p>
 Create church announcements, WhatsApp messages and social-media content.
 </p>
 
-<button onclick="showMessage('Church communication tools are coming next.')">
+<button onclick="showMessage('Church communication tools will be available in the next upgrade.')">
 Create Message
 </button>
 
@@ -368,13 +383,14 @@ Create Message
 
 
 <div class="card">
+
 <h3>👨‍💼 Leadership</h3>
 
 <p>
 Give pastors and leaders a clear view of important ministry activities.
 </p>
 
-<button onclick="showMessage('Leadership dashboard is coming next.')">
+<button onclick="showMessage('Leadership dashboard will be available in the next upgrade.')">
 Leadership View
 </button>
 
@@ -383,9 +399,9 @@ Leadership View
 </div>
 
 
-<!-- MEMBER MANAGEMENT -->
+<!-- MEMBERS -->
 
-<div class="card member-section" id="members">
+<div class="card section" id="members">
 
 <h2>👥 Member Management</h2>
 
@@ -393,7 +409,7 @@ Leadership View
 Add members to the Graceway ministry database.
 </p>
 
-<div class="member-form">
+<div class="form">
 
 <input
 id="memberName"
@@ -405,65 +421,26 @@ placeholder="Phone number">
 
 <select id="memberStatus">
 
-<option value="Member">
-Member
-</option>
-
-<option value="New Convert">
-New Convert
-</option>
-
-<option value="Worker">
-Worker
-</option>
-
-<option value="Leader">
-Leader
-</option>
+<option value="Member">Member</option>
+<option value="New Convert">New Convert</option>
+<option value="Worker">Worker</option>
+<option value="Leader">Leader</option>
 
 </select>
-
 
 <select id="memberDepartment">
 
-<option value="Not Assigned">
-Department
-</option>
-
-<option value="Choir">
-Choir
-</option>
-
-<option value="Evangelism">
-Evangelism
-</option>
-
-<option value="Children">
-Children
-</option>
-
-<option value="Youth">
-Youth
-</option>
-
-<option value="Women">
-Women
-</option>
-
-<option value="Men">
-Men
-</option>
-
-<option value="Media">
-Media
-</option>
-
-<option value="Ushering">
-Ushering
-</option>
+<option value="Not Assigned">Department</option>
+<option value="Choir">Choir</option>
+<option value="Evangelism">Evangelism</option>
+<option value="Children">Children</option>
+<option value="Youth">Youth</option>
+<option value="Women">Women</option>
+<option value="Men">Men</option>
+<option value="Media">Media</option>
+<option value="Ushering">Ushering</option>
 
 </select>
-
 
 <button onclick="addMember()">
 Add Member
@@ -471,12 +448,47 @@ Add Member
 
 </div>
 
-
-<div class="member-list" id="memberList">
-
-<p>No members added yet.</p>
+<div class="item-list" id="memberList"></div>
 
 </div>
+
+
+<!-- PRAYER REQUESTS -->
+
+<div class="card section" id="prayers">
+
+<h2>🙏 Prayer Request Management</h2>
+
+<p>
+Record prayer requests and keep track of follow-up.
+</p>
+
+<div class="form">
+
+<input
+id="prayerName"
+placeholder="Person's name">
+
+<textarea
+id="prayerRequest"
+placeholder="Enter the prayer request...">
+</textarea>
+
+<select id="prayerStatus">
+
+<option value="Pending">Pending</option>
+<option value="Praying">Praying</option>
+<option value="Answered">Answered</option>
+
+</select>
+
+<button onclick="addPrayer()">
+Add Prayer Request
+</button>
+
+</div>
+
+<div class="item-list" id="prayerList"></div>
 
 </div>
 
@@ -525,7 +537,7 @@ ChurchOS AI Ministry Operating System
 
 <script>
 
-/* MEMBER DATABASE */
+/* MEMBERS */
 
 let members =
 JSON.parse(localStorage.getItem("gracewayMembers")) || [];
@@ -565,7 +577,7 @@ return;
 }
 
 
-const member = {
+members.push({
 
 id: Date.now(),
 
@@ -577,10 +589,8 @@ status: status,
 
 department: department
 
-};
+});
 
-
-members.push(member);
 
 saveMembers();
 
@@ -634,7 +644,7 @@ members.forEach(member => {
 const div =
 document.createElement("div");
 
-div.className = "member";
+div.className = "item";
 
 
 div.innerHTML = `
@@ -657,6 +667,176 @@ Delete
 
 `;
 
+list.appendChild(div);
+
+});
+
+}
+
+
+/* PRAYER REQUESTS */
+
+let prayers =
+JSON.parse(localStorage.getItem("gracewayPrayers")) || [];
+
+
+function savePrayers() {
+
+localStorage.setItem(
+"gracewayPrayers",
+JSON.stringify(prayers)
+);
+
+}
+
+
+function addPrayer() {
+
+const name =
+document.getElementById("prayerName").value.trim();
+
+const request =
+document.getElementById("prayerRequest").value.trim();
+
+const status =
+document.getElementById("prayerStatus").value;
+
+
+if (!name || !request) {
+
+alert("Please enter the person's name and prayer request.");
+
+return;
+
+}
+
+
+prayers.push({
+
+id: Date.now(),
+
+name: name,
+
+request: request,
+
+status: status
+
+});
+
+
+savePrayers();
+
+document.getElementById("prayerName").value = "";
+
+document.getElementById("prayerRequest").value = "";
+
+displayPrayers();
+
+}
+
+
+function deletePrayer(id) {
+
+prayers =
+prayers.filter(prayer => prayer.id !== id);
+
+savePrayers();
+
+displayPrayers();
+
+}
+
+
+function updatePrayerStatus(id) {
+
+const prayer =
+prayers.find(item => item.id === id);
+
+if (!prayer) return;
+
+
+if (prayer.status === "Pending") {
+
+prayer.status = "Praying";
+
+}
+
+else if (prayer.status === "Praying") {
+
+prayer.status = "Answered";
+
+}
+
+else {
+
+prayer.status = "Pending";
+
+}
+
+
+savePrayers();
+
+displayPrayers();
+
+}
+
+
+function displayPrayers() {
+
+const list =
+document.getElementById("prayerList");
+
+const count =
+document.getElementById("prayerCount");
+
+count.innerText = prayers.length;
+
+
+if (prayers.length === 0) {
+
+list.innerHTML =
+"<p>No prayer requests added yet.</p>";
+
+return;
+
+}
+
+
+list.innerHTML = "";
+
+
+prayers.forEach(prayer => {
+
+const div =
+document.createElement("div");
+
+div.className = "item";
+
+
+div.innerHTML = `
+
+<strong>🙏 ${prayer.name}</strong>
+
+<small>
+${prayer.request}<br><br>
+Status: <b>${prayer.status}</b>
+</small>
+
+<br>
+
+<button
+class="status-btn"
+onclick="updatePrayerStatus(${prayer.id})">
+Change Status
+</button>
+
+<button
+class="delete-btn"
+onclick="deletePrayer(${prayer.id})">
+Delete
+</button>
+
+`;
 
 list.appendChild(div);
 
@@ -665,10 +845,12 @@ list.appendChild(div);
 }
 
 
-function scrollToMembers() {
+/* NAVIGATION */
+
+function scrollToSection(id) {
 
 document
-.getElementById("members")
+.getElementById(id)
 .scrollIntoView({
 behavior: "smooth"
 });
@@ -818,9 +1000,11 @@ Tell me what you would like to create.`;
 }
 
 
-/* LOAD MEMBERS */
+/* LOAD SAVED DATA */
 
 displayMembers();
+
+displayPrayers();
 
 </script>
 
