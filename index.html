@@ -13,7 +13,7 @@
 }
 
 body{
-  font-family:Arial, sans-serif;
+  font-family:Arial,sans-serif;
   background:#f4f7fb;
   color:#172033;
   line-height:1.6;
@@ -84,7 +84,7 @@ nav button{
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:15px;
   margin-bottom:25px;
 }
@@ -98,7 +98,7 @@ nav button{
 }
 
 .stat h3{
-  font-size:30px;
+  font-size:29px;
   color:#1d4ed8;
 }
 
@@ -144,6 +144,16 @@ textarea{
   color:white;
   border:none;
   padding:11px 17px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.secondary{
+  background:#e8eefc;
+  color:#173b8f;
+  border:none;
+  padding:10px 15px;
   border-radius:8px;
   cursor:pointer;
   font-weight:bold;
@@ -198,6 +208,25 @@ textarea{
   margin-top:15px;
 }
 
+.copy-box{
+  background:#f8fafc;
+  border:1px solid #d0d5dd;
+  border-radius:10px;
+  padding:15px;
+  margin-top:15px;
+  white-space:pre-wrap;
+}
+
+.badge{
+  display:inline-block;
+  background:#e8eefc;
+  color:#173b8f;
+  padding:4px 8px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+}
+
 footer{
   background:#111827;
   color:white;
@@ -244,6 +273,8 @@ footer{
   <button onclick="scrollToSection('prayers')">Prayer Requests</button>
   <button onclick="scrollToSection('communications')">Communications</button>
   <button onclick="scrollToSection('leadership')">Leadership</button>
+  <button onclick="scrollToSection('events')">Events</button>
+  <button onclick="scrollToSection('messaging')">Member Messages</button>
   <button onclick="scrollToSection('assistant')">AI Assistant</button>
 </nav>
 
@@ -252,8 +283,9 @@ footer{
 <section class="hero" id="dashboard">
   <h2>ChurchOS AI Ministry Operating System</h2>
   <p>
-    A simple digital system for managing members, follow-up,
-    attendance, discipleship, giving, prayer and ministry operations.
+    A digital system for managing members, follow-up, attendance,
+    discipleship, giving, prayer, events, communications and
+    ministry operations.
   </p>
 </section>
 
@@ -297,6 +329,11 @@ footer{
   <div class="stat">
     <h3 id="communicationCount">0</h3>
     <p>Announcements</p>
+  </div>
+
+  <div class="stat">
+    <h3 id="eventCount">0</h3>
+    <p>Church Events</p>
   </div>
 
 </div>
@@ -537,9 +574,7 @@ Save Announcement
 <section id="leadership">
 <h2>👑 Leadership Dashboard</h2>
 
-<p>
-Manage leaders, departments and ministry responsibilities.
-</p>
+<p>Manage leaders, departments and ministry responsibilities.</p>
 
 <br>
 
@@ -575,6 +610,120 @@ Manage leaders, departments and ministry responsibilities.
 <button class="primary" onclick="addLeader()">Add Leader</button>
 
 <div id="leaderList" class="list"></div>
+</section>
+
+
+<!-- EVENTS -->
+
+<section id="events">
+<h2>📅 Church Events</h2>
+
+<p>Create and manage upcoming church programmes and activities.</p>
+
+<br>
+
+<div class="form-grid">
+
+<input id="eventTitle" placeholder="Event Title">
+
+<input id="eventDate" type="date">
+
+<input id="eventTime" type="time">
+
+<input id="eventVenue" placeholder="Venue">
+
+<select id="eventType">
+<option>Church Service</option>
+<option>Prayer Meeting</option>
+<option>Conference</option>
+<option>Evangelism</option>
+<option>Youth Programme</option>
+<option>Children's Programme</option>
+<option>Workers Meeting</option>
+<option>Special Event</option>
+</select>
+
+</div>
+
+<textarea id="eventDescription"
+placeholder="Event description"></textarea>
+
+<br><br>
+
+<button class="primary" onclick="addEvent()">
+Add Church Event
+</button>
+
+<div id="eventList" class="list"></div>
+</section>
+
+
+<!-- MEMBER COMMUNICATION -->
+
+<section id="messaging">
+<h2>💬 Member Communication Tools</h2>
+
+<p>
+Prepare messages for WhatsApp, SMS or church groups.
+</p>
+
+<br>
+
+<div class="form-grid">
+
+<select id="messageAudience">
+<option>All Members</option>
+<option>Workers</option>
+<option>Leaders</option>
+<option>New Converts</option>
+<option>Youth</option>
+<option>Women</option>
+<option>Men</option>
+<option>Choir</option>
+<option>Evangelism Team</option>
+</select>
+
+<select id="messageType">
+<option>General Announcement</option>
+<option>Service Reminder</option>
+<option>Prayer Reminder</option>
+<option>Birthday Message</option>
+<option>Follow-up Message</option>
+<option>Event Invitation</option>
+<option>Special Message</option>
+</select>
+
+</div>
+
+<input id="messageSubject"
+placeholder="Message subject">
+
+<br><br>
+
+<textarea id="messageBody"
+placeholder="Write your message here..."></textarea>
+
+<br><br>
+
+<button class="primary" onclick="generateMessage()">
+Generate Message
+</button>
+
+<div id="generatedMessage" class="copy-box">
+Your prepared message will appear here.
+</div>
+
+<br>
+
+<button class="secondary" onclick="copyMessage()">
+📋 Copy Message
+</button>
+
+<button class="secondary" onclick="saveMessage()">
+💾 Save Message
+</button>
+
+<div id="messageHistory" class="list"></div>
 </section>
 
 
@@ -633,7 +782,8 @@ JSON.parse(localStorage.getItem("gracewayMembers") || "[]");
 
 function addMember(){
 
-  const name = document.getElementById("memberName").value.trim();
+  const name =
+    document.getElementById("memberName").value.trim();
 
   if(!name){
     alert("Please enter the member name.");
@@ -648,7 +798,10 @@ function addMember(){
     department:document.getElementById("memberDepartment").value
   });
 
-  localStorage.setItem("gracewayMembers",JSON.stringify(members));
+  localStorage.setItem(
+    "gracewayMembers",
+    JSON.stringify(members)
+  );
 
   document.getElementById("memberName").value="";
   document.getElementById("memberPhone").value="";
@@ -660,14 +813,18 @@ function deleteMember(id){
 
   members = members.filter(x => x.id !== id);
 
-  localStorage.setItem("gracewayMembers",JSON.stringify(members));
+  localStorage.setItem(
+    "gracewayMembers",
+    JSON.stringify(members)
+  );
 
   renderMembers();
 }
 
 function renderMembers(){
 
-  const list = document.getElementById("memberList");
+  const list =
+    document.getElementById("memberList");
 
   list.innerHTML = members.map(m => `
     <div class="item">
@@ -677,7 +834,8 @@ function renderMembers(){
       Department: ${escapeHTML(m.department)}
 
       <div class="item-actions">
-        <button class="danger" onclick="deleteMember(${m.id})">
+        <button class="danger"
+          onclick="deleteMember(${m.id})">
           Delete
         </button>
       </div>
@@ -730,7 +888,8 @@ function addConvert(){
 
 function changeConvertStatus(id){
 
-  const item = converts.find(x => x.id === id);
+  const item =
+    converts.find(x => x.id === id);
 
   const statuses = [
     "New",
@@ -740,9 +899,11 @@ function changeConvertStatus(id){
     "Needs Attention"
   ];
 
-  let index = statuses.indexOf(item.status);
+  let index =
+    statuses.indexOf(item.status);
 
-  item.status = statuses[(index + 1) % statuses.length];
+  item.status =
+    statuses[(index + 1) % statuses.length];
 
   localStorage.setItem(
     "gracewayConverts",
@@ -754,7 +915,8 @@ function changeConvertStatus(id){
 
 function deleteConvert(id){
 
-  converts = converts.filter(x => x.id !== id);
+  converts =
+    converts.filter(x => x.id !== id);
 
   localStorage.setItem(
     "gracewayConverts",
@@ -766,9 +928,11 @@ function deleteConvert(id){
 
 function renderConverts(){
 
-  const list = document.getElementById("convertList");
+  const list =
+    document.getElementById("convertList");
 
-  list.innerHTML = converts.map(c => `
+  list.innerHTML =
+    converts.map(c => `
     <div class="item">
       <strong>${escapeHTML(c.name)}</strong><br>
       📞 ${escapeHTML(c.phone || "No phone")}<br>
@@ -778,6 +942,7 @@ function renderConverts(){
       Notes: ${escapeHTML(c.notes || "None")}
 
       <div class="item-actions">
+
         <button class="small-btn"
           onclick="changeConvertStatus(${c.id})">
           Change Status
@@ -787,6 +952,7 @@ function renderConverts(){
           onclick="deleteConvert(${c.id})">
           Delete
         </button>
+
       </div>
     </div>
   `).join("");
@@ -844,7 +1010,8 @@ function addAttendance(){
 
 function deleteAttendance(id){
 
-  attendance = attendance.filter(x => x.id !== id);
+  attendance =
+    attendance.filter(x => x.id !== id);
 
   localStorage.setItem(
     "gracewayAttendance",
@@ -856,9 +1023,11 @@ function deleteAttendance(id){
 
 function renderAttendance(){
 
-  const list = document.getElementById("attendanceList");
+  const list =
+    document.getElementById("attendanceList");
 
-  list.innerHTML = attendance.map(a => `
+  list.innerHTML =
+    attendance.map(a => `
     <div class="item">
       <strong>${escapeHTML(a.service)}</strong><br>
       Date: ${escapeHTML(a.date || "Not set")}<br>
@@ -887,7 +1056,7 @@ function renderAttendance(){
 }
 
 
-/* FOUNDATION SCHOOL */
+/* FOUNDATION */
 
 let foundation =
 JSON.parse(localStorage.getItem("gracewayFoundation") || "[]");
@@ -923,7 +1092,8 @@ function addFoundationStudent(){
 
 function changeFoundationProgress(id){
 
-  const item = foundation.find(x => x.id === id);
+  const item =
+    foundation.find(x => x.id === id);
 
   const progress = [
     "Not Started",
@@ -932,7 +1102,8 @@ function changeFoundationProgress(id){
     "Completed"
   ];
 
-  let index = progress.indexOf(item.progress);
+  let index =
+    progress.indexOf(item.progress);
 
   item.progress =
     progress[(index + 1) % progress.length];
@@ -963,7 +1134,8 @@ function renderFoundation(){
   const list =
     document.getElementById("foundationList");
 
-  list.innerHTML = foundation.map(f => `
+  list.innerHTML =
+    foundation.map(f => `
     <div class="item">
       <strong>${escapeHTML(f.name)}</strong><br>
       📞 ${escapeHTML(f.phone || "No phone")}<br>
@@ -971,6 +1143,7 @@ function renderFoundation(){
       Progress: ${escapeHTML(f.progress)}
 
       <div class="item-actions">
+
         <button class="small-btn"
           onclick="changeFoundationProgress(${f.id})">
           Change Progress
@@ -980,6 +1153,7 @@ function renderFoundation(){
           onclick="deleteFoundation(${f.id})">
           Delete
         </button>
+
       </div>
     </div>
   `).join("");
@@ -1033,7 +1207,8 @@ function addGiving(){
 
 function deleteGiving(id){
 
-  giving = giving.filter(x => x.id !== id);
+  giving =
+    giving.filter(x => x.id !== id);
 
   localStorage.setItem(
     "gracewayGiving",
@@ -1048,7 +1223,8 @@ function renderGiving(){
   const list =
     document.getElementById("givingList");
 
-  list.innerHTML = giving.map(g => `
+  list.innerHTML =
+    giving.map(g => `
     <div class="item">
       <strong>${escapeHTML(g.name)}</strong><br>
       Type: ${escapeHTML(g.type)}<br>
@@ -1065,14 +1241,17 @@ function renderGiving(){
   `).join("");
 
   const total =
-    giving.reduce((sum,g) => sum + Number(g.amount),0);
+    giving.reduce(
+      (sum,g) => sum + Number(g.amount),
+      0
+    );
 
   document.getElementById("givingTotal").textContent =
     "₦" + total.toLocaleString();
 }
 
 
-/* PRAYER REQUESTS */
+/* PRAYERS */
 
 let prayers =
 JSON.parse(localStorage.getItem("gracewayPrayers") || "[]");
@@ -1110,7 +1289,8 @@ function addPrayer(){
 
 function changePrayerStatus(id){
 
-  const item = prayers.find(x => x.id === id);
+  const item =
+    prayers.find(x => x.id === id);
 
   const statuses = [
     "Pending",
@@ -1118,7 +1298,8 @@ function changePrayerStatus(id){
     "Answered"
   ];
 
-  let index = statuses.indexOf(item.status);
+  let index =
+    statuses.indexOf(item.status);
 
   item.status =
     statuses[(index + 1) % statuses.length];
@@ -1133,7 +1314,8 @@ function changePrayerStatus(id){
 
 function deletePrayer(id){
 
-  prayers = prayers.filter(x => x.id !== id);
+  prayers =
+    prayers.filter(x => x.id !== id);
 
   localStorage.setItem(
     "gracewayPrayers",
@@ -1148,7 +1330,8 @@ function renderPrayers(){
   const list =
     document.getElementById("prayerList");
 
-  list.innerHTML = prayers.map(p => `
+  list.innerHTML =
+    prayers.map(p => `
     <div class="item">
       <strong>${escapeHTML(p.name)}</strong><br>
       ${escapeHTML(p.text)}<br>
@@ -1230,7 +1413,8 @@ function renderCommunications(){
   const list =
     document.getElementById("communicationList");
 
-  list.innerHTML = communications.map(c => `
+  list.innerHTML =
+    communications.map(c => `
     <div class="item">
       <strong>${escapeHTML(c.title)}</strong><br>
       Type: ${escapeHTML(c.type)}<br>
@@ -1253,7 +1437,7 @@ function renderCommunications(){
 }
 
 
-/* LEADERSHIP */
+/* LEADERS */
 
 let leaders =
 JSON.parse(localStorage.getItem("gracewayLeaders") || "[]");
@@ -1332,7 +1516,8 @@ function renderLeaders(){
   const list =
     document.getElementById("leaderList");
 
-  list.innerHTML = leaders.map(l => `
+  list.innerHTML =
+    leaders.map(l => `
     <div class="item">
       <strong>${escapeHTML(l.name)}</strong><br>
       📞 ${escapeHTML(l.phone || "No phone")}<br>
@@ -1358,6 +1543,241 @@ function renderLeaders(){
 
   document.getElementById("leaderCount").textContent =
     leaders.length;
+}
+
+
+/* CHURCH EVENTS */
+
+let events =
+JSON.parse(localStorage.getItem("gracewayEvents") || "[]");
+
+function addEvent(){
+
+  const title =
+    document.getElementById("eventTitle").value.trim();
+
+  if(!title){
+    alert("Please enter the event title.");
+    return;
+  }
+
+  events.push({
+    id:Date.now(),
+    title:title,
+    date:document.getElementById("eventDate").value,
+    time:document.getElementById("eventTime").value,
+    venue:document.getElementById("eventVenue").value,
+    type:document.getElementById("eventType").value,
+    description:document.getElementById("eventDescription").value
+  });
+
+  localStorage.setItem(
+    "gracewayEvents",
+    JSON.stringify(events)
+  );
+
+  document.getElementById("eventTitle").value="";
+  document.getElementById("eventVenue").value="";
+  document.getElementById("eventDescription").value="";
+
+  renderEvents();
+}
+
+function deleteEvent(id){
+
+  events =
+    events.filter(x => x.id !== id);
+
+  localStorage.setItem(
+    "gracewayEvents",
+    JSON.stringify(events)
+  );
+
+  renderEvents();
+}
+
+function renderEvents(){
+
+  const list =
+    document.getElementById("eventList");
+
+  list.innerHTML =
+    events.map(e => `
+    <div class="item">
+
+      <span class="badge">
+        ${escapeHTML(e.type)}
+      </span>
+
+      <br><br>
+
+      <strong>${escapeHTML(e.title)}</strong><br>
+
+      📅 ${escapeHTML(e.date || "Date not set")}<br>
+
+      🕐 ${escapeHTML(e.time || "Time not set")}<br>
+
+      📍 ${escapeHTML(e.venue || "Venue not set")}<br><br>
+
+      ${escapeHTML(e.description || "No description")}
+
+      <div class="item-actions">
+
+        <button class="danger"
+          onclick="deleteEvent(${e.id})">
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+  `).join("");
+
+  document.getElementById("eventCount").textContent =
+    events.length;
+}
+
+
+/* MEMBER MESSAGES */
+
+let messageHistory =
+JSON.parse(localStorage.getItem("gracewayMessageHistory") || "[]");
+
+function generateMessage(){
+
+  const audience =
+    document.getElementById("messageAudience").value;
+
+  const type =
+    document.getElementById("messageType").value;
+
+  const subject =
+    document.getElementById("messageSubject").value.trim();
+
+  const body =
+    document.getElementById("messageBody").value.trim();
+
+  if(!body){
+    alert("Please write the message first.");
+    return;
+  }
+
+  const prepared =
+`Grace and peace from Graceway and Truth Triumphant Church Inc.
+
+${subject ? subject + "\n\n" : ""}${body}
+
+We look forward to seeing you.
+
+Graceway and Truth Triumphant Church Inc.
+Transform • Build • Inherit
+Home of Triumphant`;
+
+  document.getElementById("generatedMessage").textContent =
+    prepared;
+
+  window.currentPreparedMessage = prepared;
+}
+
+async function copyMessage(){
+
+  const message =
+    window.currentPreparedMessage ||
+    document.getElementById("generatedMessage").textContent;
+
+  if(
+    !message ||
+    message === "Your prepared message will appear here."
+  ){
+    alert("Please generate a message first.");
+    return;
+  }
+
+  try{
+
+    await navigator.clipboard.writeText(message);
+
+    alert("Message copied successfully.");
+
+  }catch(error){
+
+    alert("Please select and copy the message manually.");
+
+  }
+}
+
+function saveMessage(){
+
+  const message =
+    window.currentPreparedMessage;
+
+  if(!message){
+    alert("Please generate a message first.");
+    return;
+  }
+
+  messageHistory.push({
+    id:Date.now(),
+    audience:document.getElementById("messageAudience").value,
+    type:document.getElementById("messageType").value,
+    subject:document.getElementById("messageSubject").value,
+    message:message,
+    date:new Date().toLocaleDateString()
+  });
+
+  localStorage.setItem(
+    "gracewayMessageHistory",
+    JSON.stringify(messageHistory)
+  );
+
+  renderMessageHistory();
+
+  alert("Message saved.");
+}
+
+function deleteSavedMessage(id){
+
+  messageHistory =
+    messageHistory.filter(x => x.id !== id);
+
+  localStorage.setItem(
+    "gracewayMessageHistory",
+    JSON.stringify(messageHistory)
+  );
+
+  renderMessageHistory();
+}
+
+function renderMessageHistory(){
+
+  const list =
+    document.getElementById("messageHistory");
+
+  list.innerHTML =
+    messageHistory.map(m => `
+    <div class="item">
+
+      <strong>
+        ${escapeHTML(m.subject || "Church Message")}
+      </strong><br>
+
+      Audience: ${escapeHTML(m.audience)}<br>
+      Type: ${escapeHTML(m.type)}<br>
+      Date: ${escapeHTML(m.date)}<br><br>
+
+      ${escapeHTML(m.message)}
+
+      <div class="item-actions">
+
+        <button class="danger"
+          onclick="deleteSavedMessage(${m.id})">
+          Delete
+        </button>
+
+      </div>
+
+    </div>
+  `).join("");
 }
 
 
@@ -1433,8 +1853,7 @@ function askAI(){
     answer =
       "<strong>ChurchOS AI</strong><br><br>" +
       "I can help you create devotional ideas, sermon ideas, " +
-      "follow-up messages and church announcements. " +
-      "Try asking one of these.";
+      "follow-up messages and church announcements.";
 
   }
 
@@ -1453,6 +1872,8 @@ renderGiving();
 renderPrayers();
 renderCommunications();
 renderLeaders();
+renderEvents();
+renderMessageHistory();
 
 </script>
 
