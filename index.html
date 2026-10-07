@@ -4299,5 +4299,918 @@ createChurchOSFamilies();
 createChurchOSCustomDashboard();
 
 </script>
+   <!-- =========================================================
+     CHURCHOS AI — FEATURES 28–31
+     28. Volunteer & Worker Scheduling
+     29. Church Assets & Equipment
+     30. Certificates & Recognition
+     31. Expenses & Ministry Budget
+     ========================================================= -->
+
+<style>
+.churchos-v5-card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  margin:20px 0;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.churchos-v5-card input,
+.churchos-v5-card select,
+.churchos-v5-card textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:11px;
+  margin:7px 0;
+  border:1px solid #ddd;
+  border-radius:9px;
+}
+
+.churchos-v5-card textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.churchos-v5-card button{
+  border:0;
+  border-radius:9px;
+  padding:10px 14px;
+  margin:5px 4px 5px 0;
+  cursor:pointer;
+}
+
+.v5-primary{
+  background:#111827;
+  color:#fff;
+}
+
+.v5-success{
+  background:#15803d;
+  color:#fff;
+}
+
+.v5-danger{
+  background:#dc2626;
+  color:#fff;
+}
+
+.v5-item{
+  background:#f8fafc;
+  border-left:4px solid #111827;
+  padding:13px;
+  border-radius:9px;
+  margin-top:10px;
+}
+
+.v5-badge{
+  display:inline-block;
+  padding:4px 9px;
+  margin:3px 3px 3px 0;
+  border-radius:20px;
+  background:#e5e7eb;
+  font-size:12px;
+}
+
+.v5-empty{
+  color:#777;
+  padding:10px 0;
+}
+
+.v5-summary{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;
+  margin:15px 0;
+}
+
+.v5-stat{
+  background:#f8fafc;
+  padding:16px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.v5-stat strong{
+  display:block;
+  font-size:25px;
+  margin-top:5px;
+}
+</style>
+
+<script>
+
+/* =========================================================
+   COMMON HELPERS
+   ========================================================= */
+
+function churchOSV5Data(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSV5Save(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+
+/* =========================================================
+   28. VOLUNTEER & WORKER SCHEDULING
+   ========================================================= */
+
+function createChurchOSVolunteerSchedule(){
+
+  if(document.getElementById("churchosVolunteerSchedule")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosVolunteerSchedule";
+
+  section.innerHTML=`
+
+    <div class="churchos-v5-card">
+
+      <h2>👷 Volunteer & Worker Scheduling</h2>
+
+      <p>
+        Schedule workers and ministry volunteers for services,
+        programmes and assignments.
+      </p>
+
+      <input id="volunteerName"
+        placeholder="Worker / volunteer name">
+
+      <input id="volunteerDepartment"
+        placeholder="Department / ministry">
+
+      <input id="volunteerDate"
+        type="date">
+
+      <input id="volunteerTime"
+        type="time">
+
+      <input id="volunteerAssignment"
+        placeholder="Assignment">
+
+      <select id="volunteerStatus">
+        <option>Scheduled</option>
+        <option>Confirmed</option>
+        <option>Completed</option>
+        <option>Unavailable</option>
+      </select>
+
+      <button class="v5-primary"
+        onclick="addChurchOSVolunteer()">
+        Add Schedule
+      </button>
+
+      <div id="churchosVolunteerList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSVolunteers();
+}
+
+function addChurchOSVolunteer(){
+
+  const name=document.getElementById("volunteerName").value.trim();
+  const department=document.getElementById("volunteerDepartment").value.trim();
+  const date=document.getElementById("volunteerDate").value;
+  const time=document.getElementById("volunteerTime").value;
+  const assignment=document.getElementById("volunteerAssignment").value.trim();
+  const status=document.getElementById("volunteerStatus").value;
+
+  if(!name || !date || !assignment){
+    alert("Please enter the worker, date and assignment.");
+    return;
+  }
+
+  const data=churchOSV5Data("churchosVolunteerSchedules");
+
+  data.push({
+    id:Date.now(),
+    name,
+    department,
+    date,
+    time,
+    assignment,
+    status
+  });
+
+  churchOSV5Save("churchosVolunteerSchedules",data);
+
+  document.getElementById("volunteerName").value="";
+  document.getElementById("volunteerDepartment").value="";
+  document.getElementById("volunteerDate").value="";
+  document.getElementById("volunteerTime").value="";
+  document.getElementById("volunteerAssignment").value="";
+
+  renderChurchOSVolunteers();
+}
+
+function changeChurchOSVolunteerStatus(id){
+
+  const data=churchOSV5Data("churchosVolunteerSchedules");
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const statuses=[
+    "Scheduled",
+    "Confirmed",
+    "Completed",
+    "Unavailable"
+  ];
+
+  const current=statuses.indexOf(item.status);
+
+  item.status=statuses[(current+1)%statuses.length];
+
+  churchOSV5Save("churchosVolunteerSchedules",data);
+
+  renderChurchOSVolunteers();
+}
+
+function deleteChurchOSVolunteer(id){
+
+  const data=churchOSV5Data("churchosVolunteerSchedules")
+    .filter(x=>x.id!==id);
+
+  churchOSV5Save("churchosVolunteerSchedules",data);
+
+  renderChurchOSVolunteers();
+}
+
+function renderChurchOSVolunteers(){
+
+  const box=document.getElementById("churchosVolunteerList");
+
+  if(!box) return;
+
+  const data=churchOSV5Data("churchosVolunteerSchedules")
+    .sort((a,b)=>a.date.localeCompare(b.date));
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="v5-empty">No worker schedules yet.</div>';
+    return;
+  }
+
+  const confirmed=data.filter(
+    x=>x.status==="Confirmed"
+  ).length;
+
+  box.innerHTML=`
+
+    <div class="v5-summary">
+
+      <div class="v5-stat">
+        Total Schedules
+        <strong>${data.length}</strong>
+      </div>
+
+      <div class="v5-stat">
+        Confirmed
+        <strong>${confirmed}</strong>
+      </div>
+
+    </div>
+
+    ${data.map(item=>`
+
+      <div class="v5-item">
+
+        <strong>${escapeHTML(item.name)}</strong>
+
+        <p>
+          📋 ${escapeHTML(item.assignment)}
+        </p>
+
+        ${item.department ?
+          `<p>🏢 ${escapeHTML(item.department)}</p>` : ""}
+
+        <p>
+          📅 ${escapeHTML(item.date)}
+          ${item.time ? " • "+escapeHTML(item.time) : ""}
+        </p>
+
+        <span class="v5-badge">
+          ${escapeHTML(item.status)}
+        </span>
+
+        <button
+          onclick="changeChurchOSVolunteerStatus(${item.id})">
+          🔄 Change Status
+        </button>
+
+        <button class="v5-danger"
+          onclick="deleteChurchOSVolunteer(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("")}
+  `;
+}
+
+
+/* =========================================================
+   29. CHURCH ASSETS & EQUIPMENT
+   ========================================================= */
+
+function createChurchOSAssets(){
+
+  if(document.getElementById("churchosAssets")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosAssets";
+
+  section.innerHTML=`
+
+    <div class="churchos-v5-card">
+
+      <h2>🏢 Church Assets & Equipment</h2>
+
+      <p>
+        Track church equipment, furniture, media items and other assets.
+      </p>
+
+      <input id="assetName"
+        placeholder="Asset / equipment name">
+
+      <input id="assetCategory"
+        placeholder="Category e.g. Media, Furniture">
+
+      <input id="assetQuantity"
+        type="number"
+        min="1"
+        placeholder="Quantity">
+
+      <input id="assetLocation"
+        placeholder="Location">
+
+      <select id="assetCondition">
+        <option>Excellent</option>
+        <option>Good</option>
+        <option>Needs Repair</option>
+        <option>Damaged</option>
+        <option>Missing</option>
+      </select>
+
+      <input id="assetValue"
+        type="number"
+        min="0"
+        placeholder="Estimated value ₦">
+
+      <button class="v5-primary"
+        onclick="addChurchOSAsset()">
+        Add Asset
+      </button>
+
+      <div id="churchosAssetList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSAssets();
+}
+
+function addChurchOSAsset(){
+
+  const name=document.getElementById("assetName").value.trim();
+  const category=document.getElementById("assetCategory").value.trim();
+  const quantity=Number(
+    document.getElementById("assetQuantity").value || 1
+  );
+  const location=document.getElementById("assetLocation").value.trim();
+  const condition=document.getElementById("assetCondition").value;
+  const value=Number(
+    document.getElementById("assetValue").value || 0
+  );
+
+  if(!name){
+    alert("Please enter the asset name.");
+    return;
+  }
+
+  const data=churchOSV5Data("churchosAssets");
+
+  data.push({
+    id:Date.now(),
+    name,
+    category,
+    quantity,
+    location,
+    condition,
+    value
+  });
+
+  churchOSV5Save("churchosAssets",data);
+
+  document.getElementById("assetName").value="";
+  document.getElementById("assetCategory").value="";
+  document.getElementById("assetQuantity").value="";
+  document.getElementById("assetLocation").value="";
+  document.getElementById("assetValue").value="";
+
+  renderChurchOSAssets();
+}
+
+function deleteChurchOSAsset(id){
+
+  const data=churchOSV5Data("churchosAssets")
+    .filter(x=>x.id!==id);
+
+  churchOSV5Save("churchosAssets",data);
+
+  renderChurchOSAssets();
+}
+
+function renderChurchOSAssets(){
+
+  const box=document.getElementById("churchosAssetList");
+
+  if(!box) return;
+
+  const data=churchOSV5Data("churchosAssets");
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="v5-empty">No church assets recorded.</div>';
+    return;
+  }
+
+  const totalQuantity=data.reduce(
+    (sum,x)=>sum+Number(x.quantity||0),0
+  );
+
+  const totalValue=data.reduce(
+    (sum,x)=>sum+Number(x.value||0)*Number(x.quantity||1),0
+  );
+
+  box.innerHTML=`
+
+    <div class="v5-summary">
+
+      <div class="v5-stat">
+        Items
+        <strong>${totalQuantity}</strong>
+      </div>
+
+      <div class="v5-stat">
+        Estimated Value
+        <strong>₦${totalValue.toLocaleString()}</strong>
+      </div>
+
+    </div>
+
+    ${data.map(item=>`
+
+      <div class="v5-item">
+
+        <strong>${escapeHTML(item.name)}</strong>
+
+        ${item.category ?
+          `<p>Category: ${escapeHTML(item.category)}</p>` : ""}
+
+        <p>
+          Quantity: ${item.quantity}
+        </p>
+
+        ${item.location ?
+          `<p>📍 ${escapeHTML(item.location)}</p>` : ""}
+
+        <span class="v5-badge">
+          ${escapeHTML(item.condition)}
+        </span>
+
+        ${item.value ?
+          `<p>
+            Value: ₦${Number(item.value).toLocaleString()}
+          </p>` : ""}
+
+        <button class="v5-danger"
+          onclick="deleteChurchOSAsset(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("")}
+  `;
+}
+
+
+/* =========================================================
+   30. CERTIFICATES & RECOGNITION
+   ========================================================= */
+
+function createChurchOSCertificates(){
+
+  if(document.getElementById("churchosCertificates")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosCertificates";
+
+  section.innerHTML=`
+
+    <div class="churchos-v5-card">
+
+      <h2>🏆 Certificates & Recognition</h2>
+
+      <p>
+        Record certificates, graduations, awards and ministry recognition.
+      </p>
+
+      <input id="certificateName"
+        placeholder="Recipient name">
+
+      <input id="certificateTitle"
+        placeholder="Certificate / recognition title">
+
+      <input id="certificateProgramme"
+        placeholder="Programme / department">
+
+      <input id="certificateDate"
+        type="date">
+
+      <input id="certificateNumber"
+        placeholder="Certificate number">
+
+      <textarea id="certificateNote"
+        placeholder="Additional note"></textarea>
+
+      <button class="v5-primary"
+        onclick="addChurchOSCertificate()">
+        Save Certificate
+      </button>
+
+      <div id="churchosCertificateList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSCertificates();
+}
+
+function addChurchOSCertificate(){
+
+  const name=document.getElementById("certificateName").value.trim();
+  const title=document.getElementById("certificateTitle").value.trim();
+  const programme=document.getElementById("certificateProgramme").value.trim();
+  const date=document.getElementById("certificateDate").value;
+  const number=document.getElementById("certificateNumber").value.trim();
+  const note=document.getElementById("certificateNote").value.trim();
+
+  if(!name || !title){
+    alert("Please enter the recipient and certificate title.");
+    return;
+  }
+
+  const data=churchOSV5Data("churchosCertificates");
+
+  data.push({
+    id:Date.now(),
+    name,
+    title,
+    programme,
+    date,
+    number,
+    note
+  });
+
+  churchOSV5Save("churchosCertificates",data);
+
+  document.getElementById("certificateName").value="";
+  document.getElementById("certificateTitle").value="";
+  document.getElementById("certificateProgramme").value="";
+  document.getElementById("certificateDate").value="";
+  document.getElementById("certificateNumber").value="";
+  document.getElementById("certificateNote").value="";
+
+  renderChurchOSCertificates();
+}
+
+function copyChurchOSCertificate(id){
+
+  const data=churchOSV5Data("churchosCertificates");
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const text=
+`GRACEWAY AND TRUTH TRIUMPHANT CHURCH INC
+
+CERTIFICATE OF RECOGNITION
+
+This certificate is presented to
+
+${item.name}
+
+for
+
+${item.title}
+
+${item.programme ? "Programme: "+item.programme : ""}
+
+${item.date ? "Date: "+item.date : ""}
+
+${item.number ? "Certificate No.: "+item.number : ""}
+
+Transform • Build • Inherit
+Home of Triumphant`;
+
+  navigator.clipboard.writeText(text)
+    .then(()=>alert("Certificate text copied successfully."))
+    .catch(()=>alert("Unable to copy automatically."));
+}
+
+function deleteChurchOSCertificate(id){
+
+  const data=churchOSV5Data("churchosCertificates")
+    .filter(x=>x.id!==id);
+
+  churchOSV5Save("churchosCertificates",data);
+
+  renderChurchOSCertificates();
+}
+
+function renderChurchOSCertificates(){
+
+  const box=document.getElementById("churchosCertificateList");
+
+  if(!box) return;
+
+  const data=churchOSV5Data("churchosCertificates");
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="v5-empty">No certificates recorded.</div>';
+    return;
+  }
+
+  box.innerHTML=data.map(item=>`
+
+    <div class="v5-item">
+
+      <strong>${escapeHTML(item.name)}</strong>
+
+      <p>🏆 ${escapeHTML(item.title)}</p>
+
+      ${item.programme ?
+        `<p>Programme: ${escapeHTML(item.programme)}</p>` : ""}
+
+      ${item.date ?
+        `<p>📅 ${escapeHTML(item.date)}</p>` : ""}
+
+      ${item.number ?
+        `<p>Certificate No.: ${escapeHTML(item.number)}</p>` : ""}
+
+      ${item.note ?
+        `<p>${escapeHTML(item.note)}</p>` : ""}
+
+      <button onclick="copyChurchOSCertificate(${item.id})">
+        📋 Copy Certificate
+      </button>
+
+      <button class="v5-danger"
+        onclick="deleteChurchOSCertificate(${item.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================================================
+   31. EXPENSES & MINISTRY BUDGET
+   ========================================================= */
+
+function createChurchOSExpenses(){
+
+  if(document.getElementById("churchosExpenses")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosExpenses";
+
+  section.innerHTML=`
+
+    <div class="churchos-v5-card">
+
+      <h2>💸 Expenses & Ministry Budget</h2>
+
+      <p>
+        Track ministry expenses and compare spending against a budget.
+      </p>
+
+      <input id="expenseTitle"
+        placeholder="Expense description">
+
+      <input id="expenseDepartment"
+        placeholder="Department / ministry">
+
+      <input id="expenseAmount"
+        type="number"
+        min="0"
+        placeholder="Amount ₦">
+
+      <input id="expenseDate"
+        type="date">
+
+      <select id="expenseCategory">
+        <option>Operations</option>
+        <option>Evangelism</option>
+        <option>Media</option>
+        <option>Children</option>
+        <option>Youth</option>
+        <option>Welfare</option>
+        <option>Building</option>
+        <option>Events</option>
+        <option>Transport</option>
+        <option>Other</option>
+      </select>
+
+      <input id="expenseBudget"
+        type="number"
+        min="0"
+        placeholder="Department budget ₦">
+
+      <button class="v5-primary"
+        onclick="addChurchOSExpense()">
+        Record Expense
+      </button>
+
+      <div id="churchosExpenseList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSExpenses();
+}
+
+function addChurchOSExpense(){
+
+  const title=document.getElementById("expenseTitle").value.trim();
+  const department=document.getElementById("expenseDepartment").value.trim();
+  const amount=Number(
+    document.getElementById("expenseAmount").value || 0
+  );
+  const date=document.getElementById("expenseDate").value;
+  const category=document.getElementById("expenseCategory").value;
+  const budget=Number(
+    document.getElementById("expenseBudget").value || 0
+  );
+
+  if(!title || !amount){
+    alert("Please enter the expense description and amount.");
+    return;
+  }
+
+  const data=churchOSV5Data("churchosExpenses");
+
+  data.push({
+    id:Date.now(),
+    title,
+    department,
+    amount,
+    date,
+    category,
+    budget
+  });
+
+  churchOSV5Save("churchosExpenses",data);
+
+  document.getElementById("expenseTitle").value="";
+  document.getElementById("expenseDepartment").value="";
+  document.getElementById("expenseAmount").value="";
+  document.getElementById("expenseDate").value="";
+  document.getElementById("expenseBudget").value="";
+
+  renderChurchOSExpenses();
+}
+
+function deleteChurchOSExpense(id){
+
+  const data=churchOSV5Data("churchosExpenses")
+    .filter(x=>x.id!==id);
+
+  churchOSV5Save("churchosExpenses",data);
+
+  renderChurchOSExpenses();
+}
+
+function renderChurchOSExpenses(){
+
+  const box=document.getElementById("churchosExpenseList");
+
+  if(!box) return;
+
+  const data=churchOSV5Data("churchosExpenses");
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="v5-empty">No expenses recorded.</div>';
+    return;
+  }
+
+  const total=data.reduce(
+    (sum,x)=>sum+Number(x.amount||0),0
+  );
+
+  const budget=data.reduce(
+    (sum,x)=>sum+Number(x.budget||0),0
+  );
+
+  const remaining=budget-total;
+
+  box.innerHTML=`
+
+    <div class="v5-summary">
+
+      <div class="v5-stat">
+        Total Expenses
+        <strong>₦${total.toLocaleString()}</strong>
+      </div>
+
+      <div class="v5-stat">
+        Budget
+        <strong>₦${budget.toLocaleString()}</strong>
+      </div>
+
+      <div class="v5-stat">
+        Balance
+        <strong>₦${remaining.toLocaleString()}</strong>
+      </div>
+
+    </div>
+
+    ${data.map(item=>`
+
+      <div class="v5-item">
+
+        <strong>${escapeHTML(item.title)}</strong>
+
+        <p>
+          💸 ₦${Number(item.amount).toLocaleString()}
+        </p>
+
+        ${item.department ?
+          `<p>🏢 ${escapeHTML(item.department)}</p>` : ""}
+
+        <span class="v5-badge">
+          ${escapeHTML(item.category)}
+        </span>
+
+        ${item.date ?
+          `<span class="v5-badge">
+            ${escapeHTML(item.date)}
+          </span>` : ""}
+
+        <button class="v5-danger"
+          onclick="deleteChurchOSExpense(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("")}
+  `;
+}
+
+
+/* =========================================================
+   START FEATURES 28–31
+   ========================================================= */
+
+createChurchOSVolunteerSchedule();
+createChurchOSAssets();
+createChurchOSCertificates();
+createChurchOSExpenses();
+
+</script>
 </body>
 </html>
