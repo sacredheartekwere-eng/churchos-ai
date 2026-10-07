@@ -8893,4 +8893,1059 @@ renderChurchOSDocuments();
 
 <!-- END CHURCHOS AI FEATURES 44–47 -->
 </body>
+   <!-- =========================================================
+     CHURCHOS AI — FEATURES 48–51
+     MEMBER TRANSFER • WORKER PERFORMANCE • PRAYER JOURNAL
+     • ANNOUNCEMENT NOTICE BOARD
+========================================================= -->
+
+<style>
+.churchos-v10{
+  margin:25px 0;
+  padding:22px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  box-shadow:0 8px 25px rgba(0,0,0,.07);
+}
+
+.churchos-v10 h2{
+  margin-top:0;
+  color:#182848;
+}
+
+.v10-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+
+.churchos-v10 input,
+.churchos-v10 select,
+.churchos-v10 textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:11px;
+  margin:6px 0 12px;
+  border:1px solid #ccc;
+  border-radius:9px;
+}
+
+.churchos-v10 button{
+  border:0;
+  padding:10px 15px;
+  margin:4px;
+  border-radius:9px;
+  cursor:pointer;
+  background:#182848;
+  color:#fff;
+}
+
+.churchos-v10 button:hover{
+  opacity:.88;
+}
+
+.v10-card{
+  padding:15px;
+  margin:10px 0;
+  border-radius:13px;
+  background:#f6f8fb;
+  border-left:5px solid #182848;
+}
+
+.v10-success{
+  border-left-color:#27ae60;
+}
+
+.v10-warning{
+  border-left-color:#e67e22;
+}
+
+.v10-danger{
+  border-left-color:#c0392b;
+}
+
+.v10-muted{
+  color:#666;
+  font-size:13px;
+}
+
+.v10-status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#e8eef8;
+  font-size:12px;
+  margin:4px 0;
+}
+</style>
+
+
+<script>
+
+/* =========================================================
+   CHURCHOS V10 HELPERS
+========================================================= */
+
+function churchOSV10Data(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSV10Save(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+function churchOSV10Id(prefix){
+  return prefix+"-"+Date.now()+"-"+
+    Math.random().toString(36).substring(2,7);
+}
+
+function churchOSV10Escape(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   CREATE FEATURES
+========================================================= */
+
+function createChurchOSV10Sections(){
+
+
+/* =========================================================
+   48. MEMBER TRANSFER & CHURCH MOVEMENT
+========================================================= */
+
+if(!document.getElementById("churchosMemberTransfers")){
+
+const section=document.createElement("section");
+
+section.id="churchosMemberTransfers";
+section.className="churchos-v10";
+
+section.innerHTML=`
+
+<h2>🔄 Member Transfer & Church Movement</h2>
+
+<p>
+Track members moving between departments, branches or locations.
+</p>
+
+<div class="v10-grid">
+
+<div>
+
+<label>Member Name</label>
+
+<input id="transferMember"
+placeholder="Full name">
+
+<label>Current Department</label>
+
+<input id="transferFrom"
+placeholder="e.g. Choir">
+
+<label>New Department / Location</label>
+
+<input id="transferTo"
+placeholder="e.g. Media">
+
+<label>Movement Type</label>
+
+<select id="transferType">
+
+<option>Department Transfer</option>
+<option>Branch Transfer</option>
+<option>Relocation</option>
+<option>Temporary Movement</option>
+<option>Other</option>
+
+</select>
+
+<label>Effective Date</label>
+
+<input id="transferDate" type="date">
+
+<label>Reason / Note</label>
+
+<textarea id="transferNote"
+placeholder="Reason or additional note"></textarea>
+
+<button onclick="addChurchOSMemberTransfer()">
+Save Transfer
+</button>
+
+</div>
+
+<div>
+
+<h3>Movement Records</h3>
+
+<div id="churchosTransferList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+container.appendChild(section);
+}else{
+document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   49. VOLUNTEER & WORKER PERFORMANCE
+========================================================= */
+
+if(!document.getElementById("churchosWorkerPerformance")){
+
+const section=document.createElement("section");
+
+section.id="churchosWorkerPerformance";
+section.className="churchos-v10";
+
+section.innerHTML=`
+
+<h2>🏅 Volunteer & Worker Performance</h2>
+
+<p>
+Track worker assignments, service and contribution.
+</p>
+
+<div class="v10-grid">
+
+<div>
+
+<label>Worker Name</label>
+
+<input id="workerPerfName"
+placeholder="Worker name">
+
+<label>Department</label>
+
+<input id="workerPerfDepartment"
+placeholder="e.g. Ushering">
+
+<label>Assignment / Service</label>
+
+<input id="workerPerfAssignment"
+placeholder="e.g. Sunday Service">
+
+<label>Service Date</label>
+
+<input id="workerPerfDate" type="date">
+
+<label>Attendance</label>
+
+<select id="workerPerfAttendance">
+
+<option>Present</option>
+<option>Late</option>
+<option>Absent</option>
+
+</select>
+
+<label>Performance Rating</label>
+
+<select id="workerPerfRating">
+
+<option>Excellent</option>
+<option>Very Good</option>
+<option>Good</option>
+<option>Needs Improvement</option>
+
+</select>
+
+<label>Comment</label>
+
+<textarea id="workerPerfComment"
+placeholder="Supervisor comment"></textarea>
+
+<button onclick="addChurchOSWorkerPerformance()">
+Save Performance
+</button>
+
+</div>
+
+<div>
+
+<h3>Worker Records</h3>
+
+<div id="churchosWorkerPerformanceList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+container.appendChild(section);
+}else{
+document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   50. PRAYER & TESTIMONY JOURNAL
+========================================================= */
+
+if(!document.getElementById("churchosPrayerJournal")){
+
+const section=document.createElement("section");
+
+section.id="churchosPrayerJournal";
+section.className="churchos-v10";
+
+section.innerHTML=`
+
+<h2>🙏 Prayer & Testimony Journal</h2>
+
+<p>
+Record prayer requests, answers and testimonies for ministry follow-up.
+</p>
+
+<div class="v10-grid">
+
+<div>
+
+<label>Person / Member</label>
+
+<input id="journalPerson"
+placeholder="Name">
+
+<label>Entry Type</label>
+
+<select id="journalType">
+
+<option>Prayer Request</option>
+<option>Answered Prayer</option>
+<option>Testimony</option>
+<option>Follow-Up Prayer</option>
+
+</select>
+
+<label>Date</label>
+
+<input id="journalDate" type="date">
+
+<label>Subject</label>
+
+<input id="journalSubject"
+placeholder="e.g. Family, healing, provision">
+
+<label>Details</label>
+
+<textarea id="journalDetails"
+rows="7"
+placeholder="Write the prayer request or testimony..."></textarea>
+
+<button onclick="addChurchOSPrayerJournal()">
+Save Journal Entry
+</button>
+
+</div>
+
+<div>
+
+<h3>Prayer & Testimony Records</h3>
+
+<div id="churchosPrayerJournalList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+container.appendChild(section);
+}else{
+document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   51. ANNOUNCEMENT & NOTICE BOARD
+========================================================= */
+
+if(!document.getElementById("churchosNoticeBoard")){
+
+const section=document.createElement("section");
+
+section.id="churchosNoticeBoard";
+section.className="churchos-v10";
+
+section.innerHTML=`
+
+<h2>📣 Announcement & Notice Board</h2>
+
+<p>
+Create and manage church announcements and important notices.
+</p>
+
+<div class="v10-grid">
+
+<div>
+
+<label>Announcement Title</label>
+
+<input id="noticeTitle"
+placeholder="e.g. Sunday Service">
+
+<label>Category</label>
+
+<select id="noticeCategory">
+
+<option>General Announcement</option>
+<option>Church Service</option>
+<option>Prayer</option>
+<option>Evangelism</option>
+<option>Youth</option>
+<option>Children</option>
+<option>Workers</option>
+<option>Women</option>
+<option>Men</option>
+<option>Special Event</option>
+
+</select>
+
+<label>Publish Date</label>
+
+<input id="noticeDate" type="date">
+
+<label>Announcement</label>
+
+<textarea id="noticeContent"
+rows="7"
+placeholder="Write the announcement..."></textarea>
+
+<button onclick="addChurchOSNotice()">
+Publish Announcement
+</button>
+
+</div>
+
+<div>
+
+<h3>Published Notices</h3>
+
+<div id="churchosNoticeList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+container.appendChild(section);
+}else{
+document.body.appendChild(section);
+}
+
+}
+
+}
+
+
+/* =========================================================
+   48. MEMBER TRANSFER FUNCTIONS
+========================================================= */
+
+function addChurchOSMemberTransfer(){
+
+const member=
+document.getElementById("transferMember").value.trim();
+
+const from=
+document.getElementById("transferFrom").value.trim();
+
+const to=
+document.getElementById("transferTo").value.trim();
+
+const type=
+document.getElementById("transferType").value;
+
+const date=
+document.getElementById("transferDate").value;
+
+const note=
+document.getElementById("transferNote").value.trim();
+
+if(!member || !to || !date){
+
+alert("Please enter the member, new department/location and date.");
+
+return;
+
+}
+
+const data=
+churchOSV10Data("churchosMemberTransfers");
+
+data.unshift({
+
+id:churchOSV10Id("TRANSFER"),
+
+member:member,
+
+from:from,
+
+to:to,
+
+type:type,
+
+date:date,
+
+note:note,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV10Save("churchosMemberTransfers",data);
+
+document.getElementById("transferMember").value="";
+document.getElementById("transferFrom").value="";
+document.getElementById("transferTo").value="";
+document.getElementById("transferNote").value="";
+
+renderChurchOSMemberTransfers();
+
+alert("Member transfer saved successfully.");
+
+}
+
+
+function deleteChurchOSMemberTransfer(id){
+
+const data=
+churchOSV10Data("churchosMemberTransfers")
+.filter(item=>item.id!==id);
+
+churchOSV10Save("churchosMemberTransfers",data);
+
+renderChurchOSMemberTransfers();
+
+}
+
+
+function renderChurchOSMemberTransfers(){
+
+const box=document.getElementById("churchosTransferList");
+
+if(!box)return;
+
+const data=
+churchOSV10Data("churchosMemberTransfers");
+
+if(!data.length){
+
+box.innerHTML="<p>No movement records yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v10-card">
+
+<strong>${churchOSV10Escape(item.member)}</strong>
+
+<br>
+
+<span class="v10-status">
+${churchOSV10Escape(item.type)}
+</span>
+
+<br>
+
+From:
+${churchOSV10Escape(item.from || "Not specified")}
+
+<br>
+
+To:
+<strong>${churchOSV10Escape(item.to)}</strong>
+
+<br>
+
+Effective Date:
+${churchOSV10Escape(item.date)}
+
+${item.note
+? `<br>Note: ${churchOSV10Escape(item.note)}`
+: ""}
+
+<br>
+
+<button onclick="deleteChurchOSMemberTransfer('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   49. WORKER PERFORMANCE FUNCTIONS
+========================================================= */
+
+function addChurchOSWorkerPerformance(){
+
+const name=
+document.getElementById("workerPerfName").value.trim();
+
+const department=
+document.getElementById("workerPerfDepartment").value.trim();
+
+const assignment=
+document.getElementById("workerPerfAssignment").value.trim();
+
+const date=
+document.getElementById("workerPerfDate").value;
+
+const attendance=
+document.getElementById("workerPerfAttendance").value;
+
+const rating=
+document.getElementById("workerPerfRating").value;
+
+const comment=
+document.getElementById("workerPerfComment").value.trim();
+
+if(!name || !department || !date){
+
+alert("Please enter the worker, department and service date.");
+
+return;
+
+}
+
+const data=
+churchOSV10Data("churchosWorkerPerformance");
+
+data.unshift({
+
+id:churchOSV10Id("WORKER"),
+
+name:name,
+
+department:department,
+
+assignment:assignment,
+
+date:date,
+
+attendance:attendance,
+
+rating:rating,
+
+comment:comment,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV10Save("churchosWorkerPerformance",data);
+
+document.getElementById("workerPerfName").value="";
+document.getElementById("workerPerfDepartment").value="";
+document.getElementById("workerPerfAssignment").value="";
+document.getElementById("workerPerfComment").value="";
+
+renderChurchOSWorkerPerformance();
+
+alert("Worker performance saved successfully.");
+
+}
+
+
+function deleteChurchOSWorkerPerformance(id){
+
+const data=
+churchOSV10Data("churchosWorkerPerformance")
+.filter(item=>item.id!==id);
+
+churchOSV10Save("churchosWorkerPerformance",data);
+
+renderChurchOSWorkerPerformance();
+
+}
+
+
+function renderChurchOSWorkerPerformance(){
+
+const box=
+document.getElementById("churchosWorkerPerformanceList");
+
+if(!box)return;
+
+const data=
+churchOSV10Data("churchosWorkerPerformance");
+
+if(!data.length){
+
+box.innerHTML="<p>No worker performance records yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v10-card ${
+item.attendance==="Present"
+? "v10-success"
+: item.attendance==="Absent"
+? "v10-danger"
+: "v10-warning"
+}">
+
+<strong>${churchOSV10Escape(item.name)}</strong>
+
+<br>
+
+Department:
+${churchOSV10Escape(item.department)}
+
+<br>
+
+Assignment:
+${churchOSV10Escape(item.assignment || "Not specified")}
+
+<br>
+
+Date:
+${churchOSV10Escape(item.date)}
+
+<br>
+
+Attendance:
+<strong>${churchOSV10Escape(item.attendance)}</strong>
+
+<br>
+
+Performance:
+<strong>${churchOSV10Escape(item.rating)}</strong>
+
+${item.comment
+? `<br>Comment: ${churchOSV10Escape(item.comment)}`
+: ""}
+
+<br>
+
+<button onclick="deleteChurchOSWorkerPerformance('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   50. PRAYER JOURNAL FUNCTIONS
+========================================================= */
+
+function addChurchOSPrayerJournal(){
+
+const person=
+document.getElementById("journalPerson").value.trim();
+
+const type=
+document.getElementById("journalType").value;
+
+const date=
+document.getElementById("journalDate").value;
+
+const subject=
+document.getElementById("journalSubject").value.trim();
+
+const details=
+document.getElementById("journalDetails").value.trim();
+
+if(!person || !date || !details){
+
+alert("Please enter the person, date and details.");
+
+return;
+
+}
+
+const data=
+churchOSV10Data("churchosPrayerJournal");
+
+data.unshift({
+
+id:churchOSV10Id("PRAYER"),
+
+person:person,
+
+type:type,
+
+date:date,
+
+subject:subject,
+
+details:details,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV10Save("churchosPrayerJournal",data);
+
+document.getElementById("journalPerson").value="";
+document.getElementById("journalSubject").value="";
+document.getElementById("journalDetails").value="";
+
+renderChurchOSPrayerJournal();
+
+alert("Prayer journal entry saved.");
+
+}
+
+
+function deleteChurchOSPrayerJournal(id){
+
+const data=
+churchOSV10Data("churchosPrayerJournal")
+.filter(item=>item.id!==id);
+
+churchOSV10Save("churchosPrayerJournal",data);
+
+renderChurchOSPrayerJournal();
+
+}
+
+
+function renderChurchOSPrayerJournal(){
+
+const box=
+document.getElementById("churchosPrayerJournalList");
+
+if(!box)return;
+
+const data=
+churchOSV10Data("churchosPrayerJournal");
+
+if(!data.length){
+
+box.innerHTML="<p>No prayer or testimony entries yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v10-card ${
+item.type==="Testimony" ||
+item.type==="Answered Prayer"
+? "v10-success"
+: "v10-warning"
+}">
+
+<strong>${churchOSV10Escape(item.person)}</strong>
+
+<br>
+
+<span class="v10-status">
+${churchOSV10Escape(item.type)}
+</span>
+
+<br>
+
+Date:
+${churchOSV10Escape(item.date)}
+
+${item.subject
+? `<br>Subject: ${churchOSV10Escape(item.subject)}`
+: ""}
+
+<p>
+${churchOSV10Escape(item.details)}
+</p>
+
+<button onclick="deleteChurchOSPrayerJournal('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   51. NOTICE BOARD FUNCTIONS
+========================================================= */
+
+function addChurchOSNotice(){
+
+const title=
+document.getElementById("noticeTitle").value.trim();
+
+const category=
+document.getElementById("noticeCategory").value;
+
+const date=
+document.getElementById("noticeDate").value;
+
+const content=
+document.getElementById("noticeContent").value.trim();
+
+if(!title || !date || !content){
+
+alert("Please enter the title, date and announcement.");
+
+return;
+
+}
+
+const data=
+churchOSV10Data("churchosNotices");
+
+data.unshift({
+
+id:churchOSV10Id("NOTICE"),
+
+title:title,
+
+category:category,
+
+date:date,
+
+content:content,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV10Save("churchosNotices",data);
+
+document.getElementById("noticeTitle").value="";
+document.getElementById("noticeContent").value="";
+
+renderChurchOSNotices();
+
+alert("Announcement published successfully.");
+
+}
+
+
+function deleteChurchOSNotice(id){
+
+const data=
+churchOSV10Data("churchosNotices")
+.filter(item=>item.id!==id);
+
+churchOSV10Save("churchosNotices",data);
+
+renderChurchOSNotices();
+
+}
+
+
+function renderChurchOSNotices(){
+
+const box=document.getElementById("churchosNoticeList");
+
+if(!box)return;
+
+const data=
+churchOSV10Data("churchosNotices");
+
+if(!data.length){
+
+box.innerHTML="<p>No announcements published yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v10-card">
+
+<h3>
+${churchOSV10Escape(item.title)}
+</h3>
+
+<span class="v10-status">
+${churchOSV10Escape(item.category)}
+</span>
+
+<br>
+
+Date:
+${churchOSV10Escape(item.date)}
+
+<p>
+${churchOSV10Escape(item.content)}
+</p>
+
+<button onclick="deleteChurchOSNotice('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   INITIALIZE FEATURES
+========================================================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+createChurchOSV10Sections();
+
+renderChurchOSMemberTransfers();
+
+renderChurchOSWorkerPerformance();
+
+renderChurchOSPrayerJournal();
+
+renderChurchOSNotices();
+
+});
+
+</script>
+
+<!-- END CHURCHOS AI FEATURES 48–51 -->
 </html>
