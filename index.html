@@ -13902,6 +13902,681 @@ renderChurchOSWelfare();
 });
 
 </script>
+   <script>
+/* =========================================================
+   CHURCHOS AI — FEATURES 56–59
+   56 Polls & Surveys
+   57 Department Management
+   58 Benevolence & Welfare
+   59 Monthly Ministry Report
+   ========================================================= */
+
+(function () {
+  "use strict";
+
+  const churchName = "Graceway and Truth Triumphant Church Inc.";
+
+  function getData(key) {
+    try {
+      return JSON.parse(localStorage.getItem(key) || "[]");
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveData(key, data) {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  function id() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
+
+  function esc(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function section(title, subtitle, content) {
+    return `
+      <section style="
+        margin:24px 0;
+        padding:22px;
+        background:#ffffff;
+        border-radius:18px;
+        box-shadow:0 4px 18px rgba(0,0,0,.08);
+      ">
+        <h2 style="margin-top:0;">${title}</h2>
+        <p style="opacity:.75;">${subtitle}</p>
+        ${content}
+      </section>
+    `;
+  }
+
+  /* =========================================================
+     56. POLLS & SURVEYS
+     ========================================================= */
+
+  function renderPolls() {
+    const box = document.getElementById("churchosPollsList");
+    if (!box) return;
+
+    const polls = getData("churchosPolls");
+
+    if (!polls.length) {
+      box.innerHTML = "<p>No polls created yet.</p>";
+      return;
+    }
+
+    box.innerHTML = polls.map(poll => {
+      const total = poll.options.reduce((sum, o) => sum + o.votes, 0);
+
+      return `
+        <div style="
+          padding:16px;
+          margin:12px 0;
+          border:1px solid #ddd;
+          border-radius:14px;
+        ">
+          <h3>${esc(poll.question)}</h3>
+
+          ${poll.options.map((option, index) => {
+            const percent = total
+              ? Math.round((option.votes / total) * 100)
+              : 0;
+
+            return `
+              <div style="margin:10px 0;">
+                <button
+                  onclick="churchOSVotePoll('${poll.id}', ${index})"
+                  style="padding:9px 14px;border:0;border-radius:8px;cursor:pointer;"
+                >
+                  ${esc(option.text)}
+                </button>
+
+                <div style="margin-top:5px;">
+                  ${option.votes} vote(s) — ${percent}%
+                </div>
+              </div>
+            `;
+          }).join("")}
+
+          <p><strong>Total votes:</strong> ${total}</p>
+
+          <button
+            onclick="churchOSDeletePoll('${poll.id}')"
+            style="padding:8px 12px;border:0;border-radius:8px;cursor:pointer;"
+          >
+            Delete Poll
+          </button>
+        </div>
+      `;
+    }).join("");
+  }
+
+  window.churchOSAddPoll = function () {
+    const question = document.getElementById("pollQuestion").value.trim();
+    const optionInputs = [
+      "pollOption1",
+      "pollOption2",
+      "pollOption3",
+      "pollOption4"
+    ];
+
+    if (!question) {
+      alert("Please enter a poll question.");
+      return;
+    }
+
+    const options = optionInputs
+      .map(id => document.getElementById(id).value.trim())
+      .filter(Boolean)
+      .map(text => ({ text, votes: 0 }));
+
+    if (options.length < 2) {
+      alert("Please enter at least two options.");
+      return;
+    }
+
+    const polls = getData("churchosPolls");
+
+    polls.unshift({
+      id: id(),
+      question,
+      options,
+      createdAt: new Date().toISOString()
+    });
+
+    saveData("churchosPolls", polls);
+
+    document.getElementById("pollQuestion").value = "";
+    optionInputs.forEach(input => {
+      document.getElementById(input).value = "";
+    });
+
+    renderPolls();
+  };
+
+  window.churchOSVotePoll = function (pollId, optionIndex) {
+    const polls = getData("churchosPolls");
+    const poll = polls.find(p => p.id === pollId);
+
+    if (!poll || !poll.options[optionIndex]) return;
+
+    poll.options[optionIndex].votes++;
+
+    saveData("churchosPolls", polls);
+    renderPolls();
+  };
+
+  window.churchOSDeletePoll = function (pollId) {
+    if (!confirm("Delete this poll?")) return;
+
+    const polls = getData("churchosPolls")
+      .filter(p => p.id !== pollId);
+
+    saveData("churchosPolls", polls);
+    renderPolls();
+  };
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    section(
+      "📊 Polls & Surveys",
+      "Create simple church surveys and collect responses.",
+      `
+        <input id="pollQuestion"
+          placeholder="Poll question"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <input id="pollOption1"
+          placeholder="Option 1"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <input id="pollOption2"
+          placeholder="Option 2"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <input id="pollOption3"
+          placeholder="Option 3"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <input id="pollOption4"
+          placeholder="Option 4 (optional)"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <button onclick="churchOSAddPoll()"
+          style="padding:12px 18px;margin:8px 0;border:0;border-radius:10px;cursor:pointer;">
+          Create Poll
+        </button>
+
+        <div id="churchosPollsList"></div>
+      `
+    )
+  );
+
+  /* =========================================================
+     57. DEPARTMENT MANAGEMENT
+     ========================================================= */
+
+  function renderDepartments() {
+    const box = document.getElementById("churchosDepartmentsList");
+    if (!box) return;
+
+    const departments = getData("churchosDepartments");
+
+    if (!departments.length) {
+      box.innerHTML = "<p>No departments added yet.</p>";
+      return;
+    }
+
+    box.innerHTML = departments.map(d => `
+      <div style="
+        padding:16px;
+        margin:12px 0;
+        border:1px solid #ddd;
+        border-radius:14px;
+      ">
+        <h3>${esc(d.name)}</h3>
+        <p><strong>Leader:</strong> ${esc(d.leader || "-")}</p>
+        <p><strong>Meeting:</strong> ${esc(d.day || "-")} ${esc(d.time || "")}</p>
+        <p>${esc(d.description || "")}</p>
+
+        <button onclick="churchOSDeleteDepartment('${d.id}')"
+          style="padding:8px 12px;border:0;border-radius:8px;cursor:pointer;">
+          Delete
+        </button>
+      </div>
+    `).join("");
+  }
+
+  window.churchOSAddDepartment = function () {
+    const name = document.getElementById("departmentName").value.trim();
+
+    if (!name) {
+      alert("Please enter a department name.");
+      return;
+    }
+
+    const departments = getData("churchosDepartments");
+
+    departments.unshift({
+      id: id(),
+      name,
+      leader: document.getElementById("departmentLeader").value.trim(),
+      day: document.getElementById("departmentMeetingDay").value,
+      time: document.getElementById("departmentMeetingTime").value,
+      description: document.getElementById("departmentDescription").value.trim()
+    });
+
+    saveData("churchosDepartments", departments);
+
+    [
+      "departmentName",
+      "departmentLeader",
+      "departmentMeetingDay",
+      "departmentMeetingTime",
+      "departmentDescription"
+    ].forEach(input => {
+      document.getElementById(input).value = "";
+    });
+
+    renderDepartments();
+  };
+
+  window.churchOSDeleteDepartment = function (departmentId) {
+    if (!confirm("Delete this department?")) return;
+
+    const departments = getData("churchosDepartments")
+      .filter(d => d.id !== departmentId);
+
+    saveData("churchosDepartments", departments);
+    renderDepartments();
+  };
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    section(
+      "🏢 Department Management",
+      "Organise church departments, leaders and meeting schedules.",
+      `
+        <input id="departmentName"
+          placeholder="Department name"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <input id="departmentLeader"
+          placeholder="Department leader"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <input id="departmentMeetingDay"
+          placeholder="Meeting day e.g. Saturday"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <input id="departmentMeetingTime"
+          placeholder="Meeting time e.g. 5:00 PM"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <textarea id="departmentDescription"
+          placeholder="Department description"
+          style="width:100%;padding:12px;margin:5px 0;"></textarea>
+
+        <button onclick="churchOSAddDepartment()"
+          style="padding:12px 18px;margin:8px 0;border:0;border-radius:10px;cursor:pointer;">
+          Add Department
+        </button>
+
+        <div id="churchosDepartmentsList"></div>
+      `
+    )
+  );
+
+  /* =========================================================
+     58. BENEVOLENCE & WELFARE
+     ========================================================= */
+
+  function renderWelfare() {
+    const box = document.getElementById("churchosWelfareList");
+    const totalBox = document.getElementById("churchosWelfareTotal");
+
+    if (!box) return;
+
+    const welfare = getData("churchosBenevolence");
+
+    const total = welfare.reduce(
+      (sum, item) => sum + Number(item.amount || 0),
+      0
+    );
+
+    if (totalBox) {
+      totalBox.innerHTML =
+        "Total Welfare Provided: ₦" +
+        total.toLocaleString();
+    }
+
+    if (!welfare.length) {
+      box.innerHTML = "<p>No welfare records yet.</p>";
+      return;
+    }
+
+    box.innerHTML = welfare.map(w => `
+      <div style="
+        padding:16px;
+        margin:12px 0;
+        border:1px solid #ddd;
+        border-radius:14px;
+      ">
+        <h3>${esc(w.name)}</h3>
+        <p><strong>Type:</strong> ${esc(w.type)}</p>
+        <p><strong>Date:</strong> ${esc(w.date)}</p>
+        <p><strong>Amount:</strong> ₦${Number(w.amount || 0).toLocaleString()}</p>
+        <p><strong>Status:</strong> ${esc(w.status)}</p>
+        <p>${esc(w.description || "")}</p>
+
+        <button onclick="churchOSDeleteWelfare('${w.id}')"
+          style="padding:8px 12px;border:0;border-radius:8px;cursor:pointer;">
+          Delete
+        </button>
+      </div>
+    `).join("");
+  }
+
+  window.churchOSAddWelfare = function () {
+    const name = document.getElementById("welfareName").value.trim();
+
+    if (!name) {
+      alert("Please enter the beneficiary name.");
+      return;
+    }
+
+    const welfare = getData("churchosBenevolence");
+
+    welfare.unshift({
+      id: id(),
+      name,
+      type: document.getElementById("welfareType").value,
+      date: document.getElementById("welfareDate").value,
+      amount: Number(document.getElementById("welfareAmount").value || 0),
+      description: document.getElementById("welfareDescription").value.trim(),
+      status: document.getElementById("welfareStatus").value
+    });
+
+    saveData("churchosBenevolence", welfare);
+
+    [
+      "welfareName",
+      "welfareDate",
+      "welfareAmount",
+      "welfareDescription"
+    ].forEach(input => {
+      document.getElementById(input).value = "";
+    });
+
+    renderWelfare();
+  };
+
+  window.churchOSDeleteWelfare = function (welfareId) {
+    if (!confirm("Delete this welfare record?")) return;
+
+    const welfare = getData("churchosBenevolence")
+      .filter(w => w.id !== welfareId);
+
+    saveData("churchosBenevolence", welfare);
+    renderWelfare();
+  };
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    section(
+      "❤️ Benevolence & Welfare",
+      "Record assistance given to members and people in need.",
+      `
+        <input id="welfareName"
+          placeholder="Beneficiary name"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <select id="welfareType"
+          style="width:100%;padding:12px;margin:5px 0;">
+          <option>Food Support</option>
+          <option>Medical Support</option>
+          <option>Transport Support</option>
+          <option>Financial Assistance</option>
+          <option>School Support</option>
+          <option>Emergency Support</option>
+          <option>Other</option>
+        </select>
+
+        <input id="welfareDate" type="date"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <input id="welfareAmount" type="number"
+          placeholder="Amount"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <textarea id="welfareDescription"
+          placeholder="Description / reason"
+          style="width:100%;padding:12px;margin:5px 0;"></textarea>
+
+        <select id="welfareStatus"
+          style="width:100%;padding:12px;margin:5px 0;">
+          <option>Pending</option>
+          <option>Approved</option>
+          <option>Provided</option>
+          <option>Closed</option>
+        </select>
+
+        <button onclick="churchOSAddWelfare()"
+          style="padding:12px 18px;margin:8px 0;border:0;border-radius:10px;cursor:pointer;">
+          Add Welfare Record
+        </button>
+
+        <h3 id="churchosWelfareTotal">Total Welfare Provided: ₦0</h3>
+
+        <div id="churchosWelfareList"></div>
+      `
+    )
+  );
+
+  /* =========================================================
+     59. MONTHLY MINISTRY REPORT
+     ========================================================= */
+
+  function countData(key) {
+    return getData(key).length;
+  }
+
+  function givingTotal() {
+    const giving = getData("gracewayGiving");
+
+    return giving.reduce(
+      (sum, item) =>
+        sum + Number(
+          item.amount ||
+          item.value ||
+          item.total ||
+          0
+        ),
+      0
+    );
+  }
+
+  function attendanceTotal() {
+    const attendance = getData("gracewayAttendance");
+
+    return attendance.reduce(
+      (sum, item) =>
+        sum + Number(
+          item.total ||
+          item.attendance ||
+          item.count ||
+          0
+        ),
+      0
+    );
+  }
+
+  window.churchOSGenerateMonthlyReport = function () {
+    const monthInput = document.getElementById("monthlyReportMonth").value;
+
+    if (!monthInput) {
+      alert("Please select a month.");
+      return;
+    }
+
+    const monthName = new Date(
+      monthInput + "-01T00:00:00"
+    ).toLocaleDateString("en-NG", {
+      month: "long",
+      year: "numeric"
+    });
+
+    const welfare = getData("churchosBenevolence");
+
+    const welfareTotal = welfare.reduce(
+      (sum, item) => sum + Number(item.amount || 0),
+      0
+    );
+
+    const report = `
+      <div style="
+        margin-top:20px;
+        padding:24px;
+        border:2px solid #ddd;
+        border-radius:18px;
+        background:#fff;
+      ">
+
+        <h2 style="text-align:center;">
+          ${churchName}
+        </h2>
+
+        <p style="text-align:center;">
+          Transform • Build • Inherit
+        </p>
+
+        <h2 style="text-align:center;">
+          MONTHLY MINISTRY REPORT
+        </h2>
+
+        <h3 style="text-align:center;">
+          ${esc(monthName)}
+        </h3>
+
+        <hr>
+
+        <p><strong>Members:</strong>
+          ${countData("gracewayMembers")}
+        </p>
+
+        <p><strong>New Converts:</strong>
+          ${countData("gracewayConverts")}
+        </p>
+
+        <p><strong>Visitors:</strong>
+          ${countData("churchosVisitors")}
+        </p>
+
+        <p><strong>Attendance Records:</strong>
+          ${countData("gracewayAttendance")}
+        </p>
+
+        <p><strong>Total Attendance Recorded:</strong>
+          ${attendanceTotal().toLocaleString()}
+        </p>
+
+        <p><strong>Events:</strong>
+          ${countData("gracewayEvents")}
+        </p>
+
+        <p><strong>Prayer Requests:</strong>
+          ${countData("gracewayPrayers")}
+        </p>
+
+        <p><strong>Foundation School:</strong>
+          ${countData("gracewayFoundation")}
+        </p>
+
+        <p><strong>Leaders:</strong>
+          ${countData("gracewayLeaders")}
+        </p>
+
+        <p><strong>Discipleship Records:</strong>
+          ${countData("churchosDiscipleship")}
+        </p>
+
+        <p><strong>Worker Performance Records:</strong>
+          ${countData("churchosWorkerPerformance")}
+        </p>
+
+        <p><strong>Tasks:</strong>
+          ${countData("gracewayTasks")}
+        </p>
+
+        <p><strong>Departments:</strong>
+          ${countData("churchosDepartments")}
+        </p>
+
+        <p><strong>Outreach Records:</strong>
+          ${countData("churchosOutreach")}
+        </p>
+
+        <p><strong>Giving Total Recorded:</strong>
+          ₦${givingTotal().toLocaleString()}
+        </p>
+
+        <p><strong>Welfare Provided:</strong>
+          ₦${welfareTotal.toLocaleString()}
+        </p>
+
+        <hr>
+
+        <p style="text-align:center;">
+          <strong>Home of Triumphant</strong>
+        </p>
+
+        <button onclick="window.print()"
+          style="padding:12px 18px;border:0;border-radius:10px;cursor:pointer;">
+          🖨️ Print Report
+        </button>
+
+      </div>
+    `;
+
+    document.getElementById("monthlyReportOutput").innerHTML = report;
+  };
+
+  document.body.insertAdjacentHTML(
+    "beforeend",
+    section(
+      "📑 Monthly Ministry Report",
+      "Generate a ministry summary from the information already stored in ChurchOS AI.",
+      `
+        <input id="monthlyReportMonth"
+          type="month"
+          style="width:100%;padding:12px;margin:5px 0;">
+
+        <button onclick="churchOSGenerateMonthlyReport()"
+          style="padding:12px 18px;margin:8px 0;border:0;border-radius:10px;cursor:pointer;">
+          Generate Monthly Report
+        </button>
+
+        <div id="monthlyReportOutput"></div>
+      `
+    )
+  );
+
+  /* Initial rendering */
+  renderPolls();
+  renderDepartments();
+  renderWelfare();
+
+})();
+   </script>
+</body>
+</html>
 
 <!-- END CHURCHOS AI FEATURES 56–59 -->
    
