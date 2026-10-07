@@ -7772,5 +7772,1125 @@ window.addEventListener("focus",function(){
 </script>
 
 <!-- END CHURCHOS AI FEATURES 40–43 -->
+   <!-- =========================================================
+     CHURCHOS AI — FEATURES 44–47
+     WHATSAPP HUB • VISITOR FOLLOW-UP • SCORECARD • DOCUMENTS
+========================================================= -->
+
+<style>
+.churchos-v9{
+  margin:25px 0;
+  padding:22px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  box-shadow:0 8px 25px rgba(0,0,0,.07);
+}
+
+.churchos-v9 h2{
+  margin-top:0;
+  color:#182848;
+}
+
+.v9-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+
+.churchos-v9 input,
+.churchos-v9 select,
+.churchos-v9 textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:11px;
+  margin:6px 0 12px;
+  border:1px solid #ccc;
+  border-radius:9px;
+}
+
+.churchos-v9 button{
+  border:0;
+  padding:10px 15px;
+  margin:4px;
+  border-radius:9px;
+  cursor:pointer;
+  background:#182848;
+  color:white;
+}
+
+.churchos-v9 button:hover{
+  opacity:.88;
+}
+
+.v9-card{
+  padding:15px;
+  margin:10px 0;
+  border-radius:13px;
+  background:#f6f8fb;
+  border-left:5px solid #182848;
+}
+
+.v9-good{
+  border-left-color:#27ae60;
+}
+
+.v9-warning{
+  border-left-color:#e67e22;
+}
+
+.v9-danger{
+  border-left-color:#c0392b;
+}
+
+.v9-score{
+  text-align:center;
+  padding:20px;
+  border-radius:15px;
+  background:#f5f7fb;
+}
+
+.v9-score strong{
+  display:block;
+  font-size:32px;
+  color:#182848;
+}
+
+.v9-progress{
+  height:12px;
+  background:#e5e7eb;
+  border-radius:20px;
+  overflow:hidden;
+  margin:8px 0;
+}
+
+.v9-progress-bar{
+  height:100%;
+  background:#182848;
+  width:0%;
+}
+
+.v9-doc{
+  white-space:pre-wrap;
+  line-height:1.6;
+}
+</style>
+
+
+<script>
+
+/* =========================================================
+   CHURCHOS V9 HELPERS
+========================================================= */
+
+function churchOSV9Data(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSV9Save(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+function churchOSV9Id(prefix){
+  return prefix+"-"+Date.now()+"-"+
+    Math.random().toString(36).substring(2,7);
+}
+
+function churchOSV9Escape(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   CREATE FEATURES
+========================================================= */
+
+function createChurchOSV9Sections(){
+
+/* =========================================================
+   44. WHATSAPP MINISTRY HUB
+========================================================= */
+
+if(!document.getElementById("churchosWhatsAppHub")){
+
+const section=document.createElement("section");
+
+section.id="churchosWhatsAppHub";
+section.className="churchos-v9";
+
+section.innerHTML=`
+
+<h2>📲 WhatsApp Ministry Hub</h2>
+
+<p>
+Create quick WhatsApp messages for members, visitors,
+workers and ministry groups.
+</p>
+
+<div class="v9-grid">
+
+<div>
+
+<label>Recipient Name</label>
+
+<input id="waName"
+placeholder="e.g. Brother John">
+
+<label>Phone Number</label>
+
+<input id="waPhone"
+placeholder="e.g. 2348031234567">
+
+<label>Message Type</label>
+
+<select id="waType">
+
+<option>Welcome Message</option>
+<option>Follow-Up</option>
+<option>Church Service Reminder</option>
+<option>Birthday Greeting</option>
+<option>Prayer Message</option>
+<option>Workers Message</option>
+<option>General Church Announcement</option>
+
+</select>
+
+<label>Message</label>
+
+<textarea id="waMessage"
+rows="5"
+placeholder="Write your message here..."></textarea>
+
+<button onclick="openChurchOSWhatsApp()">
+Open WhatsApp
+</button>
+
+<button onclick="saveChurchOSWhatsApp()">
+Save Message
+</button>
+
+</div>
+
+<div>
+
+<h3>Saved WhatsApp Messages</h3>
+
+<div id="churchosWhatsAppHistory"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+container.appendChild(section);
+}else{
+document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   45. DIGITAL VISITOR FOLLOW-UP FORM
+========================================================= */
+
+if(!document.getElementById("churchosVisitorFollowup")){
+
+const section=document.createElement("section");
+
+section.id="churchosVisitorFollowup";
+section.className="churchos-v9";
+
+section.innerHTML=`
+
+<h2>📝 Digital Visitor Follow-Up Form</h2>
+
+<p>
+Capture visitor information and create a follow-up record.
+</p>
+
+<div class="v9-grid">
+
+<div>
+
+<label>Visitor Name</label>
+
+<input id="v9VisitorName"
+placeholder="Full name">
+
+<label>Phone Number</label>
+
+<input id="v9VisitorPhone"
+placeholder="Phone number">
+
+<label>Email</label>
+
+<input id="v9VisitorEmail"
+placeholder="Email address">
+
+<label>Visit Date</label>
+
+<input id="v9VisitorDate" type="date">
+
+<label>How did you hear about us?</label>
+
+<select id="v9VisitorSource">
+
+<option>Friend / Family</option>
+<option>Social Media</option>
+<option>Online Search</option>
+<option>Church Invitation</option>
+<option>Evangelism</option>
+<option>Event / Programme</option>
+<option>Other</option>
+
+</select>
+
+<label>Follow-Up Worker</label>
+
+<input id="v9VisitorWorker"
+placeholder="Worker name">
+
+<label>Notes</label>
+
+<textarea id="v9VisitorNotes"
+placeholder="Visitor notes"></textarea>
+
+<button onclick="addChurchOSVisitorFollowup()">
+Save Visitor
+</button>
+
+</div>
+
+<div>
+
+<h3>Visitor Follow-Up Records</h3>
+
+<div id="churchosVisitorFollowupList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+container.appendChild(section);
+}else{
+document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   46. MINISTRY PERFORMANCE SCORECARD
+========================================================= */
+
+if(!document.getElementById("churchosScorecard")){
+
+const section=document.createElement("section");
+
+section.id="churchosScorecard";
+section.className="churchos-v9";
+
+section.innerHTML=`
+
+<h2>🎯 Ministry Performance Scorecard</h2>
+
+<p>
+Track department targets and ministry achievements.
+</p>
+
+<div class="v9-grid">
+
+<div>
+
+<label>Department / Ministry</label>
+
+<input id="scoreDepartment"
+placeholder="e.g. Evangelism">
+
+<label>Target</label>
+
+<input id="scoreTarget"
+type="number"
+min="0"
+placeholder="100">
+
+<label>Achievement</label>
+
+<input id="scoreAchievement"
+type="number"
+min="0"
+placeholder="75">
+
+<label>Period</label>
+
+<select id="scorePeriod">
+
+<option>Weekly</option>
+<option>Monthly</option>
+<option>Quarterly</option>
+<option>Yearly</option>
+
+</select>
+
+<button onclick="addChurchOSScorecard()">
+Add Scorecard
+</button>
+
+</div>
+
+<div>
+
+<h3>Ministry Performance</h3>
+
+<div id="churchosScorecardList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+container.appendChild(section);
+}else{
+document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   47. DOCUMENT & POLICY MANAGER
+========================================================= */
+
+if(!document.getElementById("churchosDocumentManager")){
+
+const section=document.createElement("section");
+
+section.id="churchosDocumentManager";
+section.className="churchos-v9";
+
+section.innerHTML=`
+
+<h2>🗂️ Document & Policy Manager</h2>
+
+<p>
+Store important church policies, procedures, ministry notes
+and operational documents inside ChurchOS.
+</p>
+
+<div class="v9-grid">
+
+<div>
+
+<label>Document Title</label>
+
+<input id="docTitle"
+placeholder="e.g. Workers Code of Conduct">
+
+<label>Category</label>
+
+<select id="docCategory">
+
+<option>Church Policy</option>
+<option>Ministry Procedure</option>
+<option>Leadership Document</option>
+<option>Workers Document</option>
+<option>Department Document</option>
+<option>General Note</option>
+
+</select>
+
+<label>Document Content</label>
+
+<textarea id="docContent"
+rows="10"
+placeholder="Write or paste the document here..."></textarea>
+
+<button onclick="saveChurchOSDocument()">
+Save Document
+</button>
+
+</div>
+
+<div>
+
+<h3>Saved Documents</h3>
+
+<div id="churchosDocumentList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+container.appendChild(section);
+}else{
+document.body.appendChild(section);
+}
+
+}
+
+}
+
+
+/* =========================================================
+   44. WHATSAPP FUNCTIONS
+========================================================= */
+
+function openChurchOSWhatsApp(){
+
+const name=document.getElementById("waName").value.trim();
+
+let phone=document.getElementById("waPhone").value.trim();
+
+const message=document.getElementById("waMessage").value.trim();
+
+if(!phone || !message){
+
+alert("Please enter a phone number and message.");
+
+return;
+
+}
+
+phone=phone.replace(/\D/g,"");
+
+if(phone.startsWith("0")){
+phone="234"+phone.substring(1);
+}
+
+const greeting=name
+? "Hello "+name+", "
+: "Hello, ";
+
+const finalMessage=greeting+message;
+
+const url=
+"https://wa.me/"+phone+
+"?text="+encodeURIComponent(finalMessage);
+
+window.open(url,"_blank");
+
+}
+
+
+function saveChurchOSWhatsApp(){
+
+const name=document.getElementById("waName").value.trim();
+
+const phone=document.getElementById("waPhone").value.trim();
+
+const type=document.getElementById("waType").value;
+
+const message=document.getElementById("waMessage").value.trim();
+
+if(!message){
+
+alert("Please enter a message.");
+
+return;
+
+}
+
+const data=churchOSV9Data("churchosWhatsAppMessages");
+
+data.unshift({
+
+id:churchOSV9Id("WA"),
+
+name:name,
+
+phone:phone,
+
+type:type,
+
+message:message,
+
+created:new Date().toLocaleString()
+
+});
+
+churchOSV9Save("churchosWhatsAppMessages",data);
+
+renderChurchOSWhatsApp();
+
+alert("WhatsApp message saved.");
+
+}
+
+
+function deleteChurchOSWhatsApp(id){
+
+const data=
+churchOSV9Data("churchosWhatsAppMessages")
+.filter(item=>item.id!==id);
+
+churchOSV9Save("churchosWhatsAppMessages",data);
+
+renderChurchOSWhatsApp();
+
+}
+
+
+function renderChurchOSWhatsApp(){
+
+const box=document.getElementById("churchosWhatsAppHistory");
+
+if(!box)return;
+
+const data=churchOSV9Data("churchosWhatsAppMessages");
+
+if(!data.length){
+
+box.innerHTML="<p>No saved WhatsApp messages yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v9-card">
+
+<strong>${churchOSV9Escape(item.name || "Recipient")}</strong><br>
+
+Type:
+${churchOSV9Escape(item.type)}<br>
+
+Phone:
+${churchOSV9Escape(item.phone || "Not provided")}<br>
+
+<p>${churchOSV9Escape(item.message)}</p>
+
+<button onclick="deleteChurchOSWhatsApp('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   45. VISITOR FOLLOW-UP
+========================================================= */
+
+function addChurchOSVisitorFollowup(){
+
+const name=
+document.getElementById("v9VisitorName").value.trim();
+
+const phone=
+document.getElementById("v9VisitorPhone").value.trim();
+
+const email=
+document.getElementById("v9VisitorEmail").value.trim();
+
+const date=
+document.getElementById("v9VisitorDate").value;
+
+const source=
+document.getElementById("v9VisitorSource").value;
+
+const worker=
+document.getElementById("v9VisitorWorker").value.trim();
+
+const notes=
+document.getElementById("v9VisitorNotes").value.trim();
+
+if(!name || !phone || !date){
+
+alert("Please enter the visitor name, phone number and visit date.");
+
+return;
+
+}
+
+const data=
+churchOSV9Data("churchosVisitorFollowups");
+
+data.unshift({
+
+id:churchOSV9Id("VIS"),
+
+name:name,
+
+phone:phone,
+
+email:email,
+
+date:date,
+
+source:source,
+
+worker:worker,
+
+notes:notes,
+
+status:"Pending",
+
+created:new Date().toISOString()
+
+});
+
+churchOSV9Save("churchosVisitorFollowups",data);
+
+document.getElementById("v9VisitorName").value="";
+document.getElementById("v9VisitorPhone").value="";
+document.getElementById("v9VisitorEmail").value="";
+document.getElementById("v9VisitorWorker").value="";
+document.getElementById("v9VisitorNotes").value="";
+
+renderChurchOSVisitorFollowups();
+
+alert("Visitor follow-up record saved successfully.");
+
+}
+
+
+function completeChurchOSVisitorFollowup(id){
+
+const data=churchOSV9Data("churchosVisitorFollowups");
+
+const item=data.find(x=>x.id===id);
+
+if(item){
+
+item.status="Completed";
+item.completedAt=new Date().toLocaleString();
+
+}
+
+churchOSV9Save("churchosVisitorFollowups",data);
+
+renderChurchOSVisitorFollowups();
+
+}
+
+
+function deleteChurchOSVisitorFollowup(id){
+
+const data=
+churchOSV9Data("churchosVisitorFollowups")
+.filter(item=>item.id!==id);
+
+churchOSV9Save("churchosVisitorFollowups",data);
+
+renderChurchOSVisitorFollowups();
+
+}
+
+
+function renderChurchOSVisitorFollowups(){
+
+const box=document.getElementById("churchosVisitorFollowupList");
+
+if(!box)return;
+
+const data=
+churchOSV9Data("churchosVisitorFollowups");
+
+if(!data.length){
+
+box.innerHTML="<p>No visitor follow-up records yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v9-card ${
+item.status==="Completed"
+? "v9-good"
+: "v9-warning"
+}">
+
+<strong>
+${churchOSV9Escape(item.name)}
+</strong>
+
+<br>
+
+Phone:
+${churchOSV9Escape(item.phone)}
+
+<br>
+
+Visit Date:
+${churchOSV9Escape(item.date)}
+
+<br>
+
+Source:
+${churchOSV9Escape(item.source)}
+
+<br>
+
+Worker:
+${churchOSV9Escape(item.worker || "Not assigned")}
+
+<br>
+
+Status:
+<strong>${churchOSV9Escape(item.status)}</strong>
+
+${item.notes
+? `<br>Notes: ${churchOSV9Escape(item.notes)}`
+: ""}
+
+<br>
+
+${
+item.status!=="Completed"
+?
+`<button onclick="completeChurchOSVisitorFollowup('${item.id}')">
+Mark Followed Up
+</button>`
+:""
+}
+
+<button onclick="deleteChurchOSVisitorFollowup('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   46. SCORECARD
+========================================================= */
+
+function addChurchOSScorecard(){
+
+const department=
+document.getElementById("scoreDepartment").value.trim();
+
+const target=
+Number(document.getElementById("scoreTarget").value);
+
+const achievement=
+Number(document.getElementById("scoreAchievement").value);
+
+const period=
+document.getElementById("scorePeriod").value;
+
+if(!department || target<=0){
+
+alert("Please enter the department and a valid target.");
+
+return;
+
+}
+
+const data=
+churchOSV9Data("churchosScorecards");
+
+data.unshift({
+
+id:churchOSV9Id("SCORE"),
+
+department:department,
+
+target:target,
+
+achievement:achievement,
+
+period:period,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV9Save("churchosScorecards",data);
+
+document.getElementById("scoreDepartment").value="";
+document.getElementById("scoreTarget").value="";
+document.getElementById("scoreAchievement").value="";
+
+renderChurchOSScorecards();
+
+}
+
+
+function deleteChurchOSScorecard(id){
+
+const data=
+churchOSV9Data("churchosScorecards")
+.filter(item=>item.id!==id);
+
+churchOSV9Save("churchosScorecards",data);
+
+renderChurchOSScorecards();
+
+}
+
+
+function renderChurchOSScorecards(){
+
+const box=document.getElementById("churchosScorecardList");
+
+if(!box)return;
+
+const data=
+churchOSV9Data("churchosScorecards");
+
+if(!data.length){
+
+box.innerHTML="<p>No ministry scorecards yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>{
+
+const percentage=
+Math.min(
+100,
+Math.round(
+(item.achievement/item.target)*100
+)
+);
+
+return `
+
+<div class="v9-score">
+
+<strong>${percentage}%</strong>
+
+<h3>
+${churchOSV9Escape(item.department)}
+</h3>
+
+<p>
+${item.achievement.toLocaleString()}
+/
+${item.target.toLocaleString()}
+</p>
+
+<p>
+Period: ${churchOSV9Escape(item.period)}
+</p>
+
+<div class="v9-progress">
+
+<div
+class="v9-progress-bar"
+style="width:${percentage}%">
+</div>
+
+</div>
+
+<button onclick="deleteChurchOSScorecard('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =========================================================
+   47. DOCUMENT MANAGER
+========================================================= */
+
+function saveChurchOSDocument(){
+
+const title=
+document.getElementById("docTitle").value.trim();
+
+const category=
+document.getElementById("docCategory").value;
+
+const content=
+document.getElementById("docContent").value.trim();
+
+if(!title || !content){
+
+alert("Please enter a document title and content.");
+
+return;
+
+}
+
+const data=
+churchOSV9Data("churchosDocuments");
+
+data.unshift({
+
+id:churchOSV9Id("DOC"),
+
+title:title,
+
+category:category,
+
+content:content,
+
+created:new Date().toLocaleString()
+
+});
+
+churchOSV9Save("churchosDocuments",data);
+
+document.getElementById("docTitle").value="";
+document.getElementById("docContent").value="";
+
+renderChurchOSDocuments();
+
+alert("Document saved successfully.");
+
+}
+
+
+function deleteChurchOSDocument(id){
+
+const data=
+churchOSV9Data("churchosDocuments")
+.filter(item=>item.id!==id);
+
+churchOSV9Save("churchosDocuments",data);
+
+renderChurchOSDocuments();
+
+}
+
+
+function copyChurchOSDocument(id){
+
+const data=
+churchOSV9Data("churchosDocuments");
+
+const item=data.find(x=>x.id===id);
+
+if(!item)return;
+
+const text=
+item.title+
+"\n\n"+
+item.category+
+"\n\n"+
+item.content;
+
+navigator.clipboard.writeText(text)
+
+.then(()=>alert("Document copied."))
+
+.catch(()=>{
+alert("Copy was not available on this browser.");
+});
+
+}
+
+
+function renderChurchOSDocuments(){
+
+const box=document.getElementById("churchosDocumentList");
+
+if(!box)return;
+
+const data=
+churchOSV9Data("churchosDocuments");
+
+if(!data.length){
+
+box.innerHTML="<p>No documents saved yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v9-card">
+
+<strong>
+${churchOSV9Escape(item.title)}
+</strong>
+
+<br>
+
+Category:
+${churchOSV9Escape(item.category)}
+
+<br>
+
+Created:
+${churchOSV9Escape(item.created)}
+
+<div class="v9-doc">
+
+${churchOSV9Escape(item.content)}
+
+</div>
+
+<button onclick="copyChurchOSDocument('${item.id}')">
+Copy
+</button>
+
+<button onclick="deleteChurchOSDocument('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+createChurchOSV9Sections();
+
+renderChurchOSWhatsApp();
+
+renderChurchOSVisitorFollowups();
+
+renderChurchOSScorecards();
+
+renderChurchOSDocuments();
+
+});
+
+</script>
+
+<!-- END CHURCHOS AI FEATURES 44–47 -->
 </body>
 </html>
