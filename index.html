@@ -5212,5 +5212,950 @@ createChurchOSCertificates();
 createChurchOSExpenses();
 
 </script>
+   <!-- =========================================================
+     CHURCHOS AI — FEATURES 32–35
+     32. Church Calendar & Recurring Services
+     33. Meeting Minutes & Decisions
+     34. Goals & Ministry Targets
+     35. Inventory & Stock Management
+     ========================================================= -->
+
+<style>
+.churchos-v6-card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  margin:20px 0;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.churchos-v6-card input,
+.churchos-v6-card select,
+.churchos-v6-card textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:11px;
+  margin:7px 0;
+  border:1px solid #ddd;
+  border-radius:9px;
+}
+
+.churchos-v6-card textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.churchos-v6-card button{
+  border:0;
+  border-radius:9px;
+  padding:10px 14px;
+  margin:5px 4px 5px 0;
+  cursor:pointer;
+}
+
+.v6-primary{
+  background:#111827;
+  color:#fff;
+}
+
+.v6-success{
+  background:#15803d;
+  color:#fff;
+}
+
+.v6-danger{
+  background:#dc2626;
+  color:#fff;
+}
+
+.v6-item{
+  background:#f8fafc;
+  border-left:4px solid #111827;
+  padding:13px;
+  border-radius:9px;
+  margin-top:10px;
+}
+
+.v6-badge{
+  display:inline-block;
+  padding:4px 9px;
+  margin:3px 3px 3px 0;
+  border-radius:20px;
+  background:#e5e7eb;
+  font-size:12px;
+}
+
+.v6-empty{
+  color:#777;
+  padding:10px 0;
+}
+
+.v6-summary{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;
+  margin:15px 0;
+}
+
+.v6-stat{
+  background:#f8fafc;
+  padding:16px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.v6-stat strong{
+  display:block;
+  font-size:25px;
+  margin-top:5px;
+}
+</style>
+
+<script>
+
+/* =========================================================
+   COMMON HELPERS
+   ========================================================= */
+
+function churchOSV6Data(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSV6Save(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+
+/* =========================================================
+   32. CHURCH CALENDAR & RECURRING SERVICES
+   ========================================================= */
+
+function createChurchOSCalendar(){
+
+  if(document.getElementById("churchosCalendar")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosCalendar";
+
+  section.innerHTML=`
+
+    <div class="churchos-v6-card">
+
+      <h2>📅 Church Calendar & Recurring Services</h2>
+
+      <p>
+        Manage services, programmes and recurring ministry activities.
+      </p>
+
+      <input id="calendarTitle"
+        placeholder="Event / service title">
+
+      <input id="calendarDate"
+        type="date">
+
+      <input id="calendarTime"
+        type="time">
+
+      <input id="calendarVenue"
+        placeholder="Venue">
+
+      <select id="calendarRepeat">
+        <option>One Time</option>
+        <option>Daily</option>
+        <option>Weekly</option>
+        <option>Monthly</option>
+        <option>Yearly</option>
+      </select>
+
+      <select id="calendarType">
+        <option>Church Service</option>
+        <option>Prayer Meeting</option>
+        <option>Bible Study</option>
+        <option>Evangelism</option>
+        <option>Workers Meeting</option>
+        <option>Youth Programme</option>
+        <option>Children's Programme</option>
+        <option>Conference</option>
+        <option>Special Event</option>
+      </select>
+
+      <textarea id="calendarDescription"
+        placeholder="Description"></textarea>
+
+      <button class="v6-primary"
+        onclick="addChurchOSCalendarEvent()">
+        Add Calendar Event
+      </button>
+
+      <div id="churchosCalendarList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSCalendar();
+}
+
+function addChurchOSCalendarEvent(){
+
+  const title=document.getElementById("calendarTitle").value.trim();
+  const date=document.getElementById("calendarDate").value;
+  const time=document.getElementById("calendarTime").value;
+  const venue=document.getElementById("calendarVenue").value.trim();
+  const repeat=document.getElementById("calendarRepeat").value;
+  const type=document.getElementById("calendarType").value;
+  const description=document.getElementById("calendarDescription").value.trim();
+
+  if(!title || !date){
+    alert("Please enter the event title and date.");
+    return;
+  }
+
+  const data=churchOSV6Data("churchosCalendar");
+
+  data.push({
+    id:Date.now(),
+    title,
+    date,
+    time,
+    venue,
+    repeat,
+    type,
+    description
+  });
+
+  churchOSV6Save("churchosCalendar",data);
+
+  document.getElementById("calendarTitle").value="";
+  document.getElementById("calendarDate").value="";
+  document.getElementById("calendarTime").value="";
+  document.getElementById("calendarVenue").value="";
+  document.getElementById("calendarDescription").value="";
+
+  renderChurchOSCalendar();
+}
+
+function deleteChurchOSCalendarEvent(id){
+
+  const data=churchOSV6Data("churchosCalendar")
+    .filter(x=>x.id!==id);
+
+  churchOSV6Save("churchosCalendar",data);
+
+  renderChurchOSCalendar();
+}
+
+function renderChurchOSCalendar(){
+
+  const box=document.getElementById("churchosCalendarList");
+
+  if(!box) return;
+
+  const data=churchOSV6Data("churchosCalendar")
+    .sort((a,b)=>a.date.localeCompare(b.date));
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="v6-empty">No calendar events yet.</div>';
+    return;
+  }
+
+  box.innerHTML=data.map(item=>`
+
+    <div class="v6-item">
+
+      <strong>${escapeHTML(item.title)}</strong>
+
+      <p>
+        📅 ${escapeHTML(item.date)}
+        ${item.time ? " • "+escapeHTML(item.time) : ""}
+      </p>
+
+      ${item.venue ?
+        `<p>📍 ${escapeHTML(item.venue)}</p>` : ""}
+
+      <span class="v6-badge">
+        ${escapeHTML(item.type)}
+      </span>
+
+      <span class="v6-badge">
+        🔁 ${escapeHTML(item.repeat)}
+      </span>
+
+      ${item.description ?
+        `<p>${escapeHTML(item.description)}</p>` : ""}
+
+      <button class="v6-danger"
+        onclick="deleteChurchOSCalendarEvent(${item.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================================================
+   33. MEETING MINUTES & DECISIONS
+   ========================================================= */
+
+function createChurchOSMinutes(){
+
+  if(document.getElementById("churchosMinutes")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosMinutes";
+
+  section.innerHTML=`
+
+    <div class="churchos-v6-card">
+
+      <h2>📋 Meeting Minutes & Decisions</h2>
+
+      <input id="meetingTitle"
+        placeholder="Meeting title">
+
+      <input id="meetingDate"
+        type="date">
+
+      <input id="meetingChair"
+        placeholder="Meeting chairman">
+
+      <textarea id="meetingAttendees"
+        placeholder="Attendees, one per line"></textarea>
+
+      <textarea id="meetingDiscussion"
+        placeholder="Key discussions"></textarea>
+
+      <textarea id="meetingDecisions"
+        placeholder="Decisions made"></textarea>
+
+      <textarea id="meetingActions"
+        placeholder="Action points and responsible persons"></textarea>
+
+      <button class="v6-primary"
+        onclick="addChurchOSMinutes()">
+        Save Meeting Minutes
+      </button>
+
+      <div id="churchosMinutesList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSMinutes();
+}
+
+function addChurchOSMinutes(){
+
+  const title=document.getElementById("meetingTitle").value.trim();
+  const date=document.getElementById("meetingDate").value;
+  const chair=document.getElementById("meetingChair").value.trim();
+
+  const attendees=document.getElementById("meetingAttendees").value
+    .split("\n")
+    .map(x=>x.trim())
+    .filter(Boolean);
+
+  const discussion=document.getElementById("meetingDiscussion").value.trim();
+  const decisions=document.getElementById("meetingDecisions").value.trim();
+  const actions=document.getElementById("meetingActions").value.trim();
+
+  if(!title || !date){
+    alert("Please enter the meeting title and date.");
+    return;
+  }
+
+  const data=churchOSV6Data("churchosMinutes");
+
+  data.push({
+    id:Date.now(),
+    title,
+    date,
+    chair,
+    attendees,
+    discussion,
+    decisions,
+    actions
+  });
+
+  churchOSV6Save("churchosMinutes",data);
+
+  document.getElementById("meetingTitle").value="";
+  document.getElementById("meetingDate").value="";
+  document.getElementById("meetingChair").value="";
+  document.getElementById("meetingAttendees").value="";
+  document.getElementById("meetingDiscussion").value="";
+  document.getElementById("meetingDecisions").value="";
+  document.getElementById("meetingActions").value="";
+
+  renderChurchOSMinutes();
+}
+
+function copyChurchOSMinutes(id){
+
+  const data=churchOSV6Data("churchosMinutes");
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const text=
+`GRACEWAY AND TRUTH TRIUMPHANT CHURCH INC
+
+MEETING MINUTES
+
+Meeting: ${item.title}
+Date: ${item.date}
+Chairman: ${item.chair || "N/A"}
+
+ATTENDEES
+${item.attendees.map(x=>"• "+x).join("\n")}
+
+KEY DISCUSSIONS
+${item.discussion || "None recorded"}
+
+DECISIONS
+${item.decisions || "None recorded"}
+
+ACTION POINTS
+${item.actions || "None recorded"}
+
+Transform • Build • Inherit
+Home of Triumphant`;
+
+  navigator.clipboard.writeText(text)
+    .then(()=>alert("Meeting minutes copied successfully."))
+    .catch(()=>alert("Unable to copy automatically."));
+}
+
+function deleteChurchOSMinutes(id){
+
+  const data=churchOSV6Data("churchosMinutes")
+    .filter(x=>x.id!==id);
+
+  churchOSV6Save("churchosMinutes",data);
+
+  renderChurchOSMinutes();
+}
+
+function renderChurchOSMinutes(){
+
+  const box=document.getElementById("churchosMinutesList");
+
+  if(!box) return;
+
+  const data=churchOSV6Data("churchosMinutes")
+    .sort((a,b)=>b.date.localeCompare(a.date));
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="v6-empty">No meeting minutes recorded.</div>';
+    return;
+  }
+
+  box.innerHTML=data.map(item=>`
+
+    <div class="v6-item">
+
+      <strong>${escapeHTML(item.title)}</strong>
+
+      <p>
+        📅 ${escapeHTML(item.date)}
+      </p>
+
+      ${item.chair ?
+        `<p>Chairman: ${escapeHTML(item.chair)}</p>` : ""}
+
+      <span class="v6-badge">
+        👥 ${item.attendees.length} attendees
+      </span>
+
+      ${item.decisions ?
+        `<p><strong>Decisions:</strong><br>
+        ${escapeHTML(item.decisions)}</p>` : ""}
+
+      ${item.actions ?
+        `<p><strong>Action Points:</strong><br>
+        ${escapeHTML(item.actions)}</p>` : ""}
+
+      <button
+        onclick="copyChurchOSMinutes(${item.id})">
+        📋 Copy Minutes
+      </button>
+
+      <button class="v6-danger"
+        onclick="deleteChurchOSMinutes(${item.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================================================
+   34. GOALS & MINISTRY TARGETS
+   ========================================================= */
+
+function createChurchOSGoals(){
+
+  if(document.getElementById("churchosGoals")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosGoals";
+
+  section.innerHTML=`
+
+    <div class="churchos-v6-card">
+
+      <h2>🎯 Goals & Ministry Targets</h2>
+
+      <input id="goalTitle"
+        placeholder="Goal e.g. Win 100 souls">
+
+      <input id="goalDepartment"
+        placeholder="Department / ministry">
+
+      <input id="goalTarget"
+        type="number"
+        min="0"
+        placeholder="Target number">
+
+      <input id="goalCurrent"
+        type="number"
+        min="0"
+        placeholder="Current achievement">
+
+      <input id="goalDeadline"
+        type="date">
+
+      <select id="goalStatus">
+        <option>Active</option>
+        <option>On Track</option>
+        <option>Needs Attention</option>
+        <option>Completed</option>
+      </select>
+
+      <button class="v6-primary"
+        onclick="addChurchOSGoal()">
+        Add Goal
+      </button>
+
+      <div id="churchosGoalList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSGoals();
+}
+
+function addChurchOSGoal(){
+
+  const title=document.getElementById("goalTitle").value.trim();
+  const department=document.getElementById("goalDepartment").value.trim();
+  const target=Number(
+    document.getElementById("goalTarget").value || 0
+  );
+  const current=Number(
+    document.getElementById("goalCurrent").value || 0
+  );
+  const deadline=document.getElementById("goalDeadline").value;
+  const status=document.getElementById("goalStatus").value;
+
+  if(!title || !target){
+    alert("Please enter the goal title and target.");
+    return;
+  }
+
+  const data=churchOSV6Data("churchosGoals");
+
+  data.push({
+    id:Date.now(),
+    title,
+    department,
+    target,
+    current,
+    deadline,
+    status
+  });
+
+  churchOSV6Save("churchosGoals",data);
+
+  document.getElementById("goalTitle").value="";
+  document.getElementById("goalDepartment").value="";
+  document.getElementById("goalTarget").value="";
+  document.getElementById("goalCurrent").value="";
+  document.getElementById("goalDeadline").value="";
+
+  renderChurchOSGoals();
+}
+
+function updateChurchOSGoal(id){
+
+  const data=churchOSV6Data("churchosGoals");
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const value=prompt(
+    "Enter current achievement:",
+    item.current
+  );
+
+  if(value===null) return;
+
+  const number=Number(value);
+
+  if(Number.isNaN(number) || number<0){
+    alert("Please enter a valid number.");
+    return;
+  }
+
+  item.current=number;
+
+  if(item.current>=item.target){
+    item.status="Completed";
+  }else if(item.current>=item.target*.75){
+    item.status="On Track";
+  }
+
+  churchOSV6Save("churchosGoals",data);
+
+  renderChurchOSGoals();
+}
+
+function deleteChurchOSGoal(id){
+
+  const data=churchOSV6Data("churchosGoals")
+    .filter(x=>x.id!==id);
+
+  churchOSV6Save("churchosGoals",data);
+
+  renderChurchOSGoals();
+}
+
+function renderChurchOSGoals(){
+
+  const box=document.getElementById("churchosGoalList");
+
+  if(!box) return;
+
+  const data=churchOSV6Data("churchosGoals");
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="v6-empty">No ministry goals recorded.</div>';
+    return;
+  }
+
+  box.innerHTML=data.map(item=>{
+
+    const percentage=item.target>0
+      ? Math.min(100,Math.round(
+          (item.current/item.target)*100
+        ))
+      : 0;
+
+    return `
+
+      <div class="v6-item">
+
+        <strong>${escapeHTML(item.title)}</strong>
+
+        ${item.department ?
+          `<p>🏢 ${escapeHTML(item.department)}</p>` : ""}
+
+        <p>
+          Progress:
+          ${item.current} / ${item.target}
+          (${percentage}%)
+        </p>
+
+        <span class="v6-badge">
+          ${escapeHTML(item.status)}
+        </span>
+
+        ${item.deadline ?
+          `<span class="v6-badge">
+            Deadline: ${escapeHTML(item.deadline)}
+          </span>` : ""}
+
+        <button class="v6-success"
+          onclick="updateChurchOSGoal(${item.id})">
+          📈 Update Progress
+        </button>
+
+        <button class="v6-danger"
+          onclick="deleteChurchOSGoal(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `;
+
+  }).join("");
+}
+
+
+/* =========================================================
+   35. INVENTORY & STOCK MANAGEMENT
+   ========================================================= */
+
+function createChurchOSInventory(){
+
+  if(document.getElementById("churchosInventory")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosInventory";
+
+  section.innerHTML=`
+
+    <div class="churchos-v6-card">
+
+      <h2>📦 Inventory & Stock Management</h2>
+
+      <p>
+        Track ministry supplies, quantities and low-stock items.
+      </p>
+
+      <input id="inventoryName"
+        placeholder="Item name">
+
+      <input id="inventoryCategory"
+        placeholder="Category">
+
+      <input id="inventoryQuantity"
+        type="number"
+        min="0"
+        placeholder="Current quantity">
+
+      <input id="inventoryMinimum"
+        type="number"
+        min="0"
+        placeholder="Minimum stock level">
+
+      <input id="inventoryLocation"
+        placeholder="Storage location">
+
+      <select id="inventoryUnit">
+        <option>Pieces</option>
+        <option>Boxes</option>
+        <option>Packets</option>
+        <option>Cartons</option>
+        <option>Bottles</option>
+        <option>Other</option>
+      </select>
+
+      <button class="v6-primary"
+        onclick="addChurchOSInventory()">
+        Add Inventory Item
+      </button>
+
+      <div id="churchosInventoryList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSInventory();
+}
+
+function addChurchOSInventory(){
+
+  const name=document.getElementById("inventoryName").value.trim();
+  const category=document.getElementById("inventoryCategory").value.trim();
+  const quantity=Number(
+    document.getElementById("inventoryQuantity").value || 0
+  );
+  const minimum=Number(
+    document.getElementById("inventoryMinimum").value || 0
+  );
+  const location=document.getElementById("inventoryLocation").value.trim();
+  const unit=document.getElementById("inventoryUnit").value;
+
+  if(!name){
+    alert("Please enter the inventory item name.");
+    return;
+  }
+
+  const data=churchOSV6Data("churchosInventory");
+
+  data.push({
+    id:Date.now(),
+    name,
+    category,
+    quantity,
+    minimum,
+    location,
+    unit
+  });
+
+  churchOSV6Save("churchosInventory",data);
+
+  document.getElementById("inventoryName").value="";
+  document.getElementById("inventoryCategory").value="";
+  document.getElementById("inventoryQuantity").value="";
+  document.getElementById("inventoryMinimum").value="";
+  document.getElementById("inventoryLocation").value="";
+
+  renderChurchOSInventory();
+}
+
+function updateChurchOSInventory(id){
+
+  const data=churchOSV6Data("churchosInventory");
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const value=prompt(
+    "Enter new quantity:",
+    item.quantity
+  );
+
+  if(value===null) return;
+
+  const number=Number(value);
+
+  if(Number.isNaN(number) || number<0){
+    alert("Please enter a valid quantity.");
+    return;
+  }
+
+  item.quantity=number;
+
+  churchOSV6Save("churchosInventory",data);
+
+  renderChurchOSInventory();
+}
+
+function deleteChurchOSInventory(id){
+
+  const data=churchOSV6Data("churchosInventory")
+    .filter(x=>x.id!==id);
+
+  churchOSV6Save("churchosInventory",data);
+
+  renderChurchOSInventory();
+}
+
+function renderChurchOSInventory(){
+
+  const box=document.getElementById("churchosInventoryList");
+
+  if(!box) return;
+
+  const data=churchOSV6Data("churchosInventory");
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="v6-empty">No inventory items recorded.</div>';
+    return;
+  }
+
+  const lowStock=data.filter(
+    x=>Number(x.quantity)<=Number(x.minimum)
+  ).length;
+
+  box.innerHTML=`
+
+    <div class="v6-summary">
+
+      <div class="v6-stat">
+        Inventory Items
+        <strong>${data.length}</strong>
+      </div>
+
+      <div class="v6-stat">
+        Low Stock
+        <strong>${lowStock}</strong>
+      </div>
+
+    </div>
+
+    ${data.map(item=>{
+
+      const isLow=
+        Number(item.quantity)<=Number(item.minimum);
+
+      return `
+
+        <div class="v6-item">
+
+          <strong>${escapeHTML(item.name)}</strong>
+
+          ${item.category ?
+            `<p>Category: ${escapeHTML(item.category)}</p>` : ""}
+
+          <p>
+            Stock:
+            ${item.quantity} ${escapeHTML(item.unit)}
+          </p>
+
+          <p>
+            Minimum:
+            ${item.minimum} ${escapeHTML(item.unit)}
+          </p>
+
+          ${item.location ?
+            `<p>📍 ${escapeHTML(item.location)}</p>` : ""}
+
+          <span class="v6-badge">
+            ${isLow ? "⚠️ Low Stock" : "✅ In Stock"}
+          </span>
+
+          <button class="v6-success"
+            onclick="updateChurchOSInventory(${item.id})">
+            🔄 Update Quantity
+          </button>
+
+          <button class="v6-danger"
+            onclick="deleteChurchOSInventory(${item.id})">
+            Delete
+          </button>
+
+        </div>
+
+      `;
+
+    }).join("")}
+  `;
+}
+
+
+/* =========================================================
+   START FEATURES 32–35
+   ========================================================= */
+
+createChurchOSCalendar();
+createChurchOSMinutes();
+createChurchOSGoals();
+createChurchOSInventory();
+
+</script>
 </body>
 </html>
