@@ -122,19 +122,20 @@ button:hover {
   opacity: 0.9;
 }
 
-.ai-box {
+.member-section {
   margin-top: 25px;
-  background: white;
-  padding: 22px;
-  border-radius: 14px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
 }
 
-textarea,
-input {
+.member-form {
+  display: grid;
+  gap: 10px;
+}
+
+input,
+select,
+textarea {
   width: 100%;
   padding: 12px;
-  margin: 8px 0 15px;
   border: 1px solid #d1d5db;
   border-radius: 8px;
   font-family: Arial, sans-serif;
@@ -145,12 +146,47 @@ textarea {
   resize: vertical;
 }
 
+.member-list {
+  margin-top: 20px;
+}
+
+.member {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.member strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.member small {
+  color: #6b7280;
+}
+
+.delete-btn {
+  margin-top: 10px;
+  background: #b91c1c;
+}
+
+.ai-box {
+  margin-top: 25px;
+  background: white;
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
 #aiResponse {
   margin-top: 15px;
   padding: 15px;
   background: #f3f4f6;
   border-radius: 8px;
   line-height: 1.7;
+  white-space: pre-line;
 }
 
 footer {
@@ -172,291 +208,619 @@ footer {
 
 <header>
 
-  <h1>Graceway and Truth Triumphant Church Inc.</h1>
+<h1>Graceway and Truth Triumphant Church Inc.</h1>
 
-  <p>Transform • Build • Inherit</p>
+<p>Transform • Build • Inherit</p>
 
-  <div class="brand">
-    Powered by ChurchOS AI
-  </div>
+<div class="brand">
+Powered by ChurchOS AI
+</div>
 
 </header>
 
 <div class="container">
 
-  <div class="welcome">
+<div class="welcome">
 
-    <h2>Church & Ministry Dashboard</h2>
+<h2>Church & Ministry Dashboard</h2>
 
-    <p>
-      Welcome to the digital ministry operating system for
-      Graceway and Truth Triumphant Church Inc.
-      Manage people, follow-up, prayer, discipleship,
-      attendance and ministry activities from one place.
-    </p>
-
-  </div>
-
-  <div class="stats">
-
-    <div class="stat">
-      <h3>Total Members</h3>
-      <strong>250</strong>
-    </div>
-
-    <div class="stat">
-      <h3>New Converts</h3>
-      <strong>18</strong>
-    </div>
-
-    <div class="stat">
-      <h3>Prayer Requests</h3>
-      <strong>12</strong>
-    </div>
-
-    <div class="stat">
-      <h3>Attendance</h3>
-      <strong>186</strong>
-    </div>
-
-    <div class="stat">
-      <h3>Foundation School</h3>
-      <strong>42</strong>
-    </div>
-
-    <div class="stat">
-      <h3>Giving</h3>
-      <strong>₦850,000</strong>
-    </div>
-
-  </div>
-
-  <div class="grid">
-
-    <div class="card">
-      <h3>👥 Members</h3>
-      <p>
-        Manage members, contact information,
-        departments and important member details.
-      </p>
-      <button onclick="showMessage('Members management will be available in the next version.')">
-        Open Members
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>🙏 Prayer Requests</h3>
-      <p>
-        Record prayer requests and help leaders
-        follow up with members.
-      </p>
-      <button onclick="showMessage('Prayer request management will be available in the next version.')">
-        View Requests
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>❤️ New Converts</h3>
-      <p>
-        Track new converts and ensure that nobody
-        is forgotten after salvation.
-      </p>
-      <button onclick="showMessage('New convert follow-up will be available in the next version.')">
-        Follow Up
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>📊 Attendance</h3>
-      <p>
-        Monitor attendance and understand
-        participation trends.
-      </p>
-      <button onclick="showMessage('Attendance analytics will be available in the next version.')">
-        View Attendance
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>💰 Giving</h3>
-      <p>
-        Monitor giving records and ministry
-        financial information.
-      </p>
-      <button onclick="showMessage('Giving analytics will be available in the next version.')">
-        View Giving
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>📖 Foundation School</h3>
-      <p>
-        Track discipleship, classes, attendance
-        and spiritual growth.
-      </p>
-      <button onclick="showMessage('Foundation School tracking will be available in the next version.')">
-        Open School
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>📣 Communications</h3>
-      <p>
-        Create church announcements,
-        WhatsApp messages and social-media content.
-      </p>
-      <button onclick="showMessage('Church communication tools will be available in the next version.')">
-        Create Message
-      </button>
-    </div>
-
-    <div class="card">
-      <h3>👨‍💼 Leadership</h3>
-      <p>
-        Give pastors and leaders a clear view
-        of important ministry activities.
-      </p>
-      <button onclick="showMessage('Leadership dashboard will be available in the next version.')">
-        Leadership View
-      </button>
-    </div>
-
-  </div>
-
-  <div class="ai-box">
-
-    <h2>🤖 AI Ministry Assistant</h2>
-
-    <p>
-      Generate sermon ideas, devotionals,
-      follow-up messages and church announcements.
-    </p>
-
-    <textarea
-      id="aiQuestion"
-      placeholder="Example: Write a devotional about faith...">
-    </textarea>
-
-    <button onclick="askAI()">
-      Ask Ministry Assistant
-    </button>
-
-    <div id="aiResponse">
-      Your AI response will appear here.
-    </div>
-
-  </div>
-
-  <div class="tagline">
-    Home of Triumphant
-  </div>
+<p>
+Welcome to the digital ministry operating system for
+Graceway and Truth Triumphant Church Inc.
+Manage people, follow-up, prayer, discipleship,
+attendance and ministry activities from one place.
+</p>
 
 </div>
 
+<div class="stats">
+
+<div class="stat">
+<h3>Total Members</h3>
+<strong id="memberCount">0</strong>
+</div>
+
+<div class="stat">
+<h3>New Converts</h3>
+<strong>18</strong>
+</div>
+
+<div class="stat">
+<h3>Prayer Requests</h3>
+<strong>12</strong>
+</div>
+
+<div class="stat">
+<h3>Attendance</h3>
+<strong>186</strong>
+</div>
+
+<div class="stat">
+<h3>Foundation School</h3>
+<strong>42</strong>
+</div>
+
+<div class="stat">
+<h3>Giving</h3>
+<strong>₦850,000</strong>
+</div>
+
+</div>
+
+
+<div class="grid">
+
+<div class="card">
+<h3>👥 Members</h3>
+<p>
+Add and manage church members and their basic information.
+</p>
+
+<button onclick="scrollToMembers()">
+Manage Members
+</button>
+
+</div>
+
+
+<div class="card">
+<h3>🙏 Prayer Requests</h3>
+
+<p>
+Record prayer requests and help leaders follow up with members.
+</p>
+
+<button onclick="showMessage('Prayer request management is coming next.')">
+View Requests
+</button>
+
+</div>
+
+
+<div class="card">
+<h3>❤️ New Converts</h3>
+
+<p>
+Track new converts and ensure that nobody is forgotten after salvation.
+</p>
+
+<button onclick="showMessage('New convert follow-up is coming next.')">
+Follow Up
+</button>
+
+</div>
+
+
+<div class="card">
+<h3>📊 Attendance</h3>
+
+<p>
+Monitor attendance and understand participation trends.
+</p>
+
+<button onclick="showMessage('Attendance analytics is coming next.')">
+View Attendance
+</button>
+
+</div>
+
+
+<div class="card">
+<h3>💰 Giving</h3>
+
+<p>
+Monitor giving records and ministry financial information.
+</p>
+
+<button onclick="showMessage('Giving analytics is coming next.')">
+View Giving
+</button>
+
+</div>
+
+
+<div class="card">
+<h3>📖 Foundation School</h3>
+
+<p>
+Track discipleship, classes, attendance and spiritual growth.
+</p>
+
+<button onclick="showMessage('Foundation School tracking is coming next.')">
+Open School
+</button>
+
+</div>
+
+
+<div class="card">
+<h3>📣 Communications</h3>
+
+<p>
+Create church announcements, WhatsApp messages and social-media content.
+</p>
+
+<button onclick="showMessage('Church communication tools are coming next.')">
+Create Message
+</button>
+
+</div>
+
+
+<div class="card">
+<h3>👨‍💼 Leadership</h3>
+
+<p>
+Give pastors and leaders a clear view of important ministry activities.
+</p>
+
+<button onclick="showMessage('Leadership dashboard is coming next.')">
+Leadership View
+</button>
+
+</div>
+
+</div>
+
+
+<!-- MEMBER MANAGEMENT -->
+
+<div class="card member-section" id="members">
+
+<h2>👥 Member Management</h2>
+
+<p>
+Add members to the Graceway ministry database.
+</p>
+
+<div class="member-form">
+
+<input
+id="memberName"
+placeholder="Member full name">
+
+<input
+id="memberPhone"
+placeholder="Phone number">
+
+<select id="memberStatus">
+
+<option value="Member">
+Member
+</option>
+
+<option value="New Convert">
+New Convert
+</option>
+
+<option value="Worker">
+Worker
+</option>
+
+<option value="Leader">
+Leader
+</option>
+
+</select>
+
+
+<select id="memberDepartment">
+
+<option value="Not Assigned">
+Department
+</option>
+
+<option value="Choir">
+Choir
+</option>
+
+<option value="Evangelism">
+Evangelism
+</option>
+
+<option value="Children">
+Children
+</option>
+
+<option value="Youth">
+Youth
+</option>
+
+<option value="Women">
+Women
+</option>
+
+<option value="Men">
+Men
+</option>
+
+<option value="Media">
+Media
+</option>
+
+<option value="Ushering">
+Ushering
+</option>
+
+</select>
+
+
+<button onclick="addMember()">
+Add Member
+</button>
+
+</div>
+
+
+<div class="member-list" id="memberList">
+
+<p>No members added yet.</p>
+
+</div>
+
+</div>
+
+
+<!-- AI ASSISTANT -->
+
+<div class="ai-box">
+
+<h2>🤖 AI Ministry Assistant</h2>
+
+<p>
+Generate sermon ideas, devotionals, follow-up messages
+and church announcements.
+</p>
+
+<textarea
+id="aiQuestion"
+placeholder="Example: Write a devotional about faith...">
+</textarea>
+
+<button onclick="askAI()">
+Ask Ministry Assistant
+</button>
+
+<div id="aiResponse">
+Your AI response will appear here.
+</div>
+
+</div>
+
+
+<div class="tagline">
+Home of Triumphant
+</div>
+
+</div>
+
+
 <footer>
 
-  Graceway and Truth Triumphant Church Inc.<br>
-  ChurchOS AI Ministry Operating System
+Graceway and Truth Triumphant Church Inc.<br>
+ChurchOS AI Ministry Operating System
 
 </footer>
 
+
 <script>
 
-function showMessage(message) {
-  alert(message);
+/* MEMBER DATABASE */
+
+let members =
+JSON.parse(localStorage.getItem("gracewayMembers")) || [];
+
+
+function saveMembers() {
+
+localStorage.setItem(
+"gracewayMembers",
+JSON.stringify(members)
+);
+
 }
+
+
+function addMember() {
+
+const name =
+document.getElementById("memberName").value.trim();
+
+const phone =
+document.getElementById("memberPhone").value.trim();
+
+const status =
+document.getElementById("memberStatus").value;
+
+const department =
+document.getElementById("memberDepartment").value;
+
+
+if (!name) {
+
+alert("Please enter the member's name.");
+
+return;
+
+}
+
+
+const member = {
+
+id: Date.now(),
+
+name: name,
+
+phone: phone,
+
+status: status,
+
+department: department
+
+};
+
+
+members.push(member);
+
+saveMembers();
+
+document.getElementById("memberName").value = "";
+
+document.getElementById("memberPhone").value = "";
+
+displayMembers();
+
+}
+
+
+function deleteMember(id) {
+
+members =
+members.filter(member => member.id !== id);
+
+saveMembers();
+
+displayMembers();
+
+}
+
+
+function displayMembers() {
+
+const list =
+document.getElementById("memberList");
+
+const count =
+document.getElementById("memberCount");
+
+count.innerText = members.length;
+
+
+if (members.length === 0) {
+
+list.innerHTML =
+"<p>No members added yet.</p>";
+
+return;
+
+}
+
+
+list.innerHTML = "";
+
+
+members.forEach(member => {
+
+const div =
+document.createElement("div");
+
+div.className = "member";
+
+
+div.innerHTML = `
+
+<strong>${member.name}</strong>
+
+<small>
+📞 ${member.phone || "No phone number"}<br>
+👤 ${member.status}<br>
+🏷️ ${member.department}
+</small>
+
+<br>
+
+<button
+class="delete-btn"
+onclick="deleteMember(${member.id})">
+Delete
+</button>
+
+`;
+
+
+list.appendChild(div);
+
+});
+
+}
+
+
+function scrollToMembers() {
+
+document
+.getElementById("members")
+.scrollIntoView({
+behavior: "smooth"
+});
+
+}
+
+
+function showMessage(message) {
+
+alert(message);
+
+}
+
+
+/* AI MINISTRY ASSISTANT */
 
 function askAI() {
 
-  const question =
-    document.getElementById("aiQuestion").value.toLowerCase();
+const question =
+document
+.getElementById("aiQuestion")
+.value
+.toLowerCase();
 
-  const response =
-    document.getElementById("aiResponse");
+const response =
+document.getElementById("aiResponse");
 
-  if (!question.trim()) {
 
-    response.innerText =
-      "Please enter a ministry question first.";
+if (!question.trim()) {
 
-    return;
-  }
+response.innerText =
+"Please enter a ministry question first.";
 
-  if (
-    question.includes("devotional") ||
-    question.includes("devotion")
-  ) {
-
-    response.innerText =
-      "DEVOTIONAL IDEA\n\n" +
-      "Faith Beyond What You See\n\n" +
-      "Scripture: Hebrews 11:1\n\n" +
-      "Faith is trusting God and His Word even when " +
-      "the evidence around us has not yet changed. " +
-      "God's Word remains sufficient. Encourage the church " +
-      "to keep believing, keep walking and keep standing " +
-      "on what God has spoken.";
-
-  }
-
-  else if (
-    question.includes("sermon") ||
-    question.includes("message")
-  ) {
-
-    response.innerText =
-      "SERMON IDEA\n\n" +
-      "Fight the Good Fight of Faith\n\n" +
-      "Main Scripture: 1 Timothy 6:12\n\n" +
-      "Key Points:\n" +
-      "1. Faith must be exercised.\n" +
-      "2. Faith stands on God's Word.\n" +
-      "3. Faith refuses to surrender to circumstances.\n" +
-      "4. Faith keeps moving toward God's purpose.";
-
-  }
-
-  else if (
-    question.includes("follow") ||
-    question.includes("convert")
-  ) {
-
-    response.innerText =
-      "FOLLOW-UP MESSAGE\n\n" +
-      "Hello! We are grateful that you worshipped with " +
-      "Graceway and Truth Triumphant Church Inc. " +
-      "We would love to know how you are doing and " +
-      "how we can pray with you. You are welcome, " +
-      "loved and valued in this family.";
-
-  }
-
-  else if (
-    question.includes("announcement") ||
-    question.includes("whatsapp")
-  ) {
-
-    response.innerText =
-      "CHURCH ANNOUNCEMENT\n\n" +
-      "Dear Graceway family, we invite you to join us " +
-      "for our upcoming service. Come expectant, invite " +
-      "someone and let's encounter Christ together through " +
-      "the ministry of God's Word.";
-
-  }
-
-  else {
-
-    response.innerText =
-      "ChurchOS AI is ready to assist Graceway and Truth " +
-      "Triumphant Church Inc. with sermons, devotionals, " +
-      "new-convert follow-up, announcements and other " +
-      "ministry tasks.\n\n" +
-      "Tell me what you would like to create.";
-
-  }
+return;
 
 }
+
+
+if (
+question.includes("devotional") ||
+question.includes("devotion")
+) {
+
+response.innerText =
+`DEVOTIONAL IDEA
+
+Faith Beyond What You See
+
+Scripture: Hebrews 11:1
+
+Faith is trusting God and His Word even when
+the evidence around us has not yet changed.
+
+God's Word remains sufficient.
+
+Encourage the church to keep believing,
+keep walking and keep standing on what
+God has spoken.`;
+
+}
+
+
+else if (
+question.includes("sermon") ||
+question.includes("message")
+) {
+
+response.innerText =
+`SERMON IDEA
+
+Fight the Good Fight of Faith
+
+Main Scripture: 1 Timothy 6:12
+
+Key Points:
+
+1. Faith must be exercised.
+
+2. Faith stands on God's Word.
+
+3. Faith refuses to surrender to circumstances.
+
+4. Faith keeps moving toward God's purpose.`;
+
+}
+
+
+else if (
+question.includes("follow") ||
+question.includes("convert")
+) {
+
+response.innerText =
+`FOLLOW-UP MESSAGE
+
+Hello!
+
+We are grateful that you worshipped with
+Graceway and Truth Triumphant Church Inc.
+
+We would love to know how you are doing
+and how we can pray with you.
+
+You are welcome, loved and valued in
+this family.`;
+
+}
+
+
+else if (
+question.includes("announcement") ||
+question.includes("whatsapp")
+) {
+
+response.innerText =
+`CHURCH ANNOUNCEMENT
+
+Dear Graceway family,
+
+We invite you to join us for our upcoming service.
+
+Come expectant, invite someone and let's
+encounter Christ together through the
+ministry of God's Word.`;
+
+}
+
+
+else {
+
+response.innerText =
+`ChurchOS AI is ready to assist Graceway and
+Truth Triumphant Church Inc.
+
+I can help with:
+
+• Sermons
+• Devotionals
+• New-convert follow-up
+• Church announcements
+• Ministry communication
+
+Tell me what you would like to create.`;
+
+}
+
+}
+
+
+/* LOAD MEMBERS */
+
+displayMembers();
 
 </script>
 
