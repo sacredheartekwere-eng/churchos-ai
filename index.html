@@ -3530,5 +3530,774 @@ createChurchOSVisitors();
 createChurchOSForms();
 
 </script>
+   <!-- =========================================================
+     CHURCHOS AI — FEATURES 24–27
+     Online Giving & Pledges
+     Event Registration & Check-in
+     Family & Household Management
+     Custom Dashboard Widgets
+     ========================================================= -->
+
+<style>
+.churchos-v4-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:18px;
+  margin-top:20px;
+}
+
+.churchos-v4-card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+  margin-bottom:20px;
+}
+
+.churchos-v4-card input,
+.churchos-v4-card select,
+.churchos-v4-card textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:11px;
+  margin:7px 0;
+  border:1px solid #ddd;
+  border-radius:9px;
+}
+
+.churchos-v4-card textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.churchos-v4-card button{
+  border:0;
+  border-radius:9px;
+  padding:10px 14px;
+  cursor:pointer;
+  margin:5px 4px 5px 0;
+}
+
+.churchos-v4-primary{
+  background:#111827;
+  color:#fff;
+}
+
+.churchos-v4-success{
+  background:#15803d;
+  color:#fff;
+}
+
+.churchos-v4-danger{
+  background:#dc2626;
+  color:#fff;
+}
+
+.churchos-v4-item{
+  background:#f8fafc;
+  border-left:4px solid #111827;
+  padding:13px;
+  border-radius:9px;
+  margin-top:10px;
+}
+
+.churchos-v4-badge{
+  display:inline-block;
+  padding:4px 9px;
+  border-radius:20px;
+  background:#e5e7eb;
+  font-size:12px;
+  margin:3px 3px 3px 0;
+}
+
+.churchos-v4-empty{
+  color:#777;
+  padding:10px 0;
+}
+
+.churchos-widget-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:12px;
+  margin-top:15px;
+}
+
+.churchos-widget{
+  background:#f8fafc;
+  border-radius:14px;
+  padding:18px;
+  text-align:center;
+}
+
+.churchos-widget strong{
+  display:block;
+  font-size:28px;
+  margin-top:7px;
+}
+</style>
+
+<script>
+
+/* =========================================================
+   COMMON HELPERS
+   ========================================================= */
+
+function churchOSV4Data(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSV4Save(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+
+/* =========================================================
+   24. ONLINE GIVING & PLEDGES
+   ========================================================= */
+
+function createChurchOSGivingPledges(){
+
+  if(document.getElementById("churchosGivingPledges")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosGivingPledges";
+
+  section.innerHTML=`
+
+    <div class="churchos-v4-card">
+
+      <h2>💳 Online Giving & Pledges</h2>
+
+      <p>
+        Record giving intentions, pledges and payment references.
+      </p>
+
+      <input id="pledgeName"
+        placeholder="Member / giver name">
+
+      <select id="pledgeType">
+        <option>Tithe</option>
+        <option>Offering</option>
+        <option>Thanksgiving</option>
+        <option>Mission</option>
+        <option>Building Project</option>
+        <option>Special Pledge</option>
+        <option>Other</option>
+      </select>
+
+      <input id="pledgeAmount"
+        type="number"
+        min="0"
+        placeholder="Amount ₦">
+
+      <input id="pledgeDate"
+        type="date">
+
+      <select id="pledgeStatus">
+        <option>Pledged</option>
+        <option>Partially Paid</option>
+        <option>Paid</option>
+      </select>
+
+      <input id="pledgeReference"
+        placeholder="Payment / reference number">
+
+      <button class="churchos-v4-primary"
+        onclick="addChurchOSPledge()">
+        Save Pledge
+      </button>
+
+      <div id="churchosPledgeList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSPledges();
+}
+
+function addChurchOSPledge(){
+
+  const name=document.getElementById("pledgeName").value.trim();
+  const type=document.getElementById("pledgeType").value;
+  const amount=Number(document.getElementById("pledgeAmount").value);
+  const date=document.getElementById("pledgeDate").value;
+  const status=document.getElementById("pledgeStatus").value;
+  const reference=document.getElementById("pledgeReference").value.trim();
+
+  if(!name || !amount){
+    alert("Please enter the giver's name and amount.");
+    return;
+  }
+
+  const data=churchOSV4Data("churchosPledges");
+
+  data.push({
+    id:Date.now(),
+    name,
+    type,
+    amount,
+    date,
+    status,
+    reference
+  });
+
+  churchOSV4Save("churchosPledges",data);
+
+  document.getElementById("pledgeName").value="";
+  document.getElementById("pledgeAmount").value="";
+  document.getElementById("pledgeDate").value="";
+  document.getElementById("pledgeReference").value="";
+
+  renderChurchOSPledges();
+}
+
+function changeChurchOSPledgeStatus(id){
+
+  const data=churchOSV4Data("churchosPledges");
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const statuses=[
+    "Pledged",
+    "Partially Paid",
+    "Paid"
+  ];
+
+  const current=statuses.indexOf(item.status);
+
+  item.status=statuses[(current+1)%statuses.length];
+
+  churchOSV4Save("churchosPledges",data);
+  renderChurchOSPledges();
+}
+
+function deleteChurchOSPledge(id){
+
+  const data=churchOSV4Data("churchosPledges")
+    .filter(x=>x.id!==id);
+
+  churchOSV4Save("churchosPledges",data);
+  renderChurchOSPledges();
+}
+
+function renderChurchOSPledges(){
+
+  const box=document.getElementById("churchosPledgeList");
+
+  if(!box) return;
+
+  const data=churchOSV4Data("churchosPledges");
+
+  if(!data.length){
+    box.innerHTML='<div class="churchos-v4-empty">No pledges recorded.</div>';
+    return;
+  }
+
+  const total=data.reduce((sum,x)=>sum+Number(x.amount||0),0);
+
+  box.innerHTML=`
+
+    <div class="churchos-v4-widget">
+      Total Recorded Pledges
+      <strong>₦${total.toLocaleString()}</strong>
+    </div>
+
+    ${data.map(item=>`
+
+      <div class="churchos-v4-item">
+
+        <strong>${escapeHTML(item.name)}</strong>
+
+        <div>
+          <span class="churchos-v4-badge">
+            ${escapeHTML(item.type)}
+          </span>
+
+          <span class="churchos-v4-badge">
+            ${escapeHTML(item.status)}
+          </span>
+        </div>
+
+        <p>
+          ₦${Number(item.amount).toLocaleString()}
+          ${item.date ? " • "+escapeHTML(item.date) : ""}
+        </p>
+
+        ${item.reference ?
+          `<p>Reference: ${escapeHTML(item.reference)}</p>` : ""}
+
+        <button
+          onclick="changeChurchOSPledgeStatus(${item.id})">
+          🔄 Change Status
+        </button>
+
+        <button class="churchos-v4-danger"
+          onclick="deleteChurchOSPledge(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("")}
+  `;
+}
+
+
+/* =========================================================
+   25. EVENT REGISTRATION & CHECK-IN
+   ========================================================= */
+
+function createChurchOSEventRegistration(){
+
+  if(document.getElementById("churchosEventRegistration")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosEventRegistration";
+
+  section.innerHTML=`
+
+    <div class="churchos-v4-card">
+
+      <h2>🎫 Event Registration & Check-in</h2>
+
+      <input id="eventRegName"
+        placeholder="Participant name">
+
+      <input id="eventRegPhone"
+        placeholder="Phone number">
+
+      <input id="eventRegEvent"
+        placeholder="Event name">
+
+      <input id="eventRegDate"
+        type="date">
+
+      <select id="eventRegStatus">
+        <option>Registered</option>
+        <option>Checked In</option>
+        <option>Attended</option>
+        <option>Cancelled</option>
+      </select>
+
+      <button class="churchos-v4-primary"
+        onclick="addChurchOSEventRegistration()">
+        Register Participant
+      </button>
+
+      <div id="churchosEventRegList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSEventRegistrations();
+}
+
+function addChurchOSEventRegistration(){
+
+  const name=document.getElementById("eventRegName").value.trim();
+  const phone=document.getElementById("eventRegPhone").value.trim();
+  const event=document.getElementById("eventRegEvent").value.trim();
+  const date=document.getElementById("eventRegDate").value;
+  const status=document.getElementById("eventRegStatus").value;
+
+  if(!name || !event){
+    alert("Please enter the participant name and event.");
+    return;
+  }
+
+  const data=churchOSV4Data("churchosEventRegistrations");
+
+  data.push({
+    id:Date.now(),
+    name,
+    phone,
+    event,
+    date,
+    status,
+    checkInTime:""
+  });
+
+  churchOSV4Save("churchosEventRegistrations",data);
+
+  document.getElementById("eventRegName").value="";
+  document.getElementById("eventRegPhone").value="";
+  document.getElementById("eventRegEvent").value="";
+  document.getElementById("eventRegDate").value="";
+
+  renderChurchOSEventRegistrations();
+}
+
+function checkInChurchOSEvent(id){
+
+  const data=churchOSV4Data("churchosEventRegistrations");
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  item.status="Checked In";
+  item.checkInTime=new Date().toLocaleString();
+
+  churchOSV4Save("churchosEventRegistrations",data);
+
+  renderChurchOSEventRegistrations();
+}
+
+function deleteChurchOSEventRegistration(id){
+
+  const data=churchOSV4Data("churchosEventRegistrations")
+    .filter(x=>x.id!==id);
+
+  churchOSV4Save("churchosEventRegistrations",data);
+
+  renderChurchOSEventRegistrations();
+}
+
+function renderChurchOSEventRegistrations(){
+
+  const box=document.getElementById("churchosEventRegList");
+
+  if(!box) return;
+
+  const data=churchOSV4Data("churchosEventRegistrations");
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="churchos-v4-empty">No event registrations yet.</div>';
+    return;
+  }
+
+  const checked=data.filter(
+    x=>x.status==="Checked In" || x.status==="Attended"
+  ).length;
+
+  box.innerHTML=`
+
+    <div class="churchos-v4-widget">
+      Checked In
+      <strong>${checked}</strong>
+    </div>
+
+    ${data.map(item=>`
+
+      <div class="churchos-v4-item">
+
+        <strong>${escapeHTML(item.name)}</strong>
+
+        <p>
+          🎫 ${escapeHTML(item.event)}
+        </p>
+
+        ${item.phone ?
+          `<p>📞 ${escapeHTML(item.phone)}</p>` : ""}
+
+        ${item.date ?
+          `<p>📅 ${escapeHTML(item.date)}</p>` : ""}
+
+        <span class="churchos-v4-badge">
+          ${escapeHTML(item.status)}
+        </span>
+
+        ${item.checkInTime ?
+          `<p>Check-in: ${escapeHTML(item.checkInTime)}</p>` : ""}
+
+        <button class="churchos-v4-success"
+          onclick="checkInChurchOSEvent(${item.id})">
+          ✅ Check In
+        </button>
+
+        <button class="churchos-v4-danger"
+          onclick="deleteChurchOSEventRegistration(${item.id})">
+          Delete
+        </button>
+
+      </div>
+
+    `).join("")}
+  `;
+}
+
+
+/* =========================================================
+   26. FAMILY & HOUSEHOLD MANAGEMENT
+   ========================================================= */
+
+function createChurchOSFamilies(){
+
+  if(document.getElementById("churchosFamilies")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosFamilies";
+
+  section.innerHTML=`
+
+    <div class="churchos-v4-card">
+
+      <h2>👨‍👩‍👧 Family & Household Management</h2>
+
+      <input id="familyName"
+        placeholder="Family / household name">
+
+      <input id="familyHead"
+        placeholder="Head of household">
+
+      <input id="familyPhone"
+        placeholder="Family phone">
+
+      <input id="familyAddress"
+        placeholder="Address">
+
+      <textarea id="familyMembers"
+        placeholder="Family members, one per line"></textarea>
+
+      <button class="churchos-v4-primary"
+        onclick="addChurchOSFamily()">
+        Save Household
+      </button>
+
+      <div id="churchosFamilyList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+  renderChurchOSFamilies();
+}
+
+function addChurchOSFamily(){
+
+  const name=document.getElementById("familyName").value.trim();
+  const head=document.getElementById("familyHead").value.trim();
+  const phone=document.getElementById("familyPhone").value.trim();
+  const address=document.getElementById("familyAddress").value.trim();
+  const members=document.getElementById("familyMembers").value
+    .split("\n")
+    .map(x=>x.trim())
+    .filter(Boolean);
+
+  if(!name || !head){
+    alert("Please enter the family name and head of household.");
+    return;
+  }
+
+  const data=churchOSV4Data("churchosFamilies");
+
+  data.push({
+    id:Date.now(),
+    name,
+    head,
+    phone,
+    address,
+    members
+  });
+
+  churchOSV4Save("churchosFamilies",data);
+
+  document.getElementById("familyName").value="";
+  document.getElementById("familyHead").value="";
+  document.getElementById("familyPhone").value="";
+  document.getElementById("familyAddress").value="";
+  document.getElementById("familyMembers").value="";
+
+  renderChurchOSFamilies();
+}
+
+function deleteChurchOSFamily(id){
+
+  const data=churchOSV4Data("churchosFamilies")
+    .filter(x=>x.id!==id);
+
+  churchOSV4Save("churchosFamilies",data);
+  renderChurchOSFamilies();
+}
+
+function renderChurchOSFamilies(){
+
+  const box=document.getElementById("churchosFamilyList");
+
+  if(!box) return;
+
+  const data=churchOSV4Data("churchosFamilies");
+
+  if(!data.length){
+    box.innerHTML=
+      '<div class="churchos-v4-empty">No households recorded.</div>';
+    return;
+  }
+
+  box.innerHTML=data.map(item=>`
+
+    <div class="churchos-v4-item">
+
+      <strong>${escapeHTML(item.name)}</strong>
+
+      <p>
+        Head: ${escapeHTML(item.head)}
+      </p>
+
+      ${item.phone ?
+        `<p>📞 ${escapeHTML(item.phone)}</p>` : ""}
+
+      ${item.address ?
+        `<p>📍 ${escapeHTML(item.address)}</p>` : ""}
+
+      <p>
+        👨‍👩‍👧 Members: ${item.members.length}
+      </p>
+
+      ${item.members.length ?
+        `<p>${item.members.map(x=>
+          "• "+escapeHTML(x)
+        ).join("<br>")}</p>` : ""}
+
+      <button class="churchos-v4-danger"
+        onclick="deleteChurchOSFamily(${item.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================================================
+   27. CUSTOM DASHBOARD WIDGETS
+   ========================================================= */
+
+function createChurchOSCustomDashboard(){
+
+  if(document.getElementById("churchosCustomDashboard")) return;
+
+  const header=document.querySelector("header");
+
+  if(!header) return;
+
+  const section=document.createElement("section");
+  section.id="churchosCustomDashboard";
+  section.style.margin="20px";
+
+  section.innerHTML=`
+
+    <div class="churchos-v4-card">
+
+      <h2>📊 Custom Dashboard Widgets</h2>
+
+      <p>
+        Quick ministry indicators from your ChurchOS data.
+      </p>
+
+      <div class="churchos-widget-grid"
+        id="churchosWidgetGrid">
+      </div>
+
+    </div>
+  `;
+
+  header.insertAdjacentElement("afterend",section);
+
+  renderChurchOSWidgets();
+}
+
+function renderChurchOSWidgets(){
+
+  const box=document.getElementById("churchosWidgetGrid");
+
+  if(!box) return;
+
+  const members=churchOSV4Data("gracewayMembers");
+  const converts=churchOSV4Data("gracewayConverts");
+  const prayers=churchOSV4Data("gracewayPrayers");
+  const leaders=churchOSV4Data("gracewayLeaders");
+  const visitors=churchOSV4Data("churchosVisitors");
+  const families=churchOSV4Data("churchosFamilies");
+  const tasks=churchOSV4Data("gracewayTasks");
+  const reminders=churchOSV4Data("churchosReminders");
+
+  const pendingPrayers=prayers.filter(
+    x=>x.status==="Pending"
+  ).length;
+
+  const pendingTasks=tasks.filter(
+    x=>x.status!=="Completed"
+  ).length;
+
+  const pendingReminders=reminders.filter(
+    x=>!x.completed
+  ).length;
+
+  box.innerHTML=`
+
+    <div class="churchos-widget">
+      👥 Members
+      <strong>${members.length}</strong>
+    </div>
+
+    <div class="churchos-widget">
+      🌱 Converts
+      <strong>${converts.length}</strong>
+    </div>
+
+    <div class="churchos-widget">
+      🙏 Pending Prayers
+      <strong>${pendingPrayers}</strong>
+    </div>
+
+    <div class="churchos-widget">
+      👑 Leaders
+      <strong>${leaders.length}</strong>
+    </div>
+
+    <div class="churchos-widget">
+      📱 Visitors
+      <strong>${visitors.length}</strong>
+    </div>
+
+    <div class="churchos-widget">
+      👨‍👩‍👧 Families
+      <strong>${families.length}</strong>
+    </div>
+
+    <div class="churchos-widget">
+      📋 Open Tasks
+      <strong>${pendingTasks}</strong>
+    </div>
+
+    <div class="churchos-widget">
+      🔔 Reminders
+      <strong>${pendingReminders}</strong>
+    </div>
+
+  `;
+}
+
+
+/* =========================================================
+   START FEATURES 24–27
+   ========================================================= */
+
+createChurchOSGivingPledges();
+createChurchOSEventRegistration();
+createChurchOSFamilies();
+createChurchOSCustomDashboard();
+
+</script>
 </body>
 </html>
