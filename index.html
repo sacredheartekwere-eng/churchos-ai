@@ -1930,6 +1930,884 @@ renderTasks();
 updateDashboard();
 
 </script>
+<!-- CHURCHOS AI - SECURITY, SEARCH, EXPORT & BACKUP UPGRADE -->
 
+<style>
+#churchosLogin{
+position:fixed;
+inset:0;
+background:rgba(10,25,47,.96);
+z-index:9999;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+}
+
+.login-box{
+background:white;
+width:100%;
+max-width:420px;
+padding:30px;
+border-radius:18px;
+box-shadow:0 15px 50px rgba(0,0,0,.3);
+}
+
+.login-box h2{
+color:#173b8f;
+margin-bottom:8px;
+}
+
+.login-box p{
+color:#667085;
+margin-bottom:18px;
+}
+
+.login-box input,
+.login-box select{
+margin-bottom:12px;
+}
+
+#churchosUserBar{
+background:#eef3ff;
+padding:10px 15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+}
+
+#globalSearchBox{
+background:white;
+padding:18px;
+border-radius:14px;
+margin-bottom:20px;
+box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
+.search-results{
+margin-top:12px;
+}
+
+.search-item{
+padding:12px;
+border-bottom:1px solid #e5e7eb;
+cursor:pointer;
+}
+
+.search-item:hover{
+background:#f8fafc;
+}
+
+.report-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:12px;
+}
+
+.report-card{
+background:#f8fafc;
+padding:18px;
+border-radius:12px;
+border:1px solid #e2e8f0;
+}
+
+.report-card strong{
+display:block;
+font-size:24px;
+color:#1d4ed8;
+}
+
+#backupRestoreSection{
+margin-top:20px;
+}
+</style>
+
+<!-- LOGIN -->
+
+<div id="churchosLogin">
+
+<div class="login-box">
+
+<h2>🔐 ChurchOS AI</h2>
+
+<p>Graceway and Truth Triumphant Church Inc.</p>
+
+<input id="loginName" placeholder="Enter your name">
+
+<select id="loginRole">
+<option>Admin</option>
+<option>Pastor</option>
+<option>Leader</option>
+<option>Worker</option>
+</select>
+
+<button class="btn" style="width:100%" onclick="churchosLoginUser()">
+Enter ChurchOS
+</button>
+
+<p class="small" style="margin-top:15px">
+Demo login for this prototype. Full secure multi-user authentication will require a real backend.
+</p>
+
+</div>
+</div>
+
+<!-- USER BAR -->
+
+<div id="churchosUserBar" style="display:none">
+
+<div>
+<strong>👤 <span id="loggedUser"></span></strong>
+<span class="badge" id="loggedRole"></span>
+</div>
+
+<button class="btn secondary" onclick="churchosLogout()">Logout</button>
+
+</div>
+
+<script>
+
+/* =====================================================
+   CHURCHOS LOGIN & ROLES
+===================================================== */
+
+function churchosLoginUser(){
+
+const name=document.getElementById("loginName").value.trim();
+const role=document.getElementById("loginRole").value;
+
+if(!name){
+alert("Please enter your name.");
+return;
+}
+
+const user={
+name:name,
+role:role,
+loginTime:new Date().toLocaleString()
+};
+
+localStorage.setItem("churchosCurrentUser",JSON.stringify(user));
+
+showChurchOSUser();
+
+}
+
+function showChurchOSUser(){
+
+const saved=localStorage.getItem("churchosCurrentUser");
+
+if(!saved){
+
+document.getElementById("churchosLogin").style.display="flex";
+document.getElementById("churchosUserBar").style.display="none";
+
+return;
+}
+
+const user=JSON.parse(saved);
+
+document.getElementById("churchosLogin").style.display="none";
+document.getElementById("churchosUserBar").style.display="flex";
+
+document.getElementById("loggedUser").textContent=user.name;
+document.getElementById("loggedRole").textContent=user.role;
+
+applyChurchOSRole(user.role);
+
+}
+
+function churchosLogout(){
+
+if(confirm("Logout of ChurchOS AI?")){
+
+localStorage.removeItem("churchosCurrentUser");
+
+document.getElementById("loginName").value="";
+
+showChurchOSUser();
+
+}
+
+}
+
+/*
+Demo role permissions.
+This is interface-level role control only.
+Real security requires server-side authentication.
+*/
+
+function applyChurchOSRole(role){
+
+const adminOnly=[
+"backupRestoreSection"
+];
+
+if(role==="Worker"){
+
+const leadership=document.getElementById("leadership");
+
+if(leadership){
+leadership.style.display="none";
+}
+
+}
+
+if(role==="Leader"){
+
+const giving=document.getElementById("giving");
+
+if(giving){
+giving.style.display="none";
+}
+
+}
+
+if(role==="Pastor"||role==="Admin"){
+
+adminOnly.forEach(id=>{
+const element=document.getElementById(id);
+if(element)element.style.display="block";
+});
+
+}
+
+}
+
+/* =====================================================
+   GLOBAL SEARCH
+===================================================== */
+
+function createGlobalSearch(){
+
+const nav=document.querySelector("nav");
+
+if(!nav)return;
+
+const box=document.createElement("div");
+
+box.id="globalSearchBox";
+
+box.innerHTML=`
+
+<h3 style="color:#173b8f;margin-bottom:10px">
+🔎 Global ChurchOS Search
+</h3>
+
+<input
+id="churchosGlobalSearch"
+placeholder="Search members, converts, leaders, sermons, tasks, events..."
+oninput="performChurchOSSearch()"
+>
+
+<div id="churchosSearchResults" class="search-results"></div>
+
+`;
+
+nav.parentNode.insertBefore(box,nav);
+
+}
+
+function performChurchOSSearch(){
+
+const q=document.getElementById("churchosGlobalSearch").value
+.toLowerCase()
+.trim();
+
+const results=document.getElementById("churchosSearchResults");
+
+if(!q){
+
+results.innerHTML="";
+
+return;
+
+}
+
+let found=[];
+
+function searchData(key,type,fields,section){
+
+const data=getData(key);
+
+data.forEach(item=>{
+
+const text=fields
+.map(field=>String(item[field]||""))
+.join(" ")
+.toLowerCase();
+
+if(text.includes(q)){
+
+found.push({
+type:type,
+name:item.name||item.title||item.service||"Record",
+detail:text,
+section:section
+});
+
+}
+
+});
+
+}
+
+searchData(
+"gracewayMembers",
+"Member",
+["name","phone","status","department"],
+"members"
+);
+
+searchData(
+"gracewayConverts",
+"New Convert",
+["name","phone","status","worker","notes"],
+"converts"
+);
+
+searchData(
+"gracewayLeaders",
+"Leader",
+["name","phone","role","department","status"],
+"leadership"
+);
+
+searchData(
+"gracewayEvents",
+"Event",
+["title","venue","type","description"],
+"events"
+);
+
+searchData(
+"gracewayLibrary",
+"Sermon/Devotional",
+["title","type","speaker","scripture","content"],
+"library"
+);
+
+searchData(
+"gracewayTasks",
+"Task",
+["title","assigned","department","priority","status"],
+"tasks"
+);
+
+searchData(
+"gracewayCommunications",
+"Communication",
+["title","type","message"],
+"communications"
+);
+
+if(!found.length){
+
+results.innerHTML=
+"<div class='empty'>No matching records found.</div>";
+
+return;
+
+}
+
+results.innerHTML=found.slice(0,30).map(item=>`
+
+<div
+class="search-item"
+onclick="scrollToSection('${item.section}')"
+>
+
+<strong>${escapeHTML(item.type)}</strong>
+
+<br>
+
+${escapeHTML(item.name)}
+
+<br>
+
+<span class="small">
+${escapeHTML(item.detail.substring(0,150))}
+</span>
+
+</div>
+
+`).join("");
+
+}
+
+/* =====================================================
+   REPORTS
+===================================================== */
+
+function createReportsSection(){
+
+const container=document.querySelector(".container");
+
+if(!container)return;
+
+const section=document.createElement("section");
+
+section.id="reports";
+
+section.innerHTML=`
+
+<h2>📤 Reports & Export</h2>
+
+<p class="small">
+Generate a quick ministry summary or export your ChurchOS data.
+</p>
+
+<div class="report-grid" style="margin-top:15px">
+
+<div class="report-card">
+<strong id="reportMembers">0</strong>
+Members
+</div>
+
+<div class="report-card">
+<strong id="reportConverts">0</strong>
+New Converts
+</div>
+
+<div class="report-card">
+<strong id="reportAttendance">0</strong>
+Attendance
+</div>
+
+<div class="report-card">
+<strong id="reportGiving">₦0</strong>
+Giving
+</div>
+
+<div class="report-card">
+<strong id="reportFoundation">0</strong>
+Foundation Students
+</div>
+
+<div class="report-card">
+<strong id="reportLeaders">0</strong>
+Leaders
+</div>
+
+</div>
+
+<div style="margin-top:20px">
+
+<button class="btn" onclick="downloadChurchReport()">
+📄 Download Church Report
+</button>
+
+<button class="btn success" onclick="exportAllChurchData()">
+📦 Export All Data
+</button>
+
+</div>
+
+<div id="backupRestoreSection">
+
+<h3 style="color:#173b8f;margin-top:25px">
+🛡️ Backup & Restore
+</h3>
+
+<p class="small">
+Create a complete backup of your ChurchOS data and restore it whenever needed.
+</p>
+
+<button class="btn" onclick="downloadChurchBackup()">
+⬇️ Download Backup
+</button>
+
+<label class="btn secondary" style="display:inline-block">
+⬆️ Restore Backup
+<input
+type="file"
+id="churchBackupFile"
+accept=".json"
+style="display:none"
+onchange="restoreChurchBackup(event)"
+>
+</label>
+
+<button class="btn danger" onclick="confirmClearChurchData()">
+⚠️ Clear All Church Data
+</button>
+
+</div>
+
+`;
+
+container.appendChild(section);
+
+}
+
+/* =====================================================
+   REPORT CALCULATIONS
+===================================================== */
+
+function updateChurchReports(){
+
+const members=getData("gracewayMembers");
+const converts=getData("gracewayConverts");
+const attendance=getData("gracewayAttendance");
+const giving=getData("gracewayGiving");
+const foundation=getData("gracewayFoundation");
+const leaders=getData("gracewayLeaders");
+
+const attendanceTotal=attendance.reduce(
+(sum,x)=>sum+Number(x.total||0),0
+);
+
+const givingTotal=giving.reduce(
+(sum,x)=>sum+Number(x.amount||0),0
+);
+
+document.getElementById("reportMembers").textContent=members.length;
+
+document.getElementById("reportConverts").textContent=converts.length;
+
+document.getElementById("reportAttendance").textContent=
+attendanceTotal;
+
+document.getElementById("reportGiving").textContent=
+"₦"+givingTotal.toLocaleString();
+
+document.getElementById("reportFoundation").textContent=
+foundation.length;
+
+document.getElementById("reportLeaders").textContent=
+leaders.length;
+
+}
+
+/* =====================================================
+   CSV HELPER
+===================================================== */
+
+function downloadCSV(filename,rows){
+
+if(!rows.length)return;
+
+const csv=rows.map(row=>
+row.map(value=>
+`"${String(value??"").replace(/"/g,'""')}"`
+).join(",")
+).join("\n");
+
+const blob=new Blob([csv],{
+type:"text/csv;charset=utf-8;"
+});
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+a.download=filename;
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+URL.revokeObjectURL(url);
+
+}
+
+/* =====================================================
+   CHURCH REPORT
+===================================================== */
+
+function downloadChurchReport(){
+
+const members=getData("gracewayMembers");
+const converts=getData("gracewayConverts");
+const attendance=getData("gracewayAttendance");
+const giving=getData("gracewayGiving");
+const foundation=getData("gracewayFoundation");
+const leaders=getData("gracewayLeaders");
+
+const rows=[
+["GRACEWAY AND TRUTH TRIUMPHANT CHURCH INC."],
+["CHURCHOS AI MINISTRY REPORT"],
+["Generated",new Date().toLocaleString()],
+[],
+["SUMMARY"],
+["Members",members.length],
+["New Converts",converts.length],
+["Foundation Students",foundation.length],
+["Leaders",leaders.length],
+["Total Attendance",attendance.reduce((s,x)=>s+Number(x.total||0),0)],
+["Total Giving","₦"+giving.reduce((s,x)=>s+Number(x.amount||0),0)],
+[],
+["NEW CONVERTS"],
+["Name","Phone","Status","Worker","Next Follow-up"]
+];
+
+converts.forEach(x=>{
+rows.push([
+x.name,
+x.phone,
+x.status,
+x.worker,
+x.next
+]);
+});
+
+rows.push(
+[],
+["GIVING"],
+["Name","Type","Amount","Date"]
+);
+
+giving.forEach(x=>{
+rows.push([
+x.name,
+x.type,
+x.amount,
+x.date
+]);
+});
+
+downloadCSV(
+"Graceway-ChurchOS-Report.csv",
+rows
+);
+
+}
+
+/* =====================================================
+   EXPORT EVERYTHING
+===================================================== */
+
+function exportAllChurchData(){
+
+const allData={};
+
+const keys=[
+"gracewayMembers",
+"gracewayConverts",
+"gracewayAttendance",
+"gracewayFoundation",
+"gracewayGiving",
+"gracewayPrayers",
+"gracewayCommunications",
+"gracewayLeaders",
+"gracewayEvents",
+"gracewayMessageHistory",
+"gracewayLibrary",
+"gracewayTasks"
+];
+
+keys.forEach(key=>{
+allData[key]=getData(key);
+});
+
+allData.exportedAt=new Date().toISOString();
+
+const blob=new Blob(
+[JSON.stringify(allData,null,2)],
+{type:"application/json"}
+);
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+a.download="Graceway-ChurchOS-All-Data.json";
+
+document.body.appendChild(a);
+a.click();
+a.remove();
+
+URL.revokeObjectURL(url);
+
+alert("All ChurchOS data exported successfully.");
+
+}
+
+/* =====================================================
+   BACKUP
+===================================================== */
+
+function downloadChurchBackup(){
+
+const backup={};
+
+const keys=[
+"gracewayMembers",
+"gracewayConverts",
+"gracewayAttendance",
+"gracewayFoundation",
+"gracewayGiving",
+"gracewayPrayers",
+"gracewayCommunications",
+"gracewayLeaders",
+"gracewayEvents",
+"gracewayMessageHistory",
+"gracewayLibrary",
+"gracewayTasks"
+];
+
+keys.forEach(key=>{
+backup[key]=getData(key);
+});
+
+backup.backupDate=new Date().toISOString();
+backup.church="Graceway and Truth Triumphant Church Inc.";
+backup.system="ChurchOS AI";
+
+const blob=new Blob(
+[JSON.stringify(backup,null,2)],
+{type:"application/json"}
+);
+
+const url=URL.createObjectURL(blob);
+
+const a=document.createElement("a");
+
+a.href=url;
+
+a.download=
+"Graceway-ChurchOS-Backup-"+new Date()
+.toISOString()
+.slice(0,10)+".json";
+
+document.body.appendChild(a);
+
+a.click();
+
+a.remove();
+
+URL.revokeObjectURL(url);
+
+alert("ChurchOS backup downloaded successfully.");
+
+}
+
+/* =====================================================
+   RESTORE
+===================================================== */
+
+function restoreChurchBackup(event){
+
+const file=event.target.files[0];
+
+if(!file)return;
+
+const reader=new FileReader();
+
+reader.onload=function(e){
+
+try{
+
+const backup=JSON.parse(e.target.result);
+
+const keys=[
+"gracewayMembers",
+"gracewayConverts",
+"gracewayAttendance",
+"gracewayFoundation",
+"gracewayGiving",
+"gracewayPrayers",
+"gracewayCommunications",
+"gracewayLeaders",
+"gracewayEvents",
+"gracewayMessageHistory",
+"gracewayLibrary",
+"gracewayTasks"
+];
+
+let restored=0;
+
+keys.forEach(key=>{
+
+if(Array.isArray(backup[key])){
+
+localStorage.setItem(
+key,
+JSON.stringify(backup[key])
+);
+
+restored++;
+
+}
+
+});
+
+alert(
+"Backup restored successfully.\n\n"+
+restored+" ChurchOS data areas restored."
+);
+
+location.reload();
+
+}
+catch(error){
+
+alert(
+"This backup file is not valid ChurchOS data."
+);
+
+}
+
+};
+
+reader.readAsText(file);
+
+}
+
+/* =====================================================
+   CLEAR DATA
+===================================================== */
+
+function confirmClearChurchData(){
+
+const answer=prompt(
+"Type DELETE to permanently clear all ChurchOS church data."
+);
+
+if(answer!=="DELETE"){
+
+alert("Nothing was deleted.");
+
+return;
+
+}
+
+const keys=[
+"gracewayMembers",
+"gracewayConverts",
+"gracewayAttendance",
+"gracewayFoundation",
+"gracewayGiving",
+"gracewayPrayers",
+"gracewayCommunications",
+"gracewayLeaders",
+"gracewayEvents",
+"gracewayMessageHistory",
+"gracewayLibrary",
+"gracewayTasks"
+];
+
+keys.forEach(key=>localStorage.removeItem(key));
+
+alert("All ChurchOS church data has been cleared.");
+
+location.reload();
+
+}
+
+/* =====================================================
+   INITIALISE UPGRADE
+===================================================== */
+
+createGlobalSearch();
+createReportsSection();
+updateChurchReports();
+showChurchOSUser();
+
+  </script>
 </body>
 </html>
