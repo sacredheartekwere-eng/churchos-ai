@@ -9946,6 +9946,1310 @@ renderChurchOSNotices();
 });
 
 </script>
+   <!-- =========================================================
+     CHURCHOS AI — FEATURES 52–55
+     STAFF • COUNSELLING • DISCIPLESHIP • OUTREACH
+========================================================= -->
+
+<style>
+.churchos-v11{
+  margin:25px 0;
+  padding:22px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  box-shadow:0 8px 25px rgba(0,0,0,.07);
+}
+
+.churchos-v11 h2{
+  margin-top:0;
+  color:#182848;
+}
+
+.v11-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+
+.churchos-v11 input,
+.churchos-v11 select,
+.churchos-v11 textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:11px;
+  margin:6px 0 12px;
+  border:1px solid #ccc;
+  border-radius:9px;
+}
+
+.churchos-v11 button{
+  border:0;
+  padding:10px 15px;
+  margin:4px;
+  border-radius:9px;
+  cursor:pointer;
+  background:#182848;
+  color:#fff;
+}
+
+.churchos-v11 button:hover{
+  opacity:.88;
+}
+
+.v11-card{
+  padding:15px;
+  margin:10px 0;
+  border-radius:13px;
+  background:#f6f8fb;
+  border-left:5px solid #182848;
+}
+
+.v11-good{
+  border-left-color:#27ae60;
+}
+
+.v11-warning{
+  border-left-color:#e67e22;
+}
+
+.v11-danger{
+  border-left-color:#c0392b;
+}
+
+.v11-private{
+  background:#fff8f0;
+  border-left-color:#9b59b6;
+}
+
+.v11-badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#e8eef8;
+  font-size:12px;
+  margin:4px 0;
+}
+</style>
+
+<script>
+
+/* =========================================================
+   CHURCHOS V11 HELPERS
+========================================================= */
+
+function churchOSV11Data(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSV11Save(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+function churchOSV11Id(prefix){
+  return prefix+"-"+Date.now()+"-"+
+    Math.random().toString(36).substring(2,7);
+}
+
+function churchOSV11Escape(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   CREATE FEATURES 52–55
+========================================================= */
+
+function createChurchOSV11Sections(){
+
+/* =========================================================
+   52. STAFF & MINISTRY PERSONNEL
+========================================================= */
+
+if(!document.getElementById("churchosStaffPersonnel")){
+
+const section=document.createElement("section");
+
+section.id="churchosStaffPersonnel";
+section.className="churchos-v11";
+
+section.innerHTML=`
+
+<h2>🧑‍💼 Staff & Ministry Personnel Manager</h2>
+
+<p>
+Manage staff, ministers and ministry personnel records.
+</p>
+
+<div class="v11-grid">
+
+<div>
+
+<label>Full Name</label>
+<input id="staffName"
+placeholder="Full name">
+
+<label>Phone Number</label>
+<input id="staffPhone"
+placeholder="Phone number">
+
+<label>Email</label>
+<input id="staffEmail"
+placeholder="Email address">
+
+<label>Department</label>
+<input id="staffDepartment"
+placeholder="e.g. Administration">
+
+<label>Role / Position</label>
+<input id="staffRole"
+placeholder="e.g. Ministry Coordinator">
+
+<label>Service Type</label>
+
+<select id="staffServiceType">
+  <option>Full Time</option>
+  <option>Part Time</option>
+  <option>Volunteer</option>
+  <option>Minister</option>
+  <option>Intern</option>
+</select>
+
+<label>Start Date</label>
+<input id="staffStartDate" type="date">
+
+<label>Status</label>
+
+<select id="staffStatus">
+  <option>Active</option>
+  <option>On Leave</option>
+  <option>Inactive</option>
+</select>
+
+<button onclick="addChurchOSStaff()">
+Save Personnel
+</button>
+
+</div>
+
+<div>
+
+<h3>Personnel Records</h3>
+
+<div id="churchosStaffList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+  container.appendChild(section);
+}else{
+  document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   53. COUNSELLING & CARE CASES
+========================================================= */
+
+if(!document.getElementById("churchosCounsellingCases")){
+
+const section=document.createElement("section");
+
+section.id="churchosCounsellingCases";
+section.className="churchos-v11";
+
+section.innerHTML=`
+
+<h2>📞 Counselling & Care Cases</h2>
+
+<p>
+Record pastoral care cases and follow-up status.
+</p>
+
+<div class="v11-card v11-private">
+<strong>🔒 Confidential Ministry Record</strong><br>
+Only authorized ministry personnel should access sensitive
+pastoral counselling information.
+</div>
+
+<div class="v11-grid">
+
+<div>
+
+<label>Person / Member</label>
+<input id="casePerson"
+placeholder="Name">
+
+<label>Case Type</label>
+
+<select id="caseType">
+  <option>Pastoral Counselling</option>
+  <option>Family Support</option>
+  <option>Marriage Support</option>
+  <option>Spiritual Guidance</option>
+  <option>Grief Support</option>
+  <option>General Care</option>
+</select>
+
+<label>Assigned Minister / Counsellor</label>
+<input id="caseCounsellor"
+placeholder="Name">
+
+<label>Date Opened</label>
+<input id="caseDate" type="date">
+
+<label>Status</label>
+
+<select id="caseStatus">
+  <option>Open</option>
+  <option>Follow-Up Required</option>
+  <option>Resolved</option>
+  <option>Closed</option>
+</select>
+
+<label>Follow-Up Date</label>
+<input id="caseFollowupDate" type="date">
+
+<label>Private Notes</label>
+
+<textarea id="caseNotes"
+rows="7"
+placeholder="Confidential pastoral notes"></textarea>
+
+<button onclick="addChurchOSCounsellingCase()">
+Save Case
+</button>
+
+</div>
+
+<div>
+
+<h3>Counselling Cases</h3>
+
+<div id="churchosCounsellingList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+  container.appendChild(section);
+}else{
+  document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   54. DISCIPLESHIP & TRAINING TRACKER
+========================================================= */
+
+if(!document.getElementById("churchosDiscipleship")){
+
+const section=document.createElement("section");
+
+section.id="churchosDiscipleship";
+section.className="churchos-v11";
+
+section.innerHTML=`
+
+<h2>🎓 Discipleship & Training Tracker</h2>
+
+<p>
+Track discipleship classes, ministry training and completion.
+</p>
+
+<div class="v11-grid">
+
+<div>
+
+<label>Student / Member</label>
+<input id="discipleName"
+placeholder="Full name">
+
+<label>Course / Training</label>
+<input id="discipleCourse"
+placeholder="e.g. Foundation School">
+
+<label>Instructor / Mentor</label>
+<input id="discipleInstructor"
+placeholder="Name">
+
+<label>Start Date</label>
+<input id="discipleStartDate" type="date">
+
+<label>Progress</label>
+
+<select id="discipleProgress">
+  <option>Not Started</option>
+  <option>In Progress</option>
+  <option>75% Complete</option>
+  <option>Completed</option>
+</select>
+
+<label>Completion Date</label>
+<input id="discipleCompletionDate" type="date">
+
+<label>Notes</label>
+
+<textarea id="discipleNotes"
+placeholder="Training notes"></textarea>
+
+<button onclick="addChurchOSDiscipleship()">
+Save Training Record
+</button>
+
+</div>
+
+<div>
+
+<h3>Training Records</h3>
+
+<div id="churchosDiscipleshipList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+  container.appendChild(section);
+}else{
+  document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   55. OUTREACH & EVANGELISM TRACKER
+========================================================= */
+
+if(!document.getElementById("churchosOutreach")){
+
+const section=document.createElement("section");
+
+section.id="churchosOutreach";
+section.className="churchos-v11";
+
+section.innerHTML=`
+
+<h2>🌍 Outreach & Evangelism Tracker</h2>
+
+<p>
+Track evangelism activities, locations, people reached and follow-up.
+</p>
+
+<div class="v11-grid">
+
+<div>
+
+<label>Outreach Title</label>
+<input id="outreachTitle"
+placeholder="e.g. Community Evangelism">
+
+<label>Date</label>
+<input id="outreachDate" type="date">
+
+<label>Location</label>
+<input id="outreachLocation"
+placeholder="Area / community">
+
+<label>Lead Worker</label>
+<input id="outreachLeader"
+placeholder="Worker name">
+
+<label>Workers Involved</label>
+
+<input id="outreachWorkers"
+placeholder="Number of workers">
+
+<label>People Reached</label>
+
+<input id="outreachReached"
+type="number"
+min="0"
+placeholder="0">
+
+<label>Decisions / New Converts</label>
+
+<input id="outreachDecisions"
+type="number"
+min="0"
+placeholder="0">
+
+<label>Follow-Ups Required</label>
+
+<input id="outreachFollowups"
+type="number"
+min="0"
+placeholder="0">
+
+<label>Notes</label>
+
+<textarea id="outreachNotes"
+placeholder="Outreach report"></textarea>
+
+<button onclick="addChurchOSOutreach()">
+Save Outreach Report
+</button>
+
+</div>
+
+<div>
+
+<h3>Outreach Records</h3>
+
+<div id="churchosOutreachList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+  container.appendChild(section);
+}else{
+  document.body.appendChild(section);
+}
+
+}
+
+}
+
+
+/* =========================================================
+   52. STAFF FUNCTIONS
+========================================================= */
+
+function addChurchOSStaff(){
+
+const name=
+document.getElementById("staffName").value.trim();
+
+const phone=
+document.getElementById("staffPhone").value.trim();
+
+const email=
+document.getElementById("staffEmail").value.trim();
+
+const department=
+document.getElementById("staffDepartment").value.trim();
+
+const role=
+document.getElementById("staffRole").value.trim();
+
+const serviceType=
+document.getElementById("staffServiceType").value;
+
+const startDate=
+document.getElementById("staffStartDate").value;
+
+const status=
+document.getElementById("staffStatus").value;
+
+if(!name || !department || !role){
+
+alert("Please enter the name, department and role.");
+
+return;
+
+}
+
+const data=
+churchOSV11Data("churchosStaffPersonnel");
+
+data.unshift({
+
+id:churchOSV11Id("STAFF"),
+
+name:name,
+
+phone:phone,
+
+email:email,
+
+department:department,
+
+role:role,
+
+serviceType:serviceType,
+
+startDate:startDate,
+
+status:status,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV11Save("churchosStaffPersonnel",data);
+
+document.getElementById("staffName").value="";
+document.getElementById("staffPhone").value="";
+document.getElementById("staffEmail").value="";
+document.getElementById("staffDepartment").value="";
+document.getElementById("staffRole").value="";
+
+renderChurchOSStaff();
+
+alert("Personnel record saved successfully.");
+
+}
+
+
+function deleteChurchOSStaff(id){
+
+const data=
+churchOSV11Data("churchosStaffPersonnel")
+.filter(item=>item.id!==id);
+
+churchOSV11Save("churchosStaffPersonnel",data);
+
+renderChurchOSStaff();
+
+}
+
+
+function renderChurchOSStaff(){
+
+const box=document.getElementById("churchosStaffList");
+
+if(!box)return;
+
+const data=
+churchOSV11Data("churchosStaffPersonnel");
+
+if(!data.length){
+
+box.innerHTML="<p>No personnel records yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v11-card ${
+item.status==="Active"
+? "v11-good"
+: "v11-warning"
+}">
+
+<strong>
+${churchOSV11Escape(item.name)}
+</strong>
+
+<br>
+
+<span class="v11-badge">
+${churchOSV11Escape(item.status)}
+</span>
+
+<br>
+
+Department:
+${churchOSV11Escape(item.department)}
+
+<br>
+
+Role:
+${churchOSV11Escape(item.role)}
+
+<br>
+
+Service:
+${churchOSV11Escape(item.serviceType)}
+
+${item.phone
+? `<br>Phone: ${churchOSV11Escape(item.phone)}`
+: ""}
+
+${item.email
+? `<br>Email: ${churchOSV11Escape(item.email)}`
+: ""}
+
+${item.startDate
+? `<br>Start Date: ${churchOSV11Escape(item.startDate)}`
+: ""}
+
+<br>
+
+<button onclick="deleteChurchOSStaff('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   53. COUNSELLING FUNCTIONS
+========================================================= */
+
+function addChurchOSCounsellingCase(){
+
+const person=
+document.getElementById("casePerson").value.trim();
+
+const type=
+document.getElementById("caseType").value;
+
+const counsellor=
+document.getElementById("caseCounsellor").value.trim();
+
+const date=
+document.getElementById("caseDate").value;
+
+const status=
+document.getElementById("caseStatus").value;
+
+const followup=
+document.getElementById("caseFollowupDate").value;
+
+const notes=
+document.getElementById("caseNotes").value.trim();
+
+if(!person || !date){
+
+alert("Please enter the person and date opened.");
+
+return;
+
+}
+
+const data=
+churchOSV11Data("churchosCounsellingCases");
+
+data.unshift({
+
+id:churchOSV11Id("CASE"),
+
+person:person,
+
+type:type,
+
+counsellor:counsellor,
+
+date:date,
+
+status:status,
+
+followup:followup,
+
+notes:notes,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV11Save("churchosCounsellingCases",data);
+
+document.getElementById("casePerson").value="";
+document.getElementById("caseCounsellor").value="";
+document.getElementById("caseNotes").value="";
+
+renderChurchOSCounselling();
+
+alert("Confidential care case saved.");
+
+}
+
+
+function updateChurchOSCaseStatus(id,status){
+
+const data=
+churchOSV11Data("churchosCounsellingCases");
+
+const item=data.find(x=>x.id===id);
+
+if(item){
+  item.status=status;
+}
+
+churchOSV11Save("churchosCounsellingCases",data);
+
+renderChurchOSCounselling();
+
+}
+
+
+function deleteChurchOSCounsellingCase(id){
+
+const data=
+churchOSV11Data("churchosCounsellingCases")
+.filter(item=>item.id!==id);
+
+churchOSV11Save("churchosCounsellingCases",data);
+
+renderChurchOSCounselling();
+
+}
+
+
+function renderChurchOSCounselling(){
+
+const box=
+document.getElementById("churchosCounsellingList");
+
+if(!box)return;
+
+const data=
+churchOSV11Data("churchosCounsellingCases");
+
+if(!data.length){
+
+box.innerHTML="<p>No counselling cases recorded.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v11-card v11-private">
+
+<strong>
+🔒 ${churchOSV11Escape(item.person)}
+</strong>
+
+<br>
+
+Case:
+${churchOSV11Escape(item.type)}
+
+<br>
+
+Counsellor:
+${churchOSV11Escape(item.counsellor || "Not assigned")}
+
+<br>
+
+Opened:
+${churchOSV11Escape(item.date)}
+
+<br>
+
+Status:
+<strong>${churchOSV11Escape(item.status)}</strong>
+
+${
+item.followup
+? `<br>Follow-Up:
+${churchOSV11Escape(item.followup)}`
+: ""
+}
+
+${
+item.notes
+? `<p>${churchOSV11Escape(item.notes)}</p>`
+: ""
+}
+
+<select
+onchange="updateChurchOSCaseStatus('${item.id}',this.value)">
+
+<option ${
+item.status==="Open" ? "selected" : ""
+}>Open</option>
+
+<option ${
+item.status==="Follow-Up Required" ? "selected" : ""
+}>Follow-Up Required</option>
+
+<option ${
+item.status==="Resolved" ? "selected" : ""
+}>Resolved</option>
+
+<option ${
+item.status==="Closed" ? "selected" : ""
+}>Closed</option>
+
+</select>
+
+<button onclick="deleteChurchOSCounsellingCase('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   54. DISCIPLESHIP FUNCTIONS
+========================================================= */
+
+function addChurchOSDiscipleship(){
+
+const name=
+document.getElementById("discipleName").value.trim();
+
+const course=
+document.getElementById("discipleCourse").value.trim();
+
+const instructor=
+document.getElementById("discipleInstructor").value.trim();
+
+const startDate=
+document.getElementById("discipleStartDate").value;
+
+const progress=
+document.getElementById("discipleProgress").value;
+
+const completionDate=
+document.getElementById("discipleCompletionDate").value;
+
+const notes=
+document.getElementById("discipleNotes").value.trim();
+
+if(!name || !course || !startDate){
+
+alert("Please enter the student, course and start date.");
+
+return;
+
+}
+
+const data=
+churchOSV11Data("churchosDiscipleship");
+
+data.unshift({
+
+id:churchOSV11Id("DISCIPLE"),
+
+name:name,
+
+course:course,
+
+instructor:instructor,
+
+startDate:startDate,
+
+progress:progress,
+
+completionDate:completionDate,
+
+notes:notes,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV11Save("churchosDiscipleship",data);
+
+document.getElementById("discipleName").value="";
+document.getElementById("discipleCourse").value="";
+document.getElementById("discipleInstructor").value="";
+document.getElementById("discipleNotes").value="";
+
+renderChurchOSDiscipleship();
+
+alert("Training record saved successfully.");
+
+}
+
+
+function updateChurchOSDiscipleship(id,progress){
+
+const data=
+churchOSV11Data("churchosDiscipleship");
+
+const item=data.find(x=>x.id===id);
+
+if(item){
+
+item.progress=progress;
+
+if(progress==="Completed" && !item.completionDate){
+  item.completionDate=
+    new Date().toISOString().split("T")[0];
+}
+
+}
+
+churchOSV11Save("churchosDiscipleship",data);
+
+renderChurchOSDiscipleship();
+
+}
+
+
+function deleteChurchOSDiscipleship(id){
+
+const data=
+churchOSV11Data("churchosDiscipleship")
+.filter(item=>item.id!==id);
+
+churchOSV11Save("churchosDiscipleship",data);
+
+renderChurchOSDiscipleship();
+
+}
+
+
+function renderChurchOSDiscipleship(){
+
+const box=
+document.getElementById("churchosDiscipleshipList");
+
+if(!box)return;
+
+const data=
+churchOSV11Data("churchosDiscipleship");
+
+if(!data.length){
+
+box.innerHTML="<p>No training records yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v11-card ${
+item.progress==="Completed"
+? "v11-good"
+: item.progress==="In Progress"
+? "v11-warning"
+: ""
+}">
+
+<strong>
+${churchOSV11Escape(item.name)}
+</strong>
+
+<br>
+
+Course:
+${churchOSV11Escape(item.course)}
+
+<br>
+
+Instructor:
+${churchOSV11Escape(item.instructor || "Not assigned")}
+
+<br>
+
+Started:
+${churchOSV11Escape(item.startDate)}
+
+<br>
+
+Progress:
+<strong>${churchOSV11Escape(item.progress)}</strong>
+
+${
+item.completionDate
+? `<br>Completed:
+${churchOSV11Escape(item.completionDate)}`
+: ""
+}
+
+${
+item.notes
+? `<br>Notes:
+${churchOSV11Escape(item.notes)}`
+: ""
+}
+
+<br>
+
+<select
+onchange="updateChurchOSDiscipleship('${item.id}',this.value)">
+
+<option ${
+item.progress==="Not Started" ? "selected" : ""
+}>Not Started</option>
+
+<option ${
+item.progress==="In Progress" ? "selected" : ""
+}>In Progress</option>
+
+<option ${
+item.progress==="75% Complete" ? "selected" : ""
+}>75% Complete</option>
+
+<option ${
+item.progress==="Completed" ? "selected" : ""
+}>Completed</option>
+
+</select>
+
+<button onclick="deleteChurchOSDiscipleship('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   55. OUTREACH FUNCTIONS
+========================================================= */
+
+function addChurchOSOutreach(){
+
+const title=
+document.getElementById("outreachTitle").value.trim();
+
+const date=
+document.getElementById("outreachDate").value;
+
+const location=
+document.getElementById("outreachLocation").value.trim();
+
+const leader=
+document.getElementById("outreachLeader").value.trim();
+
+const workers=
+Number(document.getElementById("outreachWorkers").value || 0);
+
+const reached=
+Number(document.getElementById("outreachReached").value || 0);
+
+const decisions=
+Number(document.getElementById("outreachDecisions").value || 0);
+
+const followups=
+Number(document.getElementById("outreachFollowups").value || 0);
+
+const notes=
+document.getElementById("outreachNotes").value.trim();
+
+if(!title || !date || !location){
+
+alert("Please enter the outreach title, date and location.");
+
+return;
+
+}
+
+const data=
+churchOSV11Data("churchosOutreach");
+
+data.unshift({
+
+id:churchOSV11Id("OUTREACH"),
+
+title:title,
+
+date:date,
+
+location:location,
+
+leader:leader,
+
+workers:workers,
+
+reached:reached,
+
+decisions:decisions,
+
+followups:followups,
+
+notes:notes,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV11Save("churchosOutreach",data);
+
+document.getElementById("outreachTitle").value="";
+document.getElementById("outreachLocation").value="";
+document.getElementById("outreachLeader").value="";
+document.getElementById("outreachWorkers").value="";
+document.getElementById("outreachReached").value="";
+document.getElementById("outreachDecisions").value="";
+document.getElementById("outreachFollowups").value="";
+document.getElementById("outreachNotes").value="";
+
+renderChurchOSOutreach();
+
+alert("Outreach report saved successfully.");
+
+}
+
+
+function deleteChurchOSOutreach(id){
+
+const data=
+churchOSV11Data("churchosOutreach")
+.filter(item=>item.id!==id);
+
+churchOSV11Save("churchosOutreach",data);
+
+renderChurchOSOutreach();
+
+}
+
+
+function renderChurchOSOutreach(){
+
+const box=document.getElementById("churchosOutreachList");
+
+if(!box)return;
+
+const data=
+churchOSV11Data("churchosOutreach");
+
+if(!data.length){
+
+box.innerHTML="<p>No outreach records yet.</p>";
+
+return;
+
+}
+
+const totals=data.reduce((acc,item)=>{
+
+acc.reached+=Number(item.reached||0);
+acc.decisions+=Number(item.decisions||0);
+acc.followups+=Number(item.followups||0);
+
+return acc;
+
+},{reached:0,decisions:0,followups:0});
+
+box.innerHTML=`
+
+<div class="v11-card v11-good">
+
+<strong>📊 Outreach Summary</strong><br>
+
+People Reached:
+<strong>${totals.reached.toLocaleString()}</strong>
+
+<br>
+
+Decisions / Converts:
+<strong>${totals.decisions.toLocaleString()}</strong>
+
+<br>
+
+Follow-Ups:
+<strong>${totals.followups.toLocaleString()}</strong>
+
+</div>
+
+${data.map(item=>`
+
+<div class="v11-card">
+
+<strong>
+${churchOSV11Escape(item.title)}
+</strong>
+
+<br>
+
+Date:
+${churchOSV11Escape(item.date)}
+
+<br>
+
+Location:
+${churchOSV11Escape(item.location)}
+
+<br>
+
+Lead Worker:
+${churchOSV11Escape(item.leader || "Not specified")}
+
+<br>
+
+Workers:
+${Number(item.workers||0).toLocaleString()}
+
+<br>
+
+People Reached:
+<strong>${Number(item.reached||0).toLocaleString()}</strong>
+
+<br>
+
+Decisions / Converts:
+<strong>${Number(item.decisions||0).toLocaleString()}</strong>
+
+<br>
+
+Follow-Ups:
+${Number(item.followups||0).toLocaleString()}
+
+${
+item.notes
+? `<p>Notes:
+${churchOSV11Escape(item.notes)}</p>`
+: ""
+}
+
+<button onclick="deleteChurchOSOutreach('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("")}
+
+`;
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+createChurchOSV11Sections();
+
+renderChurchOSStaff();
+
+renderChurchOSCounselling();
+
+renderChurchOSDiscipleship();
+
+renderChurchOSOutreach();
+
+});
+
+</script>
+
+<!-- END CHURCHOS AI FEATURES 52–55 -->
 
 <!-- END CHURCHOS AI FEATURES 48–51 -->
 </html>
