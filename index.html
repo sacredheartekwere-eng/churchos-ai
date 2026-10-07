@@ -12550,6 +12550,1360 @@ renderChurchOSOutreach();
 });
 
 </script>
+   <!-- =========================================================
+     CHURCHOS AI — FEATURES 56–59
+     POLLS & SURVEYS • DEPARTMENTS • BENEVOLENCE & WELFARE
+     • MONTHLY MINISTRY REPORT
+========================================================= -->
+
+<style>
+.churchos-v12{
+  margin:25px 0;
+  padding:22px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid #e5e7eb;
+  box-shadow:0 8px 25px rgba(0,0,0,.07);
+}
+
+.churchos-v12 h2{
+  margin-top:0;
+  color:#182848;
+}
+
+.v12-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px;
+}
+
+.churchos-v12 input,
+.churchos-v12 select,
+.churchos-v12 textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:11px;
+  margin:6px 0 12px;
+  border:1px solid #ccc;
+  border-radius:9px;
+}
+
+.churchos-v12 button{
+  border:0;
+  padding:10px 15px;
+  margin:4px;
+  border-radius:9px;
+  cursor:pointer;
+  background:#182848;
+  color:#fff;
+}
+
+.churchos-v12 button:hover{
+  opacity:.88;
+}
+
+.v12-card{
+  padding:15px;
+  margin:10px 0;
+  border-radius:13px;
+  background:#f6f8fb;
+  border-left:5px solid #182848;
+}
+
+.v12-good{
+  border-left-color:#27ae60;
+}
+
+.v12-warning{
+  border-left-color:#e67e22;
+}
+
+.v12-danger{
+  border-left-color:#c0392b;
+}
+
+.v12-stat{
+  padding:18px;
+  text-align:center;
+  border-radius:14px;
+  background:#f5f7fb;
+}
+
+.v12-stat strong{
+  display:block;
+  font-size:30px;
+  color:#182848;
+}
+
+.v12-option{
+  padding:9px;
+  margin:6px 0;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:8px;
+}
+
+.v12-report{
+  line-height:1.7;
+}
+
+.v12-report h3{
+  color:#182848;
+  border-bottom:1px solid #ddd;
+  padding-bottom:6px;
+}
+
+.v12-print{
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+}
+</style>
+
+<script>
+
+/* =========================================================
+   CHURCHOS V12 HELPERS
+========================================================= */
+
+function churchOSV12Data(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSV12Save(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+function churchOSV12Id(prefix){
+  return prefix+"-"+Date.now()+"-"+
+    Math.random().toString(36).substring(2,7);
+}
+
+function churchOSV12Escape(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+
+/* =========================================================
+   CREATE FEATURES
+========================================================= */
+
+function createChurchOSV12Sections(){
+
+/* =========================================================
+   56. POLLS & SURVEYS
+========================================================= */
+
+if(!document.getElementById("churchosPolls")){
+
+const section=document.createElement("section");
+
+section.id="churchosPolls";
+section.className="churchos-v12";
+
+section.innerHTML=`
+
+<h2>🗳️ Polls & Surveys</h2>
+
+<p>
+Create church polls and collect responses.
+</p>
+
+<div class="v12-grid">
+
+<div>
+
+<label>Poll Question</label>
+
+<input id="pollQuestion"
+placeholder="e.g. Which service time do you prefer?">
+
+<label>Option 1</label>
+
+<input id="pollOption1"
+placeholder="Option 1">
+
+<label>Option 2</label>
+
+<input id="pollOption2"
+placeholder="Option 2">
+
+<label>Option 3</label>
+
+<input id="pollOption3"
+placeholder="Option 3">
+
+<label>Option 4</label>
+
+<input id="pollOption4"
+placeholder="Option 4">
+
+<button onclick="addChurchOSPoll()">
+Create Poll
+</button>
+
+</div>
+
+<div>
+
+<h3>Active Polls</h3>
+
+<div id="churchosPollList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+  container.appendChild(section);
+}else{
+  document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   57. DEPARTMENT MANAGEMENT
+========================================================= */
+
+if(!document.getElementById("churchosDepartments")){
+
+const section=document.createElement("section");
+
+section.id="churchosDepartments";
+section.className="churchos-v12";
+
+section.innerHTML=`
+
+<h2>📋 Department Management</h2>
+
+<p>
+Create departments and assign leaders and members.
+</p>
+
+<div class="v12-grid">
+
+<div>
+
+<label>Department Name</label>
+
+<input id="departmentName"
+placeholder="e.g. Choir">
+
+<label>Department Leader</label>
+
+<input id="departmentLeader"
+placeholder="Leader name">
+
+<label>Meeting Day</label>
+
+<input id="departmentMeetingDay"
+placeholder="e.g. Saturday">
+
+<label>Meeting Time</label>
+
+<input id="departmentMeetingTime"
+placeholder="e.g. 5:00 PM">
+
+<label>Department Description</label>
+
+<textarea id="departmentDescription"
+placeholder="Department purpose or description"></textarea>
+
+<button onclick="addChurchOSDepartment()">
+Create Department
+</button>
+
+</div>
+
+<div>
+
+<h3>Church Departments</h3>
+
+<div id="churchosDepartmentList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+  container.appendChild(section);
+}else{
+  document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   58. BENEVOLENCE & WELFARE
+========================================================= */
+
+if(!document.getElementById("churchosBenevolence")){
+
+const section=document.createElement("section");
+
+section.id="churchosBenevolence";
+section.className="churchos-v12";
+
+section.innerHTML=`
+
+<h2>🎁 Benevolence & Welfare</h2>
+
+<p>
+Manage welfare requests and assistance provided by the church.
+</p>
+
+<div class="v12-grid">
+
+<div>
+
+<label>Beneficiary Name</label>
+
+<input id="welfareName"
+placeholder="Name">
+
+<label>Request Type</label>
+
+<select id="welfareType">
+
+<option>Food Assistance</option>
+<option>Financial Assistance</option>
+<option>Medical Support</option>
+<option>Education Support</option>
+<option>Emergency Support</option>
+<option>Widow Support</option>
+<option>Other</option>
+
+</select>
+
+<label>Date</label>
+
+<input id="welfareDate" type="date">
+
+<label>Amount / Value</label>
+
+<input id="welfareAmount"
+type="number"
+min="0"
+placeholder="0">
+
+<label>Assistance Description</label>
+
+<textarea id="welfareDescription"
+placeholder="Describe the assistance"></textarea>
+
+<label>Status</label>
+
+<select id="welfareStatus">
+
+<option>Pending</option>
+<option>Approved</option>
+<option>Provided</option>
+<option>Closed</option>
+
+</select>
+
+<button onclick="addChurchOSWelfare()">
+Save Welfare Record
+</button>
+
+</div>
+
+<div>
+
+<h3>Welfare Records</h3>
+
+<div id="churchosWelfareList"></div>
+
+</div>
+
+</div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+  container.appendChild(section);
+}else{
+  document.body.appendChild(section);
+}
+
+}
+
+
+/* =========================================================
+   59. MONTHLY MINISTRY REPORT
+========================================================= */
+
+if(!document.getElementById("churchosMonthlyReport")){
+
+const section=document.createElement("section");
+
+section.id="churchosMonthlyReport";
+section.className="churchos-v12";
+
+section.innerHTML=`
+
+<h2>📊 Monthly Ministry Report</h2>
+
+<p>
+Generate a summary from ChurchOS ministry records.
+</p>
+
+<div class="v12-grid">
+
+<div>
+
+<label>Report Month</label>
+
+<input id="monthlyReportMonth"
+type="month">
+
+<button onclick="generateChurchOSMonthlyReport()">
+Generate Report
+</button>
+
+<button onclick="printChurchOSMonthlyReport()">
+Print Report
+</button>
+
+</div>
+
+</div>
+
+<div id="churchosMonthlyReportOutput"></div>
+`;
+
+const container=document.querySelector(".container");
+
+if(container){
+  container.appendChild(section);
+}else{
+  document.body.appendChild(section);
+}
+
+}
+
+}
+
+
+/* =========================================================
+   56. POLLS
+========================================================= */
+
+function addChurchOSPoll(){
+
+const question=
+document.getElementById("pollQuestion").value.trim();
+
+const options=[
+document.getElementById("pollOption1").value.trim(),
+document.getElementById("pollOption2").value.trim(),
+document.getElementById("pollOption3").value.trim(),
+document.getElementById("pollOption4").value.trim()
+].filter(Boolean);
+
+if(!question || options.length<2){
+
+alert("Enter a question and at least two options.");
+
+return;
+
+}
+
+const data=
+churchOSV12Data("churchosPolls");
+
+data.unshift({
+
+id:churchOSV12Id("POLL"),
+
+question:question,
+
+options:options.map(option=>({
+
+text:option,
+votes:0
+
+})),
+
+created:new Date().toISOString(),
+
+status:"Active"
+
+});
+
+churchOSV12Save("churchosPolls",data);
+
+document.getElementById("pollQuestion").value="";
+document.getElementById("pollOption1").value="";
+document.getElementById("pollOption2").value="";
+document.getElementById("pollOption3").value="";
+document.getElementById("pollOption4").value="";
+
+renderChurchOSPolls();
+
+alert("Poll created successfully.");
+
+}
+
+
+function voteChurchOSPoll(pollId,index){
+
+const data=
+churchOSV12Data("churchosPolls");
+
+const poll=data.find(item=>item.id===pollId);
+
+if(!poll)return;
+
+if(poll.options[index]){
+  poll.options[index].votes++;
+}
+
+churchOSV12Save("churchosPolls",data);
+
+renderChurchOSPolls();
+
+}
+
+
+function deleteChurchOSPoll(id){
+
+const data=
+churchOSV12Data("churchosPolls")
+.filter(item=>item.id!==id);
+
+churchOSV12Save("churchosPolls",data);
+
+renderChurchOSPolls();
+
+}
+
+
+function renderChurchOSPolls(){
+
+const box=document.getElementById("churchosPollList");
+
+if(!box)return;
+
+const data=churchOSV12Data("churchosPolls");
+
+if(!data.length){
+
+box.innerHTML="<p>No polls created yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(poll=>{
+
+const total=poll.options.reduce(
+(sum,item)=>sum+Number(item.votes||0),
+0
+);
+
+return `
+
+<div class="v12-card">
+
+<strong>
+${churchOSV12Escape(poll.question)}
+</strong>
+
+<br><br>
+
+${poll.options.map((option,index)=>{
+
+const percentage=total
+? Math.round((option.votes/total)*100)
+: 0;
+
+return `
+
+<div class="v12-option">
+
+<button onclick="voteChurchOSPoll('${poll.id}',${index})">
+${churchOSV12Escape(option.text)}
+</button>
+
+<br>
+
+${option.votes} vote(s)
+— ${percentage}%
+
+</div>
+
+`;
+
+}).join("")}
+
+<strong>
+Total Responses: ${total}
+</strong>
+
+<br>
+
+<button onclick="deleteChurchOSPoll('${poll.id}')">
+Delete Poll
+</button>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* =========================================================
+   57. DEPARTMENTS
+========================================================= */
+
+function addChurchOSDepartment(){
+
+const name=
+document.getElementById("departmentName").value.trim();
+
+const leader=
+document.getElementById("departmentLeader").value.trim();
+
+const meetingDay=
+document.getElementById("departmentMeetingDay").value.trim();
+
+const meetingTime=
+document.getElementById("departmentMeetingTime").value.trim();
+
+const description=
+document.getElementById("departmentDescription").value.trim();
+
+if(!name){
+
+alert("Please enter a department name.");
+
+return;
+
+}
+
+const data=
+churchOSV12Data("churchosDepartments");
+
+data.unshift({
+
+id:churchOSV12Id("DEPT"),
+
+name:name,
+
+leader:leader,
+
+meetingDay:meetingDay,
+
+meetingTime:meetingTime,
+
+description:description,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV12Save("churchosDepartments",data);
+
+document.getElementById("departmentName").value="";
+document.getElementById("departmentLeader").value="";
+document.getElementById("departmentMeetingDay").value="";
+document.getElementById("departmentMeetingTime").value="";
+document.getElementById("departmentDescription").value="";
+
+renderChurchOSDepartments();
+
+alert("Department created successfully.");
+
+}
+
+
+function deleteChurchOSDepartment(id){
+
+const data=
+churchOSV12Data("churchosDepartments")
+.filter(item=>item.id!==id);
+
+churchOSV12Save("churchosDepartments",data);
+
+renderChurchOSDepartments();
+
+}
+
+
+function renderChurchOSDepartments(){
+
+const box=
+document.getElementById("churchosDepartmentList");
+
+if(!box)return;
+
+const data=
+churchOSV12Data("churchosDepartments");
+
+if(!data.length){
+
+box.innerHTML="<p>No departments created yet.</p>";
+
+return;
+
+}
+
+box.innerHTML=data.map(item=>`
+
+<div class="v12-card">
+
+<strong>
+${churchOSV12Escape(item.name)}
+</strong>
+
+<br>
+
+Leader:
+${churchOSV12Escape(item.leader || "Not assigned")}
+
+<br>
+
+Meeting:
+${churchOSV12Escape(item.meetingDay || "Not specified")}
+
+${
+item.meetingTime
+? ` at ${churchOSV12Escape(item.meetingTime)}`
+: ""
+}
+
+${
+item.description
+? `<p>${churchOSV12Escape(item.description)}</p>`
+: ""
+}
+
+<button onclick="deleteChurchOSDepartment('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   58. BENEVOLENCE & WELFARE
+========================================================= */
+
+function addChurchOSWelfare(){
+
+const name=
+document.getElementById("welfareName").value.trim();
+
+const type=
+document.getElementById("welfareType").value;
+
+const date=
+document.getElementById("welfareDate").value;
+
+const amount=
+Number(document.getElementById("welfareAmount").value || 0);
+
+const description=
+document.getElementById("welfareDescription").value.trim();
+
+const status=
+document.getElementById("welfareStatus").value;
+
+if(!name || !date){
+
+alert("Please enter the beneficiary name and date.");
+
+return;
+
+}
+
+const data=
+churchOSV12Data("churchosBenevolence");
+
+data.unshift({
+
+id:churchOSV12Id("WELFARE"),
+
+name:name,
+
+type:type,
+
+date:date,
+
+amount:amount,
+
+description:description,
+
+status:status,
+
+created:new Date().toISOString()
+
+});
+
+churchOSV12Save("churchosBenevolence",data);
+
+document.getElementById("welfareName").value="";
+document.getElementById("welfareAmount").value="";
+document.getElementById("welfareDescription").value="";
+
+renderChurchOSWelfare();
+
+alert("Welfare record saved successfully.");
+
+}
+
+
+function updateChurchOSWelfare(id,status){
+
+const data=
+churchOSV12Data("churchosBenevolence");
+
+const item=data.find(x=>x.id===id);
+
+if(item){
+  item.status=status;
+}
+
+churchOSV12Save("churchosBenevolence",data);
+
+renderChurchOSWelfare();
+
+}
+
+
+function deleteChurchOSWelfare(id){
+
+const data=
+churchOSV12Data("churchosBenevolence")
+.filter(item=>item.id!==id);
+
+churchOSV12Save("churchosBenevolence",data);
+
+renderChurchOSWelfare();
+
+}
+
+
+function renderChurchOSWelfare(){
+
+const box=
+document.getElementById("churchosWelfareList");
+
+if(!box)return;
+
+const data=
+churchOSV12Data("churchosBenevolence");
+
+if(!data.length){
+
+box.innerHTML="<p>No welfare records yet.</p>";
+
+return;
+
+}
+
+const totalProvided=data
+.filter(item=>item.status==="Provided")
+.reduce(
+(sum,item)=>sum+Number(item.amount||0),
+0
+);
+
+box.innerHTML=`
+
+<div class="v12-stat">
+
+<strong>
+₦${totalProvided.toLocaleString()}
+</strong>
+
+Welfare Value Provided
+
+</div>
+
+${data.map(item=>`
+
+<div class="v12-card ${
+item.status==="Provided"
+? "v12-good"
+: item.status==="Pending"
+? "v12-warning"
+: ""
+}">
+
+<strong>
+${churchOSV12Escape(item.name)}
+</strong>
+
+<br>
+
+Type:
+${churchOSV12Escape(item.type)}
+
+<br>
+
+Date:
+${churchOSV12Escape(item.date)}
+
+<br>
+
+Amount / Value:
+<strong>
+₦${Number(item.amount||0).toLocaleString()}
+</strong>
+
+<br>
+
+Status:
+<strong>${churchOSV12Escape(item.status)}</strong>
+
+${
+item.description
+? `<p>${churchOSV12Escape(item.description)}</p>`
+: ""
+}
+
+<select
+onchange="updateChurchOSWelfare('${item.id}',this.value)">
+
+<option ${
+item.status==="Pending" ? "selected" : ""
+}>Pending</option>
+
+<option ${
+item.status==="Approved" ? "selected" : ""
+}>Approved</option>
+
+<option ${
+item.status==="Provided" ? "selected" : ""
+}>Provided</option>
+
+<option ${
+item.status==="Closed" ? "selected" : ""
+}>Closed</option>
+
+</select>
+
+<button onclick="deleteChurchOSWelfare('${item.id}')">
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+
+/* =========================================================
+   59. MONTHLY MINISTRY REPORT
+========================================================= */
+
+function churchOSV12Count(key){
+
+return churchOSV12Data(key).length;
+
+}
+
+
+function churchOSV12GivingTotal(){
+
+const data=churchOSV12Data("gracewayGiving");
+
+return data.reduce((total,item)=>{
+
+const amount=
+Number(
+item.amount ||
+item.value ||
+item.givingAmount ||
+0
+);
+
+return total+amount;
+
+},0);
+
+}
+
+
+function churchOSV12AttendanceTotal(){
+
+const data=churchOSV12Data("gracewayAttendance");
+
+return data.length;
+
+}
+
+
+function churchOSV12CurrentMonth(){
+
+const now=new Date();
+
+return now.getFullYear()+"-"+
+String(now.getMonth()+1).padStart(2,"0");
+
+}
+
+
+function generateChurchOSMonthlyReport(){
+
+const monthInput=
+document.getElementById("monthlyReportMonth");
+
+const month=
+monthInput.value ||
+churchOSV12CurrentMonth();
+
+const members=
+churchOSV12Count("gracewayMembers");
+
+const converts=
+churchOSV12Count("gracewayConverts");
+
+const attendance=
+churchOSV12AttendanceTotal();
+
+const foundation=
+churchOSV12Count("gracewayFoundation");
+
+const prayers=
+churchOSV12Count("gracewayPrayers");
+
+const events=
+churchOSV12Count("gracewayEvents");
+
+const leaders=
+churchOSV12Count("gracewayLeaders");
+
+const tasks=
+churchOSV12Count("gracewayTasks");
+
+const visitors=
+churchOSV12Count("churchosVisitors");
+
+const followups=
+churchOSV12Count("churchosVisitorFollowups");
+
+const outreach=
+churchOSV12Count("churchosOutreach");
+
+const departments=
+churchOSV12Count("churchosDepartments");
+
+const welfare=
+churchOSV12Count("churchosBenevolence");
+
+const discipleship=
+churchOSV12Count("churchosDiscipleship");
+
+const workerPerformance=
+churchOSV12Count("churchosWorkerPerformance");
+
+const giving=
+churchOSV12GivingTotal();
+
+const welfareData=
+churchOSV12Data("churchosBenevolence");
+
+const welfareProvided=
+welfareData
+.filter(item=>item.status==="Provided")
+.reduce(
+(sum,item)=>sum+Number(item.amount||0),
+0
+);
+
+const reportBox=
+document.getElementById("churchosMonthlyReportOutput");
+
+reportBox.innerHTML=`
+
+<div class="v12-print v12-report">
+
+<h2>
+Graceway and Truth Triumphant Church Inc.
+</h2>
+
+<h3>
+📊 Monthly Ministry Report
+</h3>
+
+<p>
+<strong>Reporting Period:</strong>
+${churchOSV12Escape(month)}
+</p>
+
+<h3>👥 Membership & Growth</h3>
+
+<ul>
+
+<li>
+Members:
+<strong>${members}</strong>
+</li>
+
+<li>
+New Converts:
+<strong>${converts}</strong>
+</li>
+
+<li>
+Visitors:
+<strong>${visitors}</strong>
+</li>
+
+<li>
+Visitor Follow-Ups:
+<strong>${followups}</strong>
+</li>
+
+</ul>
+
+<h3>⛪ Church Activities</h3>
+
+<ul>
+
+<li>
+Attendance Records:
+<strong>${attendance}</strong>
+</li>
+
+<li>
+Church Events:
+<strong>${events}</strong>
+</li>
+
+<li>
+Prayer Requests:
+<strong>${prayers}</strong>
+</li>
+
+<li>
+Foundation School:
+<strong>${foundation}</strong>
+</li>
+
+</ul>
+
+<h3>📚 Discipleship & Leadership</h3>
+
+<ul>
+
+<li>
+Leaders:
+<strong>${leaders}</strong>
+</li>
+
+<li>
+Discipleship / Training Records:
+<strong>${discipleship}</strong>
+</li>
+
+<li>
+Worker Performance Records:
+<strong>${workerPerformance}</strong>
+</li>
+
+<li>
+Ministry Tasks:
+<strong>${tasks}</strong>
+</li>
+
+<li>
+Departments:
+<strong>${departments}</strong>
+</li>
+
+</ul>
+
+<h3>🌍 Evangelism & Outreach</h3>
+
+<ul>
+
+<li>
+Outreach Reports:
+<strong>${outreach}</strong>
+</li>
+
+</ul>
+
+<h3>💰 Giving</h3>
+
+<ul>
+
+<li>
+Recorded Giving Total:
+<strong>₦${giving.toLocaleString()}</strong>
+</li>
+
+</ul>
+
+<h3>🎁 Benevolence & Welfare</h3>
+
+<ul>
+
+<li>
+Welfare Records:
+<strong>${welfare}</strong>
+</li>
+
+<li>
+Welfare Provided:
+<strong>₦${welfareProvided.toLocaleString()}</strong>
+</li>
+
+</ul>
+
+<h3>📌 Ministry Summary</h3>
+
+<p>
+ChurchOS AI has compiled the available ministry records
+currently stored in this browser for the selected reporting
+period.
+</p>
+
+<p>
+<strong>
+Transform • Build • Inherit
+</strong>
+</p>
+
+<p>
+Home of Triumphant
+</p>
+
+</div>
+
+`;
+
+}
+
+
+function printChurchOSMonthlyReport(){
+
+const report=
+document.getElementById("churchosMonthlyReportOutput");
+
+if(!report || !report.innerHTML.trim()){
+
+generateChurchOSMonthlyReport();
+
+}
+
+const content=
+document.getElementById("churchosMonthlyReportOutput").innerHTML;
+
+const printWindow=
+window.open("","_blank");
+
+if(!printWindow){
+
+alert("Please allow pop-ups to print the report.");
+
+return;
+
+}
+
+printWindow.document.write(`
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>
+Graceway ChurchOS Monthly Report
+</title>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+padding:30px;
+color:#222;
+}
+
+h2,h3{
+color:#182848;
+}
+
+li{
+margin:8px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+${content}
+
+<script>
+window.onload=function(){
+window.print();
+};
+<\/script>
+
+</body>
+
+</html>
+
+`);
+
+printWindow.document.close();
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener("DOMContentLoaded",function(){
+
+createChurchOSV12Sections();
+
+renderChurchOSPolls();
+
+renderChurchOSDepartments();
+
+renderChurchOSWelfare();
+
+});
+
+</script>
+
+<!-- END CHURCHOS AI FEATURES 56–59 -->
 
 <!-- END CHURCHOS AI FEATURES 52–55 -->
 
