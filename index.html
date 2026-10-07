@@ -6157,5 +6157,915 @@ createChurchOSGoals();
 createChurchOSInventory();
 
 </script>
+   <!-- =========================================================
+     CHURCHOS AI — FEATURES 36–39
+     36. Member ID Card Generator
+     37. Church Directory
+     38. Giving Receipt Generator
+     39. Attendance Certificate Generator
+     ========================================================= -->
+
+<style>
+.churchos-v7-card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  margin:20px 0;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.churchos-v7-card input,
+.churchos-v7-card select,
+.churchos-v7-card textarea{
+  width:100%;
+  box-sizing:border-box;
+  padding:11px;
+  margin:7px 0;
+  border:1px solid #ddd;
+  border-radius:9px;
+}
+
+.churchos-v7-card button{
+  border:0;
+  border-radius:9px;
+  padding:10px 14px;
+  margin:5px 4px 5px 0;
+  cursor:pointer;
+}
+
+.v7-primary{
+  background:#111827;
+  color:#fff;
+}
+
+.v7-success{
+  background:#15803d;
+  color:#fff;
+}
+
+.v7-danger{
+  background:#dc2626;
+  color:#fff;
+}
+
+.v7-item{
+  background:#f8fafc;
+  border-left:4px solid #111827;
+  padding:14px;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+.v7-empty{
+  color:#777;
+  padding:10px 0;
+}
+
+.v7-id-card{
+  max-width:420px;
+  margin:15px auto;
+  padding:20px;
+  border-radius:18px;
+  border:2px solid #111827;
+  background:linear-gradient(135deg,#ffffff,#f1f5f9);
+  text-align:center;
+}
+
+.v7-id-photo{
+  width:85px;
+  height:85px;
+  border-radius:50%;
+  margin:10px auto;
+  background:#e5e7eb;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:35px;
+}
+
+.v7-id-number{
+  font-size:13px;
+  color:#555;
+}
+
+.v7-stat-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:12px;
+  margin:15px 0;
+}
+
+.v7-stat{
+  background:#f8fafc;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.v7-stat strong{
+  display:block;
+  font-size:24px;
+  margin-top:5px;
+}
+
+.v7-receipt{
+  max-width:520px;
+  margin:15px auto;
+  padding:22px;
+  background:#fff;
+  border:1px solid #ddd;
+  border-radius:12px;
+}
+
+.v7-receipt hr{
+  border:0;
+  border-top:1px dashed #aaa;
+  margin:15px 0;
+}
+</style>
+
+<script>
+
+/* =========================================================
+   COMMON V7 HELPERS
+   ========================================================= */
+
+function churchOSV7Data(key){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "[]");
+  }catch(e){
+    return [];
+  }
+}
+
+function churchOSV7Save(key,data){
+  localStorage.setItem(key,JSON.stringify(data));
+}
+
+function churchOSV7Id(prefix){
+  return prefix + "-" + Date.now();
+}
+
+
+/* =========================================================
+   36. MEMBER ID CARD GENERATOR
+   ========================================================= */
+
+function createChurchOSMemberCards(){
+
+  if(document.getElementById("churchosMemberCards")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosMemberCards";
+
+  section.innerHTML=`
+
+    <div class="churchos-v7-card">
+
+      <h2>🪪 Member ID Card Generator</h2>
+
+      <p>
+        Create simple digital member identification cards.
+      </p>
+
+      <input id="memberCardName"
+        placeholder="Member full name">
+
+      <input id="memberCardPhone"
+        placeholder="Phone number">
+
+      <input id="memberCardDepartment"
+        placeholder="Department / Ministry">
+
+      <input id="memberCardRole"
+        placeholder="Role">
+
+      <input id="memberCardNumber"
+        placeholder="Member ID number">
+
+      <input id="memberCardJoined"
+        type="date">
+
+      <button class="v7-primary"
+        onclick="generateChurchOSMemberCard()">
+        Generate ID Card
+      </button>
+
+      <div id="churchosMemberCardResult"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+}
+
+function generateChurchOSMemberCard(){
+
+  const name=document.getElementById("memberCardName").value.trim();
+  const phone=document.getElementById("memberCardPhone").value.trim();
+  const department=document.getElementById("memberCardDepartment").value.trim();
+  const role=document.getElementById("memberCardRole").value.trim();
+  const number=document.getElementById("memberCardNumber").value.trim()
+    || churchOSV7Id("GTTC");
+  const joined=document.getElementById("memberCardJoined").value;
+
+  if(!name){
+    alert("Please enter the member's name.");
+    return;
+  }
+
+  const card={
+
+    id:Date.now(),
+    name,
+    phone,
+    department,
+    role,
+    number,
+    joined
+
+  };
+
+  const data=churchOSV7Data("churchosMemberCards");
+
+  data.push(card);
+
+  churchOSV7Save("churchosMemberCards",data);
+
+  document.getElementById("churchosMemberCardResult").innerHTML=`
+
+    <div class="v7-id-card">
+
+      <strong>GRACEWAY AND TRUTH<br>
+      TRIUMPHANT CHURCH INC.</strong>
+
+      <div class="v7-id-photo">👤</div>
+
+      <h3>${escapeHTML(name)}</h3>
+
+      <div class="v7-id-number">
+        Member ID: ${escapeHTML(number)}
+      </div>
+
+      ${role ?
+        `<p>${escapeHTML(role)}</p>` : ""}
+
+      ${department ?
+        `<p>🏛️ ${escapeHTML(department)}</p>` : ""}
+
+      ${phone ?
+        `<p>📞 ${escapeHTML(phone)}</p>` : ""}
+
+      ${joined ?
+        `<p>Member since: ${escapeHTML(joined)}</p>` : ""}
+
+      <strong>Transform • Build • Inherit</strong>
+
+      <p>Home of Triumphant</p>
+
+      <button onclick="copyChurchOSMemberCard(${card.id})">
+        📋 Copy Card
+      </button>
+
+      <button class="v7-danger"
+        onclick="deleteChurchOSMemberCard(${card.id})">
+        Delete
+      </button>
+
+    </div>
+  `;
+}
+
+function copyChurchOSMemberCard(id){
+
+  const data=churchOSV7Data("churchosMemberCards");
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const text=
+`GRACEWAY AND TRUTH TRIUMPHANT CHURCH INC.
+MEMBER IDENTIFICATION CARD
+
+Name: ${item.name}
+Member ID: ${item.number}
+Role: ${item.role || "Member"}
+Department: ${item.department || "N/A"}
+Phone: ${item.phone || "N/A"}
+Member Since: ${item.joined || "N/A"}
+
+Transform • Build • Inherit
+Home of Triumphant`;
+
+  navigator.clipboard.writeText(text)
+    .then(()=>alert("Member ID card information copied."))
+    .catch(()=>alert("Unable to copy automatically."));
+}
+
+function deleteChurchOSMemberCard(id){
+
+  const data=churchOSV7Data("churchosMemberCards")
+    .filter(x=>x.id!==id);
+
+  churchOSV7Save("churchosMemberCards",data);
+
+  const result=document.getElementById("churchosMemberCardResult");
+
+  if(result) result.innerHTML="";
+
+}
+
+
+/* =========================================================
+   37. CHURCH DIRECTORY
+   ========================================================= */
+
+function createChurchOSDirectory(){
+
+  if(document.getElementById("churchosDirectory")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosDirectory";
+
+  section.innerHTML=`
+
+    <div class="churchos-v7-card">
+
+      <h2>📇 Church Directory</h2>
+
+      <p>
+        Create a simple searchable directory of church members.
+      </p>
+
+      <input id="directoryName"
+        placeholder="Full name">
+
+      <input id="directoryPhone"
+        placeholder="Phone number">
+
+      <input id="directoryEmail"
+        placeholder="Email address">
+
+      <input id="directoryDepartment"
+        placeholder="Department / Ministry">
+
+      <input id="directoryLocation"
+        placeholder="Area / Location">
+
+      <button class="v7-primary"
+        onclick="addChurchOSDirectoryMember()">
+        Add Directory Member
+      </button>
+
+      <input id="directorySearch"
+        placeholder="🔎 Search directory..."
+        oninput="renderChurchOSDirectory()">
+
+      <div id="churchosDirectoryList"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+
+  renderChurchOSDirectory();
+}
+
+function addChurchOSDirectoryMember(){
+
+  const name=document.getElementById("directoryName").value.trim();
+  const phone=document.getElementById("directoryPhone").value.trim();
+  const email=document.getElementById("directoryEmail").value.trim();
+  const department=document.getElementById("directoryDepartment").value.trim();
+  const location=document.getElementById("directoryLocation").value.trim();
+
+  if(!name){
+    alert("Please enter the member's name.");
+    return;
+  }
+
+  const data=churchOSV7Data("churchosDirectory");
+
+  data.push({
+    id:Date.now(),
+    name,
+    phone,
+    email,
+    department,
+    location
+  });
+
+  churchOSV7Save("churchosDirectory",data);
+
+  document.getElementById("directoryName").value="";
+  document.getElementById("directoryPhone").value="";
+  document.getElementById("directoryEmail").value="";
+  document.getElementById("directoryDepartment").value="";
+  document.getElementById("directoryLocation").value="";
+
+  renderChurchOSDirectory();
+}
+
+function deleteChurchOSDirectoryMember(id){
+
+  const data=churchOSV7Data("churchosDirectory")
+    .filter(x=>x.id!==id);
+
+  churchOSV7Save("churchosDirectory",data);
+
+  renderChurchOSDirectory();
+}
+
+function renderChurchOSDirectory(){
+
+  const box=document.getElementById("churchosDirectoryList");
+
+  if(!box) return;
+
+  const data=churchOSV7Data("churchosDirectory");
+
+  const search=(document.getElementById("directorySearch")?.value || "")
+    .toLowerCase();
+
+  const filtered=data.filter(item=>
+    `${item.name} ${item.phone} ${item.email} ${item.department} ${item.location}`
+      .toLowerCase()
+      .includes(search)
+  );
+
+  if(!filtered.length){
+
+    box.innerHTML=
+      '<div class="v7-empty">No directory members found.</div>';
+
+    return;
+  }
+
+  box.innerHTML=filtered.map(item=>`
+
+    <div class="v7-item">
+
+      <strong>${escapeHTML(item.name)}</strong>
+
+      ${item.phone ?
+        `<p>📞 ${escapeHTML(item.phone)}</p>` : ""}
+
+      ${item.email ?
+        `<p>✉️ ${escapeHTML(item.email)}</p>` : ""}
+
+      ${item.department ?
+        `<p>🏛️ ${escapeHTML(item.department)}</p>` : ""}
+
+      ${item.location ?
+        `<p>📍 ${escapeHTML(item.location)}</p>` : ""}
+
+      <button class="v7-danger"
+        onclick="deleteChurchOSDirectoryMember(${item.id})">
+        Delete
+      </button>
+
+    </div>
+
+  `).join("");
+}
+
+
+/* =========================================================
+   38. GIVING RECEIPT GENERATOR
+   ========================================================= */
+
+function createChurchOSReceipts(){
+
+  if(document.getElementById("churchosReceipts")) return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosReceipts";
+
+  section.innerHTML=`
+
+    <div class="churchos-v7-card">
+
+      <h2>🧾 Giving Receipt Generator</h2>
+
+      <input id="receiptDonor"
+        placeholder="Donor name">
+
+      <input id="receiptAmount"
+        type="number"
+        min="0"
+        placeholder="Amount">
+
+      <select id="receiptType">
+        <option>Tithe</option>
+        <option>Offering</option>
+        <option>Thanksgiving</option>
+        <option>First Fruit</option>
+        <option>Seed</option>
+        <option>Pledge</option>
+        <option>Special Giving</option>
+        <option>Other</option>
+      </select>
+
+      <input id="receiptDate"
+        type="date">
+
+      <input id="receiptNumber"
+        placeholder="Receipt number">
+
+      <textarea id="receiptNote"
+        placeholder="Note / description"></textarea>
+
+      <button class="v7-primary"
+        onclick="generateChurchOSReceipt()">
+        Generate Receipt
+      </button>
+
+      <div id="churchosReceiptResult"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+}
+
+function generateChurchOSReceipt(){
+
+  const donor=document.getElementById("receiptDonor").value.trim();
+  const amount=Number(
+    document.getElementById("receiptAmount").value || 0
+  );
+  const type=document.getElementById("receiptType").value;
+  const date=document.getElementById("receiptDate").value;
+  const number=document.getElementById("receiptNumber").value.trim()
+    || churchOSV7Id("RCT");
+  const note=document.getElementById("receiptNote").value.trim();
+
+  if(!donor || !amount){
+    alert("Please enter the donor name and amount.");
+    return;
+  }
+
+  const item={
+    id:Date.now(),
+    donor,
+    amount,
+    type,
+    date,
+    number,
+    note
+  };
+
+  const data=churchOSV7Data("churchosReceipts");
+
+  data.push(item);
+
+  churchOSV7Save("churchosReceipts",data);
+
+  document.getElementById("churchosReceiptResult").innerHTML=`
+
+    <div class="v7-receipt">
+
+      <div style="text-align:center">
+
+        <strong>
+          GRACEWAY AND TRUTH<br>
+          TRIUMPHANT CHURCH INC.
+        </strong>
+
+        <p>Home of Triumphant</p>
+
+        <h3>GIVING RECEIPT</h3>
+
+      </div>
+
+      <hr>
+
+      <p>
+        <strong>Receipt No:</strong>
+        ${escapeHTML(number)}
+      </p>
+
+      <p>
+        <strong>Date:</strong>
+        ${escapeHTML(date || "N/A")}
+      </p>
+
+      <p>
+        <strong>Received From:</strong>
+        ${escapeHTML(donor)}
+      </p>
+
+      <p>
+        <strong>Giving Type:</strong>
+        ${escapeHTML(type)}
+      </p>
+
+      <p>
+        <strong>Amount:</strong>
+        ₦${Number(amount).toLocaleString()}
+      </p>
+
+      ${note ?
+        `<p><strong>Note:</strong><br>
+        ${escapeHTML(note)}</p>` : ""}
+
+      <hr>
+
+      <p style="text-align:center">
+        Thank you for your giving and partnership.
+      </p>
+
+      <p style="text-align:center">
+        Transform • Build • Inherit
+      </p>
+
+      <button onclick="copyChurchOSReceipt(${item.id})">
+        📋 Copy Receipt
+      </button>
+
+      <button class="v7-danger"
+        onclick="deleteChurchOSReceipt(${item.id})">
+        Delete
+      </button>
+
+    </div>
+  `;
+}
+
+function copyChurchOSReceipt(id){
+
+  const data=churchOSV7Data("churchosReceipts");
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const text=
+`GRACEWAY AND TRUTH TRIUMPHANT CHURCH INC.
+GIVING RECEIPT
+
+Receipt No: ${item.number}
+Date: ${item.date || "N/A"}
+Received From: ${item.donor}
+Giving Type: ${item.type}
+Amount: ₦${Number(item.amount).toLocaleString()}
+${item.note ? "Note: "+item.note : ""}
+
+Thank you for your giving and partnership.
+
+Transform • Build • Inherit
+Home of Triumphant`;
+
+  navigator.clipboard.writeText(text)
+    .then(()=>alert("Receipt copied successfully."))
+    .catch(()=>alert("Unable to copy automatically."));
+}
+
+function deleteChurchOSReceipt(id){
+
+  const data=churchOSV7Data("churchosReceipts")
+    .filter(x=>x.id!==id);
+
+  churchOSV7Save("churchosReceipts",data);
+
+  const result=document.getElementById("churchosReceiptResult");
+
+  if(result) result.innerHTML="";
+}
+
+
+/* =========================================================
+   39. ATTENDANCE CERTIFICATE GENERATOR
+   ========================================================= */
+
+function createChurchOSAttendanceCertificates(){
+
+  if(document.getElementById("churchosAttendanceCertificates"))
+    return;
+
+  const container=document.querySelector(".container");
+  if(!container) return;
+
+  const section=document.createElement("section");
+  section.id="churchosAttendanceCertificates";
+
+  section.innerHTML=`
+
+    <div class="churchos-v7-card">
+
+      <h2>📜 Attendance Certificate Generator</h2>
+
+      <input id="attendanceCertName"
+        placeholder="Recipient full name">
+
+      <input id="attendanceCertProgramme"
+        placeholder="Programme / service">
+
+      <input id="attendanceCertPeriod"
+        placeholder="Attendance period">
+
+      <input id="attendanceCertDate"
+        type="date">
+
+      <input id="attendanceCertNumber"
+        placeholder="Certificate number">
+
+      <textarea id="attendanceCertNote"
+        placeholder="Additional note"></textarea>
+
+      <button class="v7-primary"
+        onclick="generateChurchOSAttendanceCertificate()">
+        Generate Certificate
+      </button>
+
+      <div id="churchosAttendanceCertificateResult"></div>
+
+    </div>
+  `;
+
+  container.appendChild(section);
+}
+
+function generateChurchOSAttendanceCertificate(){
+
+  const name=document.getElementById("attendanceCertName")
+    .value.trim();
+
+  const programme=document.getElementById("attendanceCertProgramme")
+    .value.trim();
+
+  const period=document.getElementById("attendanceCertPeriod")
+    .value.trim();
+
+  const date=document.getElementById("attendanceCertDate")
+    .value;
+
+  const number=document.getElementById("attendanceCertNumber")
+    .value.trim()
+    || churchOSV7Id("CERT");
+
+  const note=document.getElementById("attendanceCertNote")
+    .value.trim();
+
+  if(!name || !programme){
+    alert("Please enter the recipient and programme.");
+    return;
+  }
+
+  const item={
+    id:Date.now(),
+    name,
+    programme,
+    period,
+    date,
+    number,
+    note
+  };
+
+  const data=churchOSV7Data("churchosAttendanceCertificates");
+
+  data.push(item);
+
+  churchOSV7Save(
+    "churchosAttendanceCertificates",
+    data
+  );
+
+  document.getElementById(
+    "churchosAttendanceCertificateResult"
+  ).innerHTML=`
+
+    <div class="v7-receipt"
+      style="text-align:center">
+
+      <p>
+        GRACEWAY AND TRUTH<br>
+        TRIUMPHANT CHURCH INC.
+      </p>
+
+      <h2>CERTIFICATE OF ATTENDANCE</h2>
+
+      <p>
+        This certificate is proudly presented to
+      </p>
+
+      <h2>${escapeHTML(name)}</h2>
+
+      <p>
+        for faithful attendance and participation in
+      </p>
+
+      <h3>${escapeHTML(programme)}</h3>
+
+      ${period ?
+        `<p>Period: ${escapeHTML(period)}</p>` : ""}
+
+      ${note ?
+        `<p>${escapeHTML(note)}</p>` : ""}
+
+      <p>
+        Date: ${escapeHTML(date || "N/A")}
+      </p>
+
+      <p>
+        Certificate No:
+        ${escapeHTML(number)}
+      </p>
+
+      <hr>
+
+      <strong>
+        Transform • Build • Inherit
+      </strong>
+
+      <p>Home of Triumphant</p>
+
+      <button onclick="copyChurchOSAttendanceCertificate(${item.id})">
+        📋 Copy Certificate
+      </button>
+
+      <button class="v7-danger"
+        onclick="deleteChurchOSAttendanceCertificate(${item.id})">
+        Delete
+      </button>
+
+    </div>
+  `;
+}
+
+function copyChurchOSAttendanceCertificate(id){
+
+  const data=churchOSV7Data(
+    "churchosAttendanceCertificates"
+  );
+
+  const item=data.find(x=>x.id===id);
+
+  if(!item) return;
+
+  const text=
+`GRACEWAY AND TRUTH TRIUMPHANT CHURCH INC.
+
+CERTIFICATE OF ATTENDANCE
+
+This certificate is proudly presented to
+
+${item.name}
+
+for faithful attendance and participation in
+
+${item.programme}
+
+Period: ${item.period || "N/A"}
+Date: ${item.date || "N/A"}
+Certificate No: ${item.number}
+
+${item.note || ""}
+
+Transform • Build • Inherit
+Home of Triumphant`;
+
+  navigator.clipboard.writeText(text)
+    .then(()=>alert("Certificate copied successfully."))
+    .catch(()=>alert("Unable to copy automatically."));
+}
+
+function deleteChurchOSAttendanceCertificate(id){
+
+  const data=churchOSV7Data(
+    "churchosAttendanceCertificates"
+  ).filter(x=>x.id!==id);
+
+  churchOSV7Save(
+    "churchosAttendanceCertificates",
+    data
+  );
+
+  const result=document.getElementById(
+    "churchosAttendanceCertificateResult"
+  );
+
+  if(result) result.innerHTML="";
+}
+
+
+/* =========================================================
+   START FEATURES 36–39
+   ========================================================= */
+
+createChurchOSMemberCards();
+createChurchOSDirectory();
+createChurchOSReceipts();
+createChurchOSAttendanceCertificates();
+
+</script>
 </body>
 </html>
