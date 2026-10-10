@@ -14700,10 +14700,82 @@ renderChurchOSWelfare();
 
 })();
 <style>
-<div style="margin:20px;padding:20px;background:#e8f5e9;border-radius:15px;text-align:center;">
-  <h2>🎉 ChurchOS 56–59 Test</h2>
-  <p>If you can see this box, the insertion point is correct.</p>
+
+<div style="margin:20px;padding:20px;border-radius:15px;background:#f0f7ff;">
+  <h2>📊 Polls &amp; Surveys</h2>
+  <input id="pollQuestion" type="text" placeholder="Enter poll question" style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+  <input id="pollOption1" type="text" placeholder="Option 1" style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+  <input id="pollOption2" type="text" placeholder="Option 2" style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;">
+  <button onclick="createChurchPoll()" style="padding:12px 18px;background:#1457a6;color:white;border:0;border-radius:8px;">Create Poll</button>
+  <p id="pollMessage"></p>
+  <div id="churchPollList"></div>
 </div>
+
+<script>
+function createChurchPoll() {
+  const question = document.getElementById('pollQuestion').value.trim();
+  const options = [
+    document.getElementById('pollOption1').value.trim(),
+    document.getElementById('pollOption2').value.trim()
+  ].filter(Boolean);
+
+  if (!question || options.length < 2) {
+    document.getElementById('pollMessage').textContent =
+      'Enter a question and both options.';
+    return;
+  }
+
+  const polls = JSON.parse(localStorage.getItem('churchOSPolls') || '[]');
+  polls.push({
+    id: Date.now(),
+    question,
+    options: options.map(text => ({ text, votes: 0 }))
+  });
+
+  localStorage.setItem('churchOSPolls', JSON.stringify(polls));
+  document.getElementById('pollQuestion').value = '';
+  document.getElementById('pollOption1').value = '';
+  document.getElementById('pollOption2').value = '';
+  document.getElementById('pollMessage').textContent = 'Poll created successfully!';
+  showChurchPolls();
+}
+
+function showChurchPolls() {
+  const polls = JSON.parse(localStorage.getItem('churchOSPolls') || '[]');
+  const list = document.getElementById('churchPollList');
+  if (!list) return;
+
+  list.innerHTML = '';
+  polls.forEach(poll => {
+    const item = document.createElement('div');
+    item.style.cssText = 'background:white;padding:12px;margin-top:12px;border-radius:10px;';
+    const title = document.createElement('h3');
+    title.textContent = poll.question;
+    item.appendChild(title);
+
+    poll.options.forEach((option, index) => {
+      const button = document.createElement('button');
+      button.textContent = option.text + ' — ' + option.votes + ' votes';
+      button.style.cssText = 'display:block;width:100%;padding:10px;margin:6px 0;';
+      button.onclick = () => {
+        const current = JSON.parse(localStorage.getItem('churchOSPolls') || '[]');
+        const target = current.find(p => p.id === poll.id);
+        if (target) {
+          target.options[index].votes++;
+          localStorage.setItem('churchOSPolls', JSON.stringify(current));
+          showChurchPolls();
+        }
+      };
+      item.appendChild(button);
+    });
+    list.appendChild(item);
+  });
+}
+
+showChurchPolls();
+</script>
+   
+
 </body>
    <div style="margin:20px;padding:20px;background:#e8f5e9;border-radius:15px;text-align:center;">
   <h2>🎉 ChurchOS 56–59 Test</h2>
